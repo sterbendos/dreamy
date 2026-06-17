@@ -6,7 +6,7 @@ import {
 	renderFrame,
 	resizeCompositor,
 	uploadTexture,
-} from "dreamy-wasm";
+} from "opencut-wasm";
 import {
 	incrementCounter,
 	isRenderPerfEnabled,
