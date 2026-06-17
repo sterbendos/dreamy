@@ -5,7 +5,7 @@ import {
 	formatTimecode,
 	type FrameRate,
 	type TimeCodeFormat,
-} from "opencut-wasm";
+} from "dreamy-wasm";
 import { cn } from "@/utils/ui";
 import {
 	parseMediaTimecode,

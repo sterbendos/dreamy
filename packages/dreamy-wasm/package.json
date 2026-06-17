@@ -1,0 +1,23 @@
+{
+  "name": "dreamy-wasm",
+  "type": "module",
+  "description": "Shared video editor logic compiled to WebAssembly",
+  "version": "0.2.10",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dreamy/dreamy"
+  },
+  "files": [
+    "dreamy_wasm_bg.wasm",
+    "dreamy_wasm.js",
+    "dreamy_wasm_bg.js",
+    "dreamy_wasm.d.ts"
+  ],
+  "main": "dreamy_wasm.js",
+  "types": "dreamy_wasm.d.ts",
+  "sideEffects": [
+    "./dreamy_wasm.js",
+    "./snippets/*"
+  ]
+}
