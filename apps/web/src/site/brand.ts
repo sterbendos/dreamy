@@ -3,7 +3,7 @@ export const SITE_URL = "https://dreamy.app";
 export const SITE_INFO = {
 	title: "Dreamy",
 	description:
-		"A simple but powerful video editor that gets the job done. In your browser.",
+		"Edit videos that feel like dreams. A web-native, AI-powered video editor that runs 100% in your browser. Auto-cut, auto-subtitles, and export — privately.",
 	url: SITE_URL,
 	openGraphImage: "/open-graph/default.jpg",
 	twitterImage: "/open-graph/default.jpg",

@@ -1,4 +1,8 @@
 import { Hero } from "@/components/landing/hero";
+import { Features } from "@/components/landing/features";
+import { HowItWorks } from "@/components/landing/how-it-works";
+import { Showcase } from "@/components/landing/showcase";
+import { CtaBanner } from "@/components/landing/cta-banner";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import type { Metadata } from "next";
@@ -14,8 +18,15 @@ export default async function Home() {
 	return (
 		<div>
 			<Header />
-			<Hero />
+			<main>
+				<Hero />
+				<Features />
+				<HowItWorks />
+				<Showcase />
+				<CtaBanner />
+			</main>
 			<Footer />
 		</div>
 	);
 }
+
