@@ -1,8 +1,11 @@
-# Dreamy (Legacy)
+# Dreamy
 
-This is the original Dreamy codebase. It's archived and no longer maintained.
+Dreamy is a web-native video editor focusing on simplicity and privacy. We leverage WebCodecs and WASM for blazing fast local performance in your browser.
 
-The rewrite is happening at [dreamy-app/dreamy](https://github.com/dreamy-app/dreamy).
+## Features
+- **Privacy First**: Everything runs locally in your browser.
+- **Auto-Cut**: Automatically detect and remove silence from your clips.
+- **Auto-Subtitles**: Fast, accurate caption generation.
 
 ## Sponsors
 

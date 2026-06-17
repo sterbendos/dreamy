@@ -3,9 +3,9 @@
 # asdf version management
 .tool-versions
 
-node_modules
+node_modules/
 .cursorignore
-.turbo
+.turbo/
 
 .env*
 !*.env.example
@@ -14,15 +14,30 @@ node_modules
 bun.lockb
 
 # content-collections
-.content-collections
+.content-collections/
 
 # Twiggy
 .cursor/
 
-.open-next
+.open-next/
 
 target/
+dist/
+build/
+.vs/
+.vscode/
 
 .cargo-tools/
 
 rust-migration-notes.md
+
+# Media files
+*.mp4
+*.mov
+*.webm
+*.mkv
+*.wav
+*.mp3
+*.zip
+*.tar.gz
+*.rar
