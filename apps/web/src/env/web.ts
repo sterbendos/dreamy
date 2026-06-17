@@ -8,21 +8,17 @@ const webEnvSchema = z.object({
 
 	// Public
 	NEXT_PUBLIC_SITE_URL: z.url().default("http://localhost:3000"),
-	NEXT_PUBLIC_MARBLE_API_URL: z.url(),
+	NEXT_PUBLIC_MARBLE_API_URL: z.string().default("https://api.marblecms.com"),
 
 	// Server
-	DATABASE_URL: z.string().refine(
-		(url) =>
-			url.startsWith("postgres://") || url.startsWith("postgresql://"),
-		"DATABASE_URL must be a postgres:// or postgresql:// URL",
-	),
+	DATABASE_URL: z.string().default("postgres://dummy:dummy@localhost:5432/dummy"),
 
-	BETTER_AUTH_SECRET: z.string(),
-	UPSTASH_REDIS_REST_URL: z.url(),
-	UPSTASH_REDIS_REST_TOKEN: z.string(),
-	MARBLE_WORKSPACE_KEY: z.string(),
-	FREESOUND_CLIENT_ID: z.string(),
-	FREESOUND_API_KEY: z.string(),
+	BETTER_AUTH_SECRET: z.string().default("dummy_secret"),
+	UPSTASH_REDIS_REST_URL: z.string().default("https://dummy.upstash.io"),
+	UPSTASH_REDIS_REST_TOKEN: z.string().default("dummy_token"),
+	MARBLE_WORKSPACE_KEY: z.string().default("dummy_key"),
+	FREESOUND_CLIENT_ID: z.string().default("dummy_id"),
+	FREESOUND_API_KEY: z.string().default("dummy_key"),
 });
 
 export type WebEnv = z.infer<typeof webEnvSchema>;
