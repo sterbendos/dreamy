@@ -1,8 +1,15 @@
-- [x] Inspect current Exporter.ts structure and identify broken function splice
-- [ ] Reconstruct exportTimelineToMp4 browser WebCodecs+mp4-muxer implementation so it is a complete function
-- [ ] Remove orphaned WebCodecs code from exportTimelineToTauriMp4 (ensure it ends right after FFmpeg invoke)
-- [ ] Add any missing constants/types (FRAMES_PER_BATCH, AUDIO_FRAME_SIZE, quality bitrates, interfaces) used by exportTimelineToMp4
-- [ ] Ensure helper functions remain in correct scope
-- [ ] Run TypeScript build (npm run build) to confirm compilation
-- [ ] Smoke test: trigger export in Tauri to confirm native path works
+# TODO
+
+## Export pipeline redo (dreamy-classic parity)
+- [ ] Import dreamy-classic source into `vendor/dreamy-classic/`.
+- [ ] Identify dreamy-classic export pipeline entrypoints (video encode, audio/subtitles muxing, effect rendering model).
+- [ ] Decide integration approach:
+  - [ ] Implement via dreamy-classic Rust/native backend (fastest/most reliable for NVENC).
+  - [ ] JS-side orchestrator only if native backend is not portable.
+- [ ] Port exporter integration into `src/lib/render/Exporter.ts` (or new module) and keep legacy interfaces (`TimelineState`, b-rolls, transcript, captionStyle, effects).
+- [ ] Add progress + diagnostics.
+- [ ] Test exports:
+  - [ ] MP4 (with/without subtitles)
+  - [ ] Long timelines (latency/timeout robustness)
+- [ ] Confirm GPU encoder usage (NVENC/Hardware) using dreamy-classic’s mechanism.
 

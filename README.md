@@ -1,77 +1,162 @@
-<div align="center">
+# Dreamy (Legacy)
 
-# 🎬 CutFlow AI
+This is the original Dreamy codebase. It's archived and no longer maintained.
 
-**The Ultimate Cross-Platform, Local-First AI Video Editor**
+The rewrite is happening at [dreamy-app/dreamy](https://github.com/dreamy-app/dreamy).
 
-![Tauri](https://img.shields.io/badge/Tauri-FFC131?style=for-the-badge&logo=Tauri&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+## Sponsors
 
-</div>
+Thanks to [Vercel](https://vercel.com?utm_source=github-dreamy&utm_campaign=oss) and [fal.ai](https://fal.ai?utm_source=github-dreamy&utm_campaign=oss) for their support of open-source software.
 
----
+<a href="https://vercel.com/oss">
+  <img alt="Vercel OSS Program" src="https://vercel.com/oss/program-badge.svg" />
+</a>
 
-## ✨ Overview
+<a href="https://fal.ai">
+  <img alt="Powered by fal.ai" src="https://img.shields.io/badge/Powered%20by-fal.ai-000000?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCAxMEwxMy4wOSAxNS43NEwxMiAyMkwxMC45MSAxNS43NEw0IDEwTDEwLjkxIDguMjZMMTIgMloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=" />
+</a>
 
-**CutFlow AI** is a next-generation video editor designed for speed, privacy, and automation. By leveraging local AI models, it takes the tedious work out of video editing—giving you professional results without ever sending your media to the cloud.
+## Why?
 
-Built on the blazing-fast **Tauri + Rust** backend and a sleek **React** frontend, CutFlow AI is heavily optimized for high-concurrency processing, making it perfect for handling large video files locally.
+- **Privacy**: Your videos stay on your device
+- **Free features**: Most basic CapCut features are now paywalled 
+- **Simple**: People want editors that are easy to use - CapCut proved that
 
-## 🚀 Key Features
+## Project Structure
 
-- **✂️ AI Silence Skipping**: Automatically detects and cuts out dead air and pauses, saving you hours of manual trimming.
-- **💬 Dynamic Smart Subtitles**: Premium typography powered by Google Fonts, complete with word-by-word active highlighting. Features the bouncing **Claude Code Crab** 🦀 for an engaging viewer experience!
-- **🎞️ Professional Multi-Track Timeline**: A robust non-linear editing deck featuring dedicated tracks for Subtitles, B-Roll, Video, and Audio.
-- **🎭 Face-Aware Framing**: Intelligent face detection automatically adjusts subtitle positioning so you never block the speaker's face.
-- **🔒 Local-First Architecture**: All transcription (via Whisper), face tracking, and rendering happens entirely on your machine. Complete privacy.
-- **⚡ Hardware Accelerated**: Uses WebGPU and SIMD-threaded WASM for lightning-fast AI inference right in the desktop app.
+- `apps/web/`: Next.js web application
+- `apps/desktop/`: Native desktop app built with GPUI (in progress)
+- `rust/`: Platform-agnostic core: GPU compositor, effects, masks, and WASM bindings. We're actively migrating business logic here from TypeScript.
+- `docs/`: Architecture and subsystem documentation
 
-## 🛠️ Tech Stack
-
-- **Backend core**: Rust & Tauri 2.0
-- **Frontend**: React 18, TypeScript, Vite
-- **Styling**: Vanilla CSS, Framer Motion for buttery smooth micro-animations
-- **AI Models**: 
-  - Whisper (Transcription)
-  - YOLOv8 (Face Detection via ONNX Runtime Web)
-
-## 📦 Getting Started
+## Getting Started
 
 ### Prerequisites
-Make sure you have the following installed:
-- [Node.js](https://nodejs.org/) (v18+)
-- [Rust](https://www.rust-lang.org/tools/install) (latest stable)
-- Build tools (Visual Studio C++ Build Tools for Windows, Xcode for macOS, etc.)
 
-### Installation
+- [Bun](https://bun.sh/docs/installation)
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
 
-1. **Clone the repository:**
+> **Note:** Docker is optional but recommended for running the local database and Redis. If you only want to work on frontend features, you can skip it.
+
+### Setup
+
+1. Fork and clone the repository
+
+2. Copy the environment file:
+
    ```bash
-   git clone https://github.com/sterbendos/cutflow-ai.git
-   cd cutflow-ai
+   # Unix/Linux/Mac
+   cp apps/web/.env.example apps/web/.env.local
+
+   # Windows PowerShell
+   Copy-Item apps/web/.env.example apps/web/.env.local
    ```
 
-2. **Install frontend dependencies:**
+3. Start the database and Redis:
+
    ```bash
-   npm install
+   docker compose up -d db redis serverless-redis-http
    ```
 
-3. **Run the development server:**
+4. Install dependencies and start the dev server:
+
    ```bash
-   npm run tauri dev
+   bun install
+   bun dev:web
    ```
 
-## 🎮 How to Use
-1. **Import Media**: Simply drag and drop your video files into the Asset Browser.
-2. **Auto-Cut**: Let CutFlow AI analyze the video and automatically skip silences.
-3. **Add B-Roll**: Add videos as B-Roll overlay clips with a single click in the library.
-4. **Style Subtitles**: Open the Caption Editor to tweak fonts, colors, and toggle the Claude crab!
-5. **Export**: Export your fully customized video with burned-in subtitles directly to your local drive.
+The application will be available at [http://localhost:3000](http://localhost:3000).
+
+The `.env.example` has sensible defaults that match the Docker Compose config — it should work out of the box.
+
+### Desktop setup
+
+Desktop is opt-in. If you're only working on the web app, skip this entirely.
+
+If you want to get ready for `apps/desktop`, see [`apps/desktop/README.md`](apps/desktop/README.md). It's a two-step setup: Rust toolchain first, then desktop native dependencies.
+
+### Local WASM development
+
+Only needed if you're editing `rust/wasm` and want the web app to use your local build instead of the published package.
+
+**Prerequisites** — install these once before anything else:
+
+```bash
+# Rust toolchain
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# build the WASM package
+cargo install wasm-pack
+
+# reruns the build on file changes, used by bun dev:wasm
+cargo install cargo-watch
+```
+
+1. Build the package once from the repo root:
+
+   ```bash
+   bun run build:wasm
+   ```
+
+2. Register the generated package for linking:
+
+   ```bash
+   cd rust/wasm/pkg
+   bun link
+   ```
+
+3. Link `apps/web` to the local package:
+
+   ```bash
+   cd apps/web
+   bun link dreamy-wasm
+   ```
+
+4. Rebuild on changes while you work:
+
+   ```bash
+   bun dev:wasm
+   ```
+
+To switch `apps/web` back to the published package, run:
+
+```bash
+cd apps/web
+bun add dreamy-wasm
+```
+
+### Self-Hosting with Docker
+
+To run everything (including a production build of the app) in Docker:
+
+```bash
+docker compose up -d
+```
+
+The app will be available at [http://localhost:3100](http://localhost:3100).
+
+## Contributing
+
+We welcome contributions! While we're actively developing and refactoring certain areas, there are plenty of opportunities to contribute effectively.
+
+**🎯 Focus areas:** Timeline functionality, project management, performance, bug fixes, and UI improvements outside the preview panel.
+
+**⚠️ Avoid for now:** Preview panel enhancements (fonts, stickers, effects) and export functionality - we're refactoring these with a new binary rendering approach.
+
+See our [Contributing Guide](.github/CONTRIBUTING.md) for detailed setup instructions, development guidelines, and complete focus area guidance.
+
+**Quick start for contributors:**
+
+- Fork the repo and clone locally
+- Follow the setup instructions in CONTRIBUTING.md
+- Working on `apps/desktop`? See [`apps/desktop/README.md`](apps/desktop/README.md) for setup
+- Create a feature branch and submit a PR
+
+## License
+
+[MIT LICENSE](LICENSE)
 
 ---
 
-<div align="center">
-  <i>Built with ❤️ for creators who value speed and privacy.</i>
-</div>
+![Star History Chart](https://api.star-history.com/svg?repos=dreamy-app/dreamy&type=Date)
+
