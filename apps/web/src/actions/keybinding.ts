@@ -41,3 +41,26 @@ export type ShortcutKey = ModifierBasedShortcutKey | SingleCharacterShortcutKey;
 export type KeybindingConfig = {
 	[key in ShortcutKey]?: TActionWithOptionalArgs;
 };
+
+const VALID_MODIFIERS = new Set<string>([
+	"ctrl",
+	"alt",
+	"shift",
+	"ctrl+shift",
+	"alt+shift",
+	"ctrl+alt",
+	"ctrl+alt+shift"
+]);
+
+export function isShortcutKey(value: string): value is ShortcutKey {
+	if (isKey(value)) return true;
+	
+	const parts = value.split('+');
+	if (parts.length < 2) return false;
+	
+	const key = parts.pop()!;
+	if (!isKey(key)) return false;
+	
+	const modifierStr = parts.join('+');
+	return VALID_MODIFIERS.has(modifierStr);
+}
