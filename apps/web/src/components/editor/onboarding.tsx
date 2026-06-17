@@ -45,7 +45,7 @@ export function Onboarding() {
 					<div className="space-y-5">
 						<div className="space-y-3">
 							<Title title="Welcome to Dreamy Beta! 🎉" />
-							<Description description="You're among the first to try Dreamy - the fully open source CapCut alternative." />
+							<Description description="You're among the first to try Dreamy - the privacy-first, AI-powered video editor that runs entirely in your browser." />
 						</div>
 						<NextButton onClick={handleNext}>Next</NextButton>
 					</div>

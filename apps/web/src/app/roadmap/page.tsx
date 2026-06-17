@@ -24,7 +24,7 @@ const roadmapItems: RoadmapItem[] = [
 	{
 		title: "Start",
 		description:
-			"This is where it all started. Repository created, initial project structure, and the vision for a free, open-source video editor. [Check out the first tweet](https://x.com/mazeincoding/status/1936706642512388188) to see where it started.",
+			"This is where it all started. Repository created, initial project structure, and the vision for a privacy-first, AI-powered video editor. [Check out the first tweet](https://x.com/mazeincoding/status/1936706642512388188) to see where it started.",
 		status: {
 			text: "Completed",
 			type: "complete",
@@ -62,11 +62,11 @@ const roadmapItems: RoadmapItem[] = [
 export const metadata: Metadata = {
 	title: "Roadmap - Dreamy",
 	description:
-		"See what's coming next for Dreamy - the free, open-source video editor that respects your privacy.",
+		"See what's coming next for Dreamy - the privacy-first video editor.",
 	openGraph: {
 		title: "Dreamy Roadmap - What's Coming Next",
 		description:
-			"See what's coming next for Dreamy - the free, open-source video editor that respects your privacy.",
+			"See what's coming next for Dreamy - the privacy-first video editor.",
 		type: "website",
 		images: [
 			{
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
 		card: "summary_large_image",
 		title: "Dreamy Roadmap - What's Coming Next",
 		description:
-			"See what's coming next for Dreamy - the free, open-source video editor that respects your privacy.",
+			"See what's coming next for Dreamy - the privacy-first video editor.",
 		images: ["/open-graph/roadmap.jpg"],
 	},
 };
@@ -100,9 +100,7 @@ export default function RoadmapPage() {
 				</div>
 				<GitHubContributeSection
 					title="Want to help?"
-					description="Dreamy is open source and built by the community. Every contribution,
-          no matter how small, helps us build the best free video editor
-          possible."
+					description="Dreamy is actively developed by a dedicated team. If you find bugs or have ideas, we'd love to hear from you — open an issue or reach out on X."
 				/>
 			</div>
 		</BasePage>

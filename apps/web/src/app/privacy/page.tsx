@@ -65,10 +65,10 @@ export default function PrivacyPage() {
 						<p className="mt-4">
 							Questions? Email us at{" "}
 							<a
-								href="mailto:oss@dreamy.app"
+								href="mailto:hello@dreamy.app"
 								className="text-primary hover:underline"
 							>
-								oss@dreamy.app
+								hello@dreamy.app
 							</a>
 						</p>
 					</AccordionContent>
@@ -164,21 +164,19 @@ export default function PrivacyPage() {
 			</section>
 
 			<section className="flex flex-col gap-3">
-				<h2 className="text-2xl font-semibold">Open Source Transparency</h2>
+				<h2 className="text-2xl font-semibold">Transparency</h2>
 				<p>
-					Dreamy is completely open source. You can review our code, see
-					exactly how we handle data, and even self-host the application if you
-					prefer.
+					Dreamy is built with transparency in mind. All video and audio
+					processing runs locally in your browser — we have no technical
+					ability to access your content, even if we wanted to.
 				</p>
 				<p>
-					View our source code on{" "}
+					For any questions about how we handle your data, contact us at{" "}
 					<a
-						href={SOCIAL_LINKS.github}
-						target="_blank"
-						rel="noopener noreferrer"
+						href="mailto:privacy@dreamy.app"
 						className="text-primary hover:underline"
 					>
-						GitHub
+						privacy@dreamy.app
 					</a>
 					.
 				</p>
@@ -188,21 +186,12 @@ export default function PrivacyPage() {
 				<h2 className="text-2xl font-semibold">Contact Us</h2>
 				<p>Questions about this privacy policy or how we handle your data?</p>
 				<p>
-					Open an issue on our{" "}
+					Email us at{" "}
 					<a
-						href={`${SOCIAL_LINKS.github}/issues`}
-						target="_blank"
-						rel="noopener noreferrer"
+						href="mailto:hello@dreamy.app"
 						className="text-primary hover:underline"
 					>
-						GitHub repository
-					</a>
-					, email us at{" "}
-					<a
-						href="mailto:oss@dreamy.app"
-						className="text-primary hover:underline"
-					>
-						oss@dreamy.app
+						hello@dreamy.app
 					</a>
 					, or reach out on{" "}
 					<a

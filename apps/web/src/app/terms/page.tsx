@@ -12,11 +12,11 @@ import { SOCIAL_LINKS } from "@/site/social";
 export const metadata: Metadata = {
 	title: "Terms of Service - Dreamy",
 	description:
-		"Dreamy's Terms of Service. Fair, transparent terms for our free and open-source video editor.",
+		"Dreamy's Terms of Service. Fair and transparent terms for the Dreamy video editor.",
 	openGraph: {
 		title: "Terms of Service - Dreamy",
 		description:
-			"Dreamy's Terms of Service. Fair, transparent terms for our free and open-source video editor.",
+			"Dreamy's Terms of Service. Fair and transparent terms for the Dreamy video editor.",
 		type: "website",
 	},
 };
@@ -25,7 +25,7 @@ export default function TermsPage() {
 	return (
 		<BasePage
 			title="Terms of service"
-			description="Fair and transparent terms for our free, open-source video editor. Contact us if you have any questions."
+			description="Fair and transparent terms for the Dreamy video editor. Contact us if you have any questions."
 		>
 			<Accordion type="single" collapsible className="w-full">
 				<AccordionItem
@@ -60,8 +60,7 @@ export default function TermsPage() {
 								perfect uptime
 							</li>
 							<li>
-								Open source means you can review our code and self-host if
-								needed
+								Your files stay on your device — we never see or store them
 							</li>
 							<li>
 								No account required - your exported videos are always yours
@@ -70,10 +69,10 @@ export default function TermsPage() {
 						<p className="mt-4">
 							Questions? Email us at{" "}
 							<a
-								href="mailto:oss@dreamy.app"
+								href="mailto:hello@dreamy.app"
 								className="text-primary hover:underline"
 							>
-								oss@dreamy.app
+								hello@dreamy.app
 							</a>
 						</p>
 					</AccordionContent>
@@ -103,14 +102,10 @@ export default function TermsPage() {
 				<h2 className="text-2xl font-semibold">How You Can Use Dreamy</h2>
 				<p>Dreamy is free for personal and commercial use. You can:</p>
 				<ul className="list-disc space-y-2 pl-6">
-					<li>
-						Create videos for personal, educational, or commercial purposes
+					<li>Create videos for personal, educational, or commercial purposes
 					</li>
 					<li>Use Dreamy for client work and paid projects</li>
 					<li>Share and distribute videos created with Dreamy</li>
-					<li>
-						Modify and distribute the Dreamy software (under MIT license)
-					</li>
 				</ul>
 				<p>
 					You&apos;re responsible for how you use Dreamy and the content you
@@ -137,23 +132,19 @@ export default function TermsPage() {
 			</section>
 
 			<section className="flex flex-col gap-3">
-				<h2 className="text-2xl font-semibold">Open Source Benefits</h2>
-				<p>Because Dreamy is open source, you have additional rights:</p>
-				<ul className="list-disc space-y-2 pl-6">
-					<li>Review our code to see exactly how we handle your data</li>
-					<li>Self-host Dreamy on your own servers</li>
-					<li>Modify the software to suit your needs</li>
-					<li>Contribute improvements back to the community</li>
-				</ul>
+				<h2 className="text-2xl font-semibold">Intellectual Property</h2>
 				<p>
-					View our source code and license on{" "}
+					Dreamy and the Dreamy logo are proprietary. The software is provided
+					for use under the terms of this agreement and may not be copied,
+					modified, sublicensed, or redistributed without written permission.
+				</p>
+				<p>
+					For questions about licensing, contact{" "}
 					<a
-						href={SOCIAL_LINKS.github}
-						target="_blank"
-						rel="noopener noreferrer"
+						href="mailto:legal@dreamy.app"
 						className="text-primary hover:underline"
 					>
-						GitHub
+						legal@dreamy.app
 					</a>
 					.
 				</p>
@@ -203,21 +194,12 @@ export default function TermsPage() {
 				<h2 className="text-2xl font-semibold">Contact Us</h2>
 				<p>Questions about these terms or need to report an issue?</p>
 				<p>
-					Contact us through our{" "}
+					Contact us at{" "}
 					<a
-						href={`${SOCIAL_LINKS.github}/issues`}
-						target="_blank"
-						rel="noopener noreferrer"
+						href="mailto:hello@dreamy.app"
 						className="text-primary hover:underline"
 					>
-						GitHub repository
-					</a>
-					, email us at{" "}
-					<a
-						href="mailto:oss@dreamy.app"
-						className="text-primary hover:underline"
-					>
-						oss@dreamy.app
+						hello@dreamy.app
 					</a>
 					, or reach out on{" "}
 					<a
@@ -232,8 +214,7 @@ export default function TermsPage() {
 				</p>
 				<p>
 					These terms are governed by applicable law in your jurisdiction. We
-					prefer to resolve disputes through friendly discussion in our
-					open-source community.
+					prefer to resolve disputes through friendly discussion.
 				</p>
 			</section>
 			<Separator />

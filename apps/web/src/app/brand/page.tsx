@@ -170,15 +170,15 @@ export default function BrandPage() {
 			<Separator />
 
 			<div id="guidelines" className="flex flex-col gap-8 text-sm">
-				<div className="flex flex-col gap-3">
+					<div className="flex flex-col gap-3">
 					<h2 className="font-semibold text-lg">Usage</h2>
 					<p className="text-muted-foreground text-base leading-relaxed">
-						Dreamy is open source — the code is free to use under its license.
-						That license does not cover the name or logo. You can say you use
-						Dreamy, that your project integrates with Dreamy, or that it was
-						built on top of Dreamy. You cannot name your product Dreamy, imply
-						we made or endorse your product, or use the marks commercially
-						without asking first. For anything unclear, reach out at{" "}
+						Dreamy and the Dreamy logo are proprietary and may not be used
+						without written permission. You may reference Dreamy by name to
+						describe integration or compatibility (e.g. "works with Dreamy"),
+						but you cannot name your product Dreamy, imply we made or endorse
+						your product, or use the marks commercially without our explicit
+						approval. For anything unclear, reach out at{" "}
 						<Link
 							href="mailto:brand@dreamy.app"
 							className="underline underline-offset-4"
