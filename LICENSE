@@ -1,7 +1,33 @@
-Copyright 2025-2026 OpenCut
+Copyright (c) 2025–present Dreamy. All Rights Reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+PROPRIETARY SOFTWARE — NOT OPEN SOURCE
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+This software, including all source code, design, assets, algorithms, and
+documentation (the "Software"), is the exclusive property of Dreamy and its
+authors. All rights are reserved.
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+UNAUTHORIZED USE STRICTLY PROHIBITED. You may not, without prior written
+permission from Dreamy:
+
+  1. Copy, reproduce, or duplicate the Software or any part thereof.
+  2. Modify, adapt, translate, or create derivative works based on the Software.
+  3. Distribute, sublicense, sell, resell, transfer, assign, or otherwise
+     commercially exploit the Software or any portion of it.
+  4. Reverse engineer, decompile, disassemble, or attempt to derive the source
+     code of compiled components of the Software.
+  5. Use the Software to build a competing product or service.
+  6. Remove or alter any proprietary notices, labels, or marks on the Software.
+
+COMMERCIAL LICENSE REQUIRED. This Software is actively monetized. Any use in
+a commercial context — including SaaS offerings, internal business tools,
+resale, or white-labeling — requires a separate commercial license agreement
+with Dreamy. Contact: legal@dreamy.app
+
+NO WARRANTY. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL
+DREAMY OR ITS AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF,
+OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+For licensing inquiries: legal@dreamy.app

@@ -1,4 +1,4 @@
-# Contributing to OpenCut
+# Contributing to Dreamy
 
 ⚠️ We are currently NOT accepting feature PRs while we build out the core editor.
 
@@ -10,7 +10,7 @@ If you want to contribute:
 
 Critical bug fixes may be accepted on a case-by-case basis.
 
-Thank you for your interest in contributing to OpenCut! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Dreamy! This document provides guidelines and instructions for contributing.
 
 ## Getting Started
 
@@ -22,7 +22,7 @@ Thank you for your interest in contributing to OpenCut! This document provides g
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
 - Rust toolchain (only needed for `apps/desktop`)
 
-> **Note:** Docker is optional, but it's essential for running the local database and Redis services. If you're planning to contribute to frontend features, you can skip the Docker setup. If you have followed the steps below in [Setup](#setup), you're all set to go!
+> **Note:** Docker is optional, but it's essential for running the local database and Redis services. If you're planning to contribute to frontend features, you can skip the Docker setup.
 
 ### Setup
 
@@ -45,9 +45,7 @@ Thank you for your interest in contributing to OpenCut! This document provides g
 5. Install dependencies: `bun install`
 6. Start the development server: `bun run dev`
 
-> **Note:** Web development uses the published `opencut-wasm` package by default, so a fresh clone does not need a local WASM build.
->
-> If you are editing `rust/wasm`, run `bun run build:wasm`, then `cd rust/wasm/pkg && bun link`, then `cd ../../../apps/web && bun link opencut-wasm`.
+> **Note:** The WASM package is bundled with the project. A fresh clone does not need a local WASM build.
 
 ### Desktop setup
 
@@ -74,7 +72,7 @@ Only needed if you're working on `apps/desktop`. See [`apps/desktop/README.md`](
 
 The current HTML-based preview is essentially a prototype - the binary approach will be the "real deal." To avoid wasted effort, please focus on other areas of the application until this refactor is complete.
 
-If you're unsure whether your idea falls into the preview category, feel free to ask us [directly in discord](https://discord.gg/zmR9N35cjK) or create a GitHub issue!
+If you're unsure whether your idea falls into the preview category, feel free to ask us [directly in discord](https://discord.gg/Mu3acKZvCp) or create a GitHub issue!
 
 ## Development Setup
 
@@ -112,7 +110,7 @@ If you're unsure whether your idea falls into the preview category, feel free to
 
    ```bash
    # Database (matches docker-compose.yaml)
-   DATABASE_URL="postgresql://opencut:opencut@localhost:5432/opencut"
+   DATABASE_URL="postgresql://dreamy:dreamy@localhost:5432/dreamy"
 
    # Generate a secure secret for Better Auth
    BETTER_AUTH_SECRET="your-generated-secret-here"

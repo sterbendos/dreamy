@@ -77,4 +77,6 @@ If you're looking to help out:
 
 ## License
 
-[MIT LICENSE](LICENSE)
+Copyright (c) 2025–present Dreamy. All Rights Reserved.
+
+This software is proprietary and not open source. Unauthorized copying, distribution, or modification is strictly prohibited. See [LICENSE](LICENSE) for full terms.

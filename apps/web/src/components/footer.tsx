@@ -44,7 +44,6 @@ export function Footer() {
 								alt="Dreamy"
 								width={24}
 								height={24}
-								className="invert dark:invert-0"
 							/>
 							<span className="text-lg font-bold">Dreamy</span>
 						</div>

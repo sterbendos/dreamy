@@ -10,13 +10,12 @@ import { ThemeToggle } from "./theme-toggle";
 import {
 	Copy01Icon,
 	Download01Icon,
-	GithubIcon,
 	LinkSquare02Icon,
 	Menu02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/utils/ui";
-import { DEFAULT_LOGO_URL, SITE_URL } from "@/site/brand";
+import { DEFAULT_LOGO_URL } from "@/site/brand";
 import { SOCIAL_LINKS } from "@/site/social";
 import {
 	ContextMenu,
@@ -58,7 +57,6 @@ export function Header() {
 								<Image
 									src={DEFAULT_LOGO_URL}
 									alt="Dreamy Logo"
-									className="invert dark:invert-0"
 									width={32}
 									height={32}
 								/>
@@ -118,12 +116,6 @@ export function Header() {
 						</Button>
 					</div>
 					<div className="hidden items-center gap-3 md:flex">
-						<Link href={SOCIAL_LINKS.github}>
-							<Button className="bg-background text-sm" variant="outline">
-								<HugeiconsIcon icon={GithubIcon} className="size-4" />
-								40k+
-							</Button>
-						</Link>
 						<Link href="/projects">
 							<Button className="text-sm">
 								Projects

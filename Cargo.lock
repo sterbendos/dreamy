@@ -3812,14 +3812,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "opencut-desktop"
+name = "dreamy-desktop"
 version = "0.1.0"
 dependencies = [
  "gpui",
 ]
 
 [[package]]
-name = "opencut-wasm"
+name = "dreamy-wasm"
 version = "0.2.10"
 dependencies = [
  "bridge",
