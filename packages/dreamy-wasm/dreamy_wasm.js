@@ -1,6 +1,6 @@
 /* @ts-self-types="./dreamy_wasm.d.ts" */
 
-import * as wasm from "./dreamy__wasm_bg.wasm";
+import * as wasm from "./dreamy_wasm_bg.wasm";
 import { __wbg_set_wasm } from "./dreamy__wasm_bg.js";
 __wbg_set_wasm(wasm);
 wasm.__wbindgen_start();
