@@ -1,7 +1,6 @@
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { SOCIAL_LINKS } from "@/site/social";
-import { GithubIcon, Link04Icon } from "@hugeicons/core-free-icons";
+import { Mail02Icon, Bug02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 export function GitHubContributeSection({
@@ -19,22 +18,22 @@ export function GitHubContributeSection({
 			</div>
 			<div className="flex flex-col justify-center gap-4 sm:flex-row">
 				<Link
-					href={`${SOCIAL_LINKS.github}/blob/main/.github/CONTRIBUTING.md`}
+					href="mailto:hello@dreamy.app"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
 					<Button className="w-full" size="lg">
-						<HugeiconsIcon icon={GithubIcon} />
-						Start contributing
+						<HugeiconsIcon icon={Mail02Icon} />
+						Contact us
 					</Button>
 				</Link>
 				<Link
-					href={`${SOCIAL_LINKS.github}/issues`}
+					href="mailto:hello@dreamy.app?subject=Bug Report"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
 					<Button variant="outline" className="w-full" size="lg">
-						<HugeiconsIcon icon={Link04Icon} />
+						<HugeiconsIcon icon={Bug02Icon} />
 						Report issues
 					</Button>
 				</Link>

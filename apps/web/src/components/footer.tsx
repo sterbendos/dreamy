@@ -1,9 +1,6 @@
 import Link from "next/link";
-import { RiDiscordFill, RiTwitterXLine } from "react-icons/ri";
-import { FaGithub } from "react-icons/fa6";
 import Image from "next/image";
 import { DEFAULT_LOGO_URL } from "@/site/brand";
-import { SOCIAL_LINKS } from "@/site/social";
 import { capitalizeFirstLetter } from "@/utils/string";
 
 type Category = "resources" | "company";
@@ -27,7 +24,6 @@ const links: CategoryLinks = {
 		{ label: "Contributors", href: "/contributors" },
 		{ label: "Sponsors", href: "/sponsors" },
 		{ label: "Brand", href: "/brand" },
-		{ label: "About", href: `${SOCIAL_LINKS.github}/blob/main/README.md` },
 	],
 };
 
@@ -50,32 +46,6 @@ export function Footer() {
 						<p className="text-muted-foreground mb-5 text-sm md:text-left">
 							The privacy-first video editor that feels simple to use.
 						</p>
-						<div className="flex justify-start gap-3">
-							<Link
-								href={SOCIAL_LINKS.github}
-								className="text-muted-foreground hover:text-foreground transition-colors"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<FaGithub className="size-5" />
-							</Link>
-							<Link
-								href={SOCIAL_LINKS.x}
-								className="text-muted-foreground hover:text-foreground transition-colors"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<RiTwitterXLine className="size-5" />
-							</Link>
-							<Link
-								href={SOCIAL_LINKS.discord}
-								className="text-muted-foreground hover:text-foreground transition-colors"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<RiDiscordFill className="size-5" />
-							</Link>
-						</div>
 					</div>
 
 					<div className="flex items-start justify-start gap-12 py-2">

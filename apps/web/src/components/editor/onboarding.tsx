@@ -3,7 +3,6 @@
 import { ArrowRightIcon } from "lucide-react";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { SOCIAL_LINKS } from "@/site/social";
 import { useLocalStorage } from "@/services/storage/use-local-storage";
 import { Button } from "../ui/button";
 import { Dialog, DialogBody, DialogContent, DialogTitle } from "../ui/dialog";
@@ -68,7 +67,7 @@ export function Onboarding() {
 						<div className="space-y-3">
 							<Title title={getStepTitle()} />
 							<Description
-								description={`Join our [Discord](${SOCIAL_LINKS.discord}), chat with cool people and share feedback to help make Dreamy the best editor ever.`}
+								description={`Reach out to us at hello@dreamy.app with your feedback to help make Dreamy the best editor ever.`}
 							/>
 						</div>
 						<NextButton onClick={handleClose}>Finish</NextButton>
