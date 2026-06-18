@@ -65,10 +65,10 @@ export default function PrivacyPage() {
 						<p className="mt-4">
 							Questions? Email us at{" "}
 							<a
-								href="mailto:hello@dreamy.app"
+								href="mailto:ahmmmd1113@gmail.com"
 								className="text-primary hover:underline"
 							>
-								hello@dreamy.app
+								ahmmmd1113@gmail.com
 							</a>
 						</p>
 					</AccordionContent>
@@ -173,10 +173,10 @@ export default function PrivacyPage() {
 				<p>
 					For any questions about how we handle your data, contact us at{" "}
 					<a
-						href="mailto:privacy@dreamy.app"
+						href="mailto:ahmmmd1113@gmail.com"
 						className="text-primary hover:underline"
 					>
-						privacy@dreamy.app
+						ahmmmd1113@gmail.com
 					</a>
 					.
 				</p>
@@ -188,10 +188,10 @@ export default function PrivacyPage() {
 				<p>
 					Email us at{" "}
 					<a
-						href="mailto:hello@dreamy.app"
+						href="mailto:ahmmmd1113@gmail.com"
 						className="text-primary hover:underline"
 					>
-						hello@dreamy.app
+						ahmmmd1113@gmail.com
 					</a>
 					, or reach out on{" "}
 					<a

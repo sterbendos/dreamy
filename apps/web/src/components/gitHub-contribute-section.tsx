@@ -18,7 +18,7 @@ export function GitHubContributeSection({
 			</div>
 			<div className="flex flex-col justify-center gap-4 sm:flex-row">
 				<Link
-					href="mailto:hello@dreamy.app"
+					href="mailto:ahmmmd1113@gmail.com"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
@@ -28,7 +28,7 @@ export function GitHubContributeSection({
 					</Button>
 				</Link>
 				<Link
-					href="mailto:hello@dreamy.app?subject=Bug Report"
+					href="mailto:ahmmmd1113@gmail.com?subject=Bug Report"
 					target="_blank"
 					rel="noopener noreferrer"
 				>

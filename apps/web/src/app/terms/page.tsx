@@ -69,10 +69,10 @@ export default function TermsPage() {
 						<p className="mt-4">
 							Questions? Email us at{" "}
 							<a
-								href="mailto:hello@dreamy.app"
+								href="mailto:ahmmmd1113@gmail.com"
 								className="text-primary hover:underline"
 							>
-								hello@dreamy.app
+								ahmmmd1113@gmail.com
 							</a>
 						</p>
 					</AccordionContent>
@@ -141,10 +141,10 @@ export default function TermsPage() {
 				<p>
 					For questions about licensing, contact{" "}
 					<a
-						href="mailto:legal@dreamy.app"
+						href="mailto:ahmmmd1113@gmail.com"
 						className="text-primary hover:underline"
 					>
-						legal@dreamy.app
+						ahmmmd1113@gmail.com
 					</a>
 					.
 				</p>
@@ -196,10 +196,10 @@ export default function TermsPage() {
 				<p>
 					Contact us at{" "}
 					<a
-						href="mailto:hello@dreamy.app"
+						href="mailto:ahmmmd1113@gmail.com"
 						className="text-primary hover:underline"
 					>
-						hello@dreamy.app
+						ahmmmd1113@gmail.com
 					</a>
 					, or reach out on{" "}
 					<a

@@ -67,7 +67,7 @@ export function Onboarding() {
 						<div className="space-y-3">
 							<Title title={getStepTitle()} />
 							<Description
-								description={`Reach out to us at hello@dreamy.app with your feedback to help make Dreamy the best editor ever.`}
+								description={`Reach out to us at ahmmmd1113@gmail.com with your feedback to help make Dreamy the best editor ever.`}
 							/>
 						</div>
 						<NextButton onClick={handleClose}>Finish</NextButton>

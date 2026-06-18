@@ -22,17 +22,7 @@ export default function BlogPage() {
 					No posts yet — stay tuned.
 				</p>
 				<p className="text-muted-foreground text-sm max-w-md">
-					We&apos;ll be sharing updates, tutorials, and news here soon. Follow
-					us on{" "}
-					<a
-						href="https://x.com/dreamyapp"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="text-foreground underline underline-offset-4 hover:opacity-70"
-					>
-						X / Twitter
-					</a>{" "}
-					to stay up to date.
+					We&apos;ll be sharing updates, tutorials, and news here soon.
 				</p>
 			</div>
 		</BasePage>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { BasePage } from "@/app/base-page";
 
 export const metadata: Metadata = {
@@ -27,15 +28,15 @@ export default function SponsorsPage() {
 				<p className="text-muted-foreground text-lg">
 					We currently have no sponsors.
 				</p>
-				<p className="text-muted-foreground text-sm max-w-md">
-					Interested in sponsoring Dreamy? Reach out to us at{" "}
-					<a
-						href="mailto:hello@dreamy.app"
-						className="text-foreground underline underline-offset-4 hover:opacity-70"
-					>
-						hello@dreamy.app
-					</a>
-				</p>
+						<p className="mt-2 text-muted-foreground max-w-2xl text-center leading-relaxed">
+							Want to sponsor Dreamy? Reach out to us at{" "}
+							<Link
+								href="mailto:ahmmmd1113@gmail.com"
+								className="text-primary hover:underline underline-offset-4 font-medium"
+							>
+								ahmmmd1113@gmail.com
+							</Link>
+						</p>
 			</div>
 		</BasePage>
 	);

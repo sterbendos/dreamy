@@ -46,59 +46,16 @@ interface AssetSection {
 
 const ASSET_SECTIONS: AssetSection[] = [
 	{
-		title: "Symbol",
+		title: "Logo",
 		description:
-			"Use the symbol on its own when the Dreamy name is already present nearby or space is limited.",
-		cols: "2",
-		assets: [
-			{
-				src: "/logos/dreamy/symbol.svg",
-				theme: "dark",
-				label: "Symbol",
-				width: 400,
-				height: 400,
-			},
-			{
-				src: "/logos/dreamy/symbol-light.svg",
-				theme: "light",
-				label: "Symbol",
-				width: 400,
-				height: 400,
-			},
-		],
-	},
-	{
-		title: "Lockup",
-		description:
-			"The full lockup combines the symbol and wordmark. Prefer this in most contexts where you have enough horizontal space.",
-		cols: "2",
+			"The primary Dreamy logo. Use this in most contexts.",
+		cols: "1",
 		assets: [
 			{
 				src: "/logos/dreamy/logo.svg",
 				theme: "dark",
-				label: "Logo",
-				width: 1809,
-				height: 400,
-			},
-			{
-				src: "/logos/dreamy/logo-light.svg",
-				theme: "light",
-				label: "Logo",
-				width: 1809,
-				height: 400,
-			},
-			{
-				src: "/logos/dreamy/text.svg",
-				theme: "dark",
-				label: "Text",
-				width: 1760,
-				height: 400,
-			},
-			{
-				src: "/logos/dreamy/text-light.svg",
-				theme: "light",
-				label: "Text",
-				width: 1760,
+				label: "Dreamy Logo",
+				width: 400,
 				height: 400,
 			},
 		],
@@ -180,10 +137,10 @@ export default function BrandPage() {
 						your product, or use the marks commercially without our explicit
 						approval. For anything unclear, reach out at{" "}
 						<Link
-							href="mailto:brand@dreamy.app"
+							href="mailto:ahmmmd1113@gmail.com"
 							className="underline underline-offset-4"
 						>
-							brand@dreamy.app
+							ahmmmd1113@gmail.com
 						</Link>
 						.
 					</p>
