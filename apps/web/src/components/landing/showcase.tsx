@@ -55,15 +55,16 @@ export function Showcase() {
 						</ul>
 					</motion.div>
 
-					{/* Right: editor mockup */}
+					{/* Right: editor mockup with glowing gradient border */}
 					<motion.div
 						initial={{ opacity: 0, y: 24 }}
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: true }}
 						transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-						className="relative rounded-2xl border border-border/60 bg-card shadow-xl shadow-black/5 overflow-hidden"
+						className="relative p-px rounded-2xl overflow-hidden"
+						style={{ background: "linear-gradient(135deg, hsl(258,85%,65%,0.4), hsl(295,70%,65%,0.15), hsl(220,85%,65%,0.3))" }}
 					>
-						{/* Toolbar */}
+						<div className="rounded-[calc(1rem-1px)] bg-card overflow-hidden">
 						<div className="flex items-center gap-2 border-b border-border/60 bg-muted/30 px-4 py-3">
 							<span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
 							<span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
@@ -89,15 +90,27 @@ export function Showcase() {
 							))}
 						</div>
 
-						{/* Preview area */}
-						<div className="flex items-center justify-center bg-black/90 aspect-video">
-							<div className="text-center">
-								<div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary">
-									<Play className="h-5 w-5 fill-current ml-0.5" />
+							{/* Preview area */}
+							<div className="relative flex items-center justify-center bg-black/90 aspect-video overflow-hidden">
+								{/* Animated gradient shimmer behind preview */}
+								<motion.div
+									className="absolute inset-0"
+									animate={{ opacity: [0.06, 0.12, 0.06] }}
+									transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+									style={{ background: "radial-gradient(ellipse at 50% 50%, hsl(258,85%,65%), transparent 70%)" }}
+								/>
+								<div className="relative text-center">
+									<motion.div
+										whileHover={{ scale: 1.1 }}
+										transition={{ type: "spring", stiffness: 300 }}
+										className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary cursor-pointer"
+										style={{ boxShadow: "0 0 24px hsl(258,85%,65%,0.4)" }}
+									>
+										<Play className="h-5 w-5 fill-current ml-0.5" />
+									</motion.div>
+									<p className="text-[10px] text-white/30 tracking-widest uppercase">Preview</p>
 								</div>
-								<p className="text-[10px] text-white/30 tracking-widest uppercase">Preview</p>
 							</div>
-						</div>
 
 						{/* Timeline */}
 						<div className="p-4 space-y-2">
@@ -130,9 +143,14 @@ export function Showcase() {
 									className="absolute top-0 flex flex-col items-center"
 									style={{ position: "absolute" }}
 								>
-									<div className="h-3 w-px bg-primary" />
+									<motion.div
+										className="h-3 w-px bg-primary"
+										animate={{ opacity: [1, 0.4, 1], boxShadow: ["0 0 4px hsl(258,85%,65%)", "0 0 12px hsl(258,85%,65%)", "0 0 4px hsl(258,85%,65%)"] }}
+										transition={{ duration: 1.2, repeat: Infinity }}
+									/>
 								</motion.div>
 							</div>
+						</div>
 						</div>
 					</motion.div>
 				</div>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useScroll, useMotionValueEvent } from "motion/react";
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
@@ -12,42 +12,64 @@ import { cn } from "@/utils/ui";
 
 export function Header() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [scrolled, setScrolled] = useState(false);
 	const closeMenu = () => setIsMenuOpen(false);
+	const { scrollY } = useScroll();
+
+	useMotionValueEvent(scrollY, "change", (latest) => {
+		setScrolled(latest > 24);
+	});
 
 	const links = [
-		{
-			label: "Roadmap",
-			href: "/roadmap",
-		},
-		{
-			label: "Contributors",
-			href: "/contributors",
-		},
-		{
-			label: "Sponsors",
-			href: "/sponsors",
-		},
-		{
-			label: "Blog",
-			href: "/blog",
-		},
+		{ label: "Roadmap", href: "/roadmap" },
+		{ label: "Contributors", href: "/contributors" },
+		{ label: "Sponsors", href: "/sponsors" },
+		{ label: "Blog", href: "/blog" },
 	];
 
 	return (
-		<header className="bg-background/90 backdrop-blur-md border-b border-border/30 sticky top-0 z-10">
+		<header
+			className={cn(
+				"sticky top-0 z-10 transition-all duration-300",
+				scrolled
+					? "bg-background/80 backdrop-blur-xl border-b border-border/30 shadow-sm"
+					: "bg-transparent border-b border-transparent",
+			)}
+		>
+			{/* Gradient progress line on scroll */}
+			<motion.div
+				className="absolute bottom-0 left-0 h-px origin-left"
+				style={{
+					background: "linear-gradient(90deg, hsl(258,85%,65%), hsl(295,70%,65%))",
+					scaleX: scrolled ? 1 : 0,
+					transition: "transform 0.4s ease",
+				}}
+			/>
+
 			<div className="relative flex w-full items-center justify-between px-8 py-4">
 				<div className="relative z-10 flex items-center gap-8">
-					<Link href="/" className="flex items-center">
-						<span className="font-serif text-lg font-light italic text-foreground">Dreamy</span>
+					<Link href="/" className="group flex items-center relative">
+						<span className="font-serif text-lg font-light italic text-foreground transition-colors group-hover:text-primary">
+							Dreamy
+						</span>
+						{/* Animated underline */}
+						<motion.span
+							className="absolute -bottom-0.5 left-0 h-px origin-left"
+							initial={{ scaleX: 0 }}
+							whileHover={{ scaleX: 1 }}
+							transition={{ duration: 0.3 }}
+							style={{ background: "linear-gradient(90deg, hsl(258,85%,65%), hsl(295,70%,65%))", width: "100%" }}
+						/>
 					</Link>
 					<nav className="hidden items-center gap-6 md:flex">
 						{links.map((link) => (
 							<Link
 								key={link.href}
 								href={link.href}
-								className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors"
+								className="group relative text-sm font-light text-muted-foreground hover:text-foreground transition-colors"
 							>
 								{link.label}
+								<span className="absolute -bottom-0.5 left-0 h-px w-0 bg-primary transition-all duration-300 group-hover:w-full" />
 							</Link>
 						))}
 					</nav>
@@ -66,14 +88,22 @@ export function Header() {
 					</div>
 					<div className="hidden items-center gap-3 md:flex">
 						<Link href="/projects">
-							<Button className="text-sm">
-								Projects
-								<ArrowRight className="size-4" />
-							</Button>
+							<motion.div
+								whileHover={{ scale: 1.03 }}
+								whileTap={{ scale: 0.97 }}
+								transition={{ type: "spring", stiffness: 400, damping: 20 }}
+							>
+								<Button className="text-sm rounded-full px-5">
+									Open Editor
+									<ArrowRight className="size-4" />
+								</Button>
+							</motion.div>
 						</Link>
 						<ThemeToggle />
 					</div>
 				</div>
+
+				{/* Mobile overlay */}
 				<div
 					className={cn(
 						"bg-background/20 pointer-events-none fixed inset-0 opacity-0 backdrop-blur-3xl",
@@ -88,11 +118,7 @@ export function Header() {
 							className="absolute inset-0"
 							onClick={closeMenu}
 							onKeyDown={(event) => {
-								if (
-									event.key === "Enter" ||
-									event.key === " " ||
-									event.key === "Escape"
-								) {
+								if (event.key === "Enter" || event.key === " " || event.key === "Escape") {
 									event.preventDefault();
 									closeMenu();
 								}
@@ -137,3 +163,5 @@ export function Header() {
 		</header>
 	);
 }
+
+
