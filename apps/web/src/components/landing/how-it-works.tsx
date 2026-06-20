@@ -8,18 +8,21 @@ const steps = [
 		title: "Drop your video",
 		description:
 			"Drag and drop any video file straight into Dreamy. MP4, MOV, WebM — all supported. No conversion needed.",
+		color: "hsl(258, 85%, 65%)",
 	},
 	{
 		number: "02",
 		title: "Let Dreamy work",
 		description:
 			"Hit Auto-Cut to strip silence, or Auto-Subtitles to generate captions. Our AI runs entirely in your browser — instant results, zero wait.",
+		color: "hsl(295, 70%, 65%)",
 	},
 	{
 		number: "03",
 		title: "Export and share",
 		description:
 			"Export your finished video in your preferred format and resolution. Directly from the browser, no rendering farm required.",
+		color: "hsl(220, 85%, 65%)",
 	},
 ];
 
@@ -40,6 +43,18 @@ export function HowItWorks() {
 				</div>
 
 				<div className="relative grid gap-16 md:grid-cols-3 md:gap-12">
+					{/* Animated connector line (desktop only) */}
+					<div className="absolute left-[16%] right-[16%] top-4 hidden h-px md:block overflow-hidden">
+						<motion.div
+							initial={{ scaleX: 0 }}
+							whileInView={{ scaleX: 1 }}
+							viewport={{ once: true }}
+							transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+							className="h-full origin-left"
+							style={{ background: "linear-gradient(90deg, hsl(258,85%,65%), hsl(295,70%,65%), hsl(220,85%,65%))", opacity: 0.25 }}
+						/>
+					</div>
+
 					{steps.map((step, i) => (
 						<motion.div
 							key={step.number}
@@ -47,9 +62,13 @@ export function HowItWorks() {
 							whileInView={{ opacity: 1, y: 0 }}
 							viewport={{ once: true }}
 							transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-							className="relative flex flex-col"
+							whileHover={{ y: -4 }}
+							className="relative flex flex-col cursor-default"
 						>
-							<div className="mb-6 font-serif text-3xl font-light text-primary/40">
+							<div
+								className="mb-6 font-serif text-4xl font-light"
+								style={{ color: step.color, opacity: 0.7 }}
+							>
 								{step.number}
 							</div>
 
