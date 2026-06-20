@@ -5,24 +5,10 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import { ThemeToggle } from "./theme-toggle";
-import {
-	Copy01Icon,
-	Download01Icon,
-	LinkSquare02Icon,
-	Menu02Icon,
-} from "@hugeicons/core-free-icons";
+import { Menu02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/utils/ui";
-import { DEFAULT_LOGO_URL } from "@/site/brand";
-import { SOCIAL_LINKS } from "@/site/social";
-import {
-	ContextMenu,
-	ContextMenuContent,
-	ContextMenuItem,
-	ContextMenuTrigger,
-} from "./ui/context-menu";
 
 export function Header() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,57 +34,20 @@ export function Header() {
 	];
 
 	return (
-		<header className="bg-background shadow-background/85 sticky top-0 z-10 shadow-[0_30px_35px_15px_rgba(0,0,0,1)]">
-			<div className="relative flex w-full items-center justify-between px-6 pt-4">
-				<div className="relative z-10 flex items-center gap-6">
-					<ContextMenu>
-						<ContextMenuTrigger asChild>
-							<Link href="/" className="flex items-center gap-3">
-								<Image
-									src={DEFAULT_LOGO_URL}
-									alt="Dreamy Logo"
-									width={32}
-									height={32}
-								/>
-							</Link>
-						</ContextMenuTrigger>
-						<ContextMenuContent>
-							<ContextMenuItem
-								onClick={async () => {
-									const res = await fetch(DEFAULT_LOGO_URL);
-									const svg = await res.text();
-									await navigator.clipboard.writeText(svg);
-								}}
-							>
-								<HugeiconsIcon icon={Copy01Icon} />
-								Copy SVG
-							</ContextMenuItem>
-							<ContextMenuItem
-								onClick={() => {
-									const a = document.createElement("a");
-									a.href = DEFAULT_LOGO_URL;
-									a.download = "dreamy-logo.svg";
-									a.click();
-								}}
-							>
-								<HugeiconsIcon icon={Download01Icon} />
-								Download SVG
-							</ContextMenuItem>
-							<Link href="/brand">
-								<ContextMenuItem>
-									<HugeiconsIcon icon={LinkSquare02Icon} />
-									Brand assets
-								</ContextMenuItem>
-							</Link>
-						</ContextMenuContent>
-					</ContextMenu>
-
-					<nav className="hidden items-center gap-4 md:flex">
+		<header className="bg-background/90 backdrop-blur-md border-b border-border/30 sticky top-0 z-10">
+			<div className="relative flex w-full items-center justify-between px-8 py-4">
+				<div className="relative z-10 flex items-center gap-8">
+					<Link href="/" className="flex items-center">
+						<span className="font-serif text-lg font-light italic text-foreground">Dreamy</span>
+					</Link>
+					<nav className="hidden items-center gap-6 md:flex">
 						{links.map((link) => (
-							<Link key={link.href} href={link.href}>
-								<Button variant="text" className="p-0 text-sm">
-									{link.label}
-								</Button>
+							<Link
+								key={link.href}
+								href={link.href}
+								className="text-sm font-light text-muted-foreground hover:text-foreground transition-colors"
+							>
+								{link.label}
 							</Link>
 						))}
 					</nav>
@@ -166,7 +115,7 @@ export function Header() {
 								>
 									<Link
 										href={link.href}
-										className="text-2xl font-semibold"
+										className="font-serif text-2xl font-light italic text-foreground"
 										onClick={() => setIsMenuOpen(false)}
 									>
 										{link.label}

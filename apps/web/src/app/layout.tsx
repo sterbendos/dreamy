@@ -7,9 +7,10 @@ import { TooltipProvider } from "../components/ui/tooltip";
 import { baseMetaData } from "./metadata";
 import { BotIdClient } from "botid/client";
 import { webEnv } from "@/env/web";
-import { Inter } from "next/font/google";
+import { Inter, Fraunces } from "next/font/google";
 
-const siteFont = Inter({ subsets: ["latin"] });
+const siteFont = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const serifFont = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });
 
 export const metadata = baseMetaData;
 
@@ -39,7 +40,7 @@ export default function RootLayout({
 					</>
 				)}
 			</head>
-			<body className={`${siteFont.className} font-sans antialiased`}>
+			<body className={`${siteFont.variable} ${serifFont.variable} font-sans antialiased`}>
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"
