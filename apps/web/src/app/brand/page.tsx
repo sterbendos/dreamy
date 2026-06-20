@@ -52,7 +52,7 @@ const ASSET_SECTIONS: AssetSection[] = [
 		cols: "1",
 		assets: [
 			{
-				src: "/logos/dreamy/logo.svg",
+				src: "/logos/dreamy/symbol.svg",
 				theme: "dark",
 				label: "Dreamy Logo",
 				width: 400,

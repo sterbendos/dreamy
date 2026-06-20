@@ -49,6 +49,7 @@ import { OcRippleIcon } from "@/components/icons";
 import { GraphEditorPopover } from "./graph-editor/popover";
 import { PopoverTrigger } from "@/components/ui/popover";
 import { useGraphEditorController } from "./graph-editor/use-controller";
+import { AutoCutButton, AutoSubtitlesButton } from "@/components/editor/auto-cut-tools";
 
 export function TimelineToolbar({
 	zoomLevel,
@@ -142,6 +143,9 @@ function ToolbarLeftSection() {
 	return (
 		<div className="flex items-center gap-1">
 			<TooltipProvider delayDuration={500}>
+				<AutoCutButton />
+				<AutoSubtitlesButton />
+				<div className="bg-border mx-1 h-6 w-px" />
 				<ToolbarButton
 					icon={<HugeiconsIcon icon={ScissorIcon} />}
 					tooltip="Split element"
@@ -302,7 +306,7 @@ function ToolbarRightSection({
 
 			<div className="flex items-center gap-1">
 				<Button
-					variant="text"
+					variant="ghost"
 					size="icon"
 					onClick={() => onZoom({ direction: "out" })}
 				>
@@ -319,7 +323,7 @@ function ToolbarRightSection({
 					step={0.005}
 				/>
 				<Button
-					variant="text"
+					variant="ghost"
 					size="icon"
 					onClick={() => onZoom({ direction: "in" })}
 				>
@@ -347,7 +351,7 @@ function ToolbarButton({
 }) {
 	const button = (
 		<Button
-			variant={isActive ? "secondary" : "text"}
+			variant={isActive ? "secondary" : "ghost"}
 			size="icon"
 			disabled={disabled}
 			onClick={onClick ? (event) => onClick({ event }) : undefined}
