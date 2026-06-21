@@ -5,77 +5,56 @@ import { motion } from "motion/react";
 const steps = [
 	{
 		number: "01",
-		title: "Drop your video",
-		description:
-			"Drag and drop any video file straight into Dreamy. MP4, MOV, WebM — all supported. No conversion needed.",
-		color: "hsl(258, 85%, 65%)",
+		title: "Drag & Drop",
+		desc: "Drop your media files directly into the browser. No uploads, no servers. It stays on your device.",
 	},
 	{
 		number: "02",
-		title: "Let Dreamy work",
-		description:
-			"Hit Auto-Cut to strip silence, or Auto-Subtitles to generate captions. Our AI runs entirely in your browser — instant results, zero wait.",
-		color: "hsl(295, 70%, 65%)",
+		title: "Talk to Dreamy",
+		desc: "\"Cut all the silence\", \"Add subtitles in bold yellow\", \"Remove that last take\". Just type or speak your edits.",
 	},
 	{
 		number: "03",
-		title: "Export and share",
-		description:
-			"Export your finished video in your preferred format and resolution. Directly from the browser, no rendering farm required.",
-		color: "hsl(220, 85%, 65%)",
+		title: "Instant Export",
+		desc: "Render locally using blazing fast WebAssembly. Get your final MP4 in seconds, not minutes.",
 	},
 ];
 
 export function HowItWorks() {
 	return (
-		<section className="relative px-4 py-32 md:py-48">
-			<div className="mx-auto max-w-5xl">
-				<div className="mb-24 text-center">
-					<motion.h2
-						initial={{ opacity: 0, y: 16 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-						className="font-serif text-4xl font-light tracking-tight md:text-5xl text-foreground"
-					>
-						How it works
-					</motion.h2>
+		<section className="relative py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10 border-t border-border/40 mt-32">
+			<div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+				
+				<div className="lg:col-span-4 lg:sticky lg:top-32 self-start">
+					<h2 className="text-4xl md:text-5xl font-serif font-medium tracking-tight mb-6">
+						Editing, <br className="hidden lg:block"/>
+						<span className="italic text-muted-foreground">simplified.</span>
+					</h2>
+					<p className="text-lg text-muted-foreground font-light">
+						Three steps to perfect video. 
+						Your workflow just got a massive upgrade.
+					</p>
 				</div>
 
-				<div className="relative grid gap-16 md:grid-cols-3 md:gap-12">
-					{/* Animated connector line (desktop only) */}
-					<div className="absolute left-[16%] right-[16%] top-4 hidden h-px md:block overflow-hidden">
-						<motion.div
-							initial={{ scaleX: 0 }}
-							whileInView={{ scaleX: 1 }}
-							viewport={{ once: true }}
-							transition={{ duration: 1.2, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-							className="h-full origin-left"
-							style={{ background: "linear-gradient(90deg, hsl(258,85%,65%), hsl(295,70%,65%), hsl(220,85%,65%))", opacity: 0.25 }}
-						/>
-					</div>
-
-					{steps.map((step, i) => (
+				<div className="lg:col-span-8 space-y-24">
+					{steps.map((step, idx) => (
 						<motion.div
 							key={step.number}
-							initial={{ opacity: 0, y: 24 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-							whileHover={{ y: -4 }}
-							className="relative flex flex-col cursor-default"
+							initial={{ opacity: 0, x: 40 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							viewport={{ once: true, margin: "-100px" }}
+							transition={{ duration: 0.8, ease: "easeOut", delay: idx * 0.1 }}
+							className="relative pl-12 md:pl-20"
 						>
-							<div
-								className="mb-6 font-serif text-4xl font-light"
-								style={{ color: step.color, opacity: 0.7 }}
-							>
+							<div className="absolute left-0 top-0 text-6xl font-serif font-light text-primary/20 -translate-y-2">
 								{step.number}
 							</div>
-
-							<h3 className="mb-4 font-serif text-2xl font-light text-foreground">{step.title}</h3>
-							<p className="text-base leading-relaxed text-muted-foreground/80 font-light">
-								{step.description}
-							</p>
+							<div className="relative z-10">
+								<h3 className="text-2xl font-medium mb-4">{step.title}</h3>
+								<p className="text-xl text-muted-foreground font-light leading-relaxed max-w-2xl">
+									{step.desc}
+								</p>
+							</div>
 						</motion.div>
 					))}
 				</div>

@@ -1,3 +1,4 @@
+import { Noise } from "@/components/ui/noise";
 import { ThemeProvider } from "next-themes";
 import Script from "next/script";
 import "./globals.css";
@@ -7,9 +8,9 @@ import { TooltipProvider } from "../components/ui/tooltip";
 import { baseMetaData } from "./metadata";
 import { BotIdClient } from "botid/client";
 import { webEnv } from "@/env/web";
-import { Inter, Fraunces } from "next/font/google";
+import { Plus_Jakarta_Sans, Fraunces } from "next/font/google";
 
-const siteFont = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const siteFont = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-inter" });
 const serifFont = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });
 
 export const metadata = baseMetaData;
@@ -47,6 +48,7 @@ export default function RootLayout({
 					disableTransitionOnChange={true}
 				>
 					<TooltipProvider>
+						<Noise />
 						<Toaster />
 						<Script
 							src="https://cdn.databuddy.cc/databuddy.js"

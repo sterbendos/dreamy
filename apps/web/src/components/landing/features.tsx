@@ -1,90 +1,85 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Scissors, Captions, ShieldCheck } from "lucide-react";
+import { Scissors, Sparkles, Zap, Lock } from "lucide-react";
 
 const features = [
 	{
+		title: "Silence Cutter",
+		description: "Automatically detects and removes dead air, ums, and ahs from your footage.",
 		icon: Scissors,
-		title: "Auto-Cut Silence",
-		description:
-			"Dreamy detects and removes dead air from your recordings automatically. Save hours of manual trimming with one click.",
-		hue: "hsl(258, 85%, 65%)",
-		accent: "bg-violet-500/10 text-violet-500 group-hover:bg-violet-500/20",
-		glow: "group-hover:shadow-[0_0_32px_hsl(258,85%,65%,0.3)]",
+		color: "text-primary",
+		bg: "bg-primary/10",
+		border: "border-primary/20",
 	},
 	{
-		icon: Captions,
-		title: "Auto-Subtitles",
-		description:
-			"Accurate, styled captions generated directly in your browser. No API keys, no uploads — your audio never leaves your device.",
-		hue: "hsl(295, 70%, 65%)",
-		accent: "bg-fuchsia-500/10 text-fuchsia-500 group-hover:bg-fuchsia-500/20",
-		glow: "group-hover:shadow-[0_0_32px_hsl(295,70%,65%,0.3)]",
+		title: "AI Subtitles",
+		description: "Generate pixel-perfect captions instantly with Whisper-level accuracy.",
+		icon: Sparkles,
+		color: "text-chart-2",
+		bg: "bg-chart-2/10",
+		border: "border-chart-2/20",
 	},
 	{
-		icon: ShieldCheck,
-		title: "Private by Default",
-		description:
-			"Everything is processed locally using WebAssembly and WebCodecs. Your footage is yours — we never see it.",
-		hue: "hsl(220, 85%, 65%)",
-		accent: "bg-blue-500/10 text-blue-500 group-hover:bg-blue-500/20",
-		glow: "group-hover:shadow-[0_0_32px_hsl(220,85%,65%,0.3)]",
+		title: "WebAssembly Engine",
+		description: "Desktop-grade performance running entirely in your browser window.",
+		icon: Zap,
+		color: "text-chart-3",
+		bg: "bg-chart-3/10",
+		border: "border-chart-3/20",
+	},
+	{
+		title: "100% Private",
+		description: "Your files never leave your device. All processing happens locally.",
+		icon: Lock,
+		color: "text-foreground",
+		bg: "bg-muted",
+		border: "border-border",
 	},
 ];
 
 export function Features() {
 	return (
-		<section id="features" className="relative px-4 py-32 md:py-48">
-			{/* Colored top divider */}
-			<div className="absolute inset-x-0 top-0 mx-auto max-w-xs h-px"
-				style={{ background: "linear-gradient(90deg, transparent, hsl(258,85%,65%), hsl(295,70%,65%), transparent)" }}
-			/>
+		<section id="features" className="relative py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10">
+			<div className="mb-32 max-w-3xl">
+				<h2 className="text-4xl md:text-6xl font-serif font-medium tracking-tight mb-6">
+					Designed to stay out of your way.
+				</h2>
+				<p className="text-xl text-muted-foreground font-light leading-relaxed">
+					We stripped away the complexity of traditional NLEs and rebuilt video editing around what actually matters: speed, intelligence, and privacy.
+				</p>
+			</div>
 
-			<div className="mx-auto max-w-5xl">
-				{/* Header */}
-				<div className="mb-24 text-center">
-					<motion.h2
-						initial={{ opacity: 0, y: 16 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-						className="font-serif text-4xl font-light tracking-tight md:text-6xl text-foreground"
-					>
-						Everything you need.
-						<br />
-						<span className="italic text-primary">
-							Nothing you don&apos;t.
-						</span>
-					</motion.h2>
-				</div>
-
-				{/* Features List */}
-				<div className="grid gap-16 md:grid-cols-3 md:gap-12">
-					{features.map((feature, i) => (
+			<div className="space-y-32">
+				{features.map((feature, idx) => {
+					const isEven = idx % 2 === 0;
+					const Icon = feature.icon;
+					return (
 						<motion.div
 							key={feature.title}
-							initial={{ opacity: 0, y: 24 }}
+							initial={{ opacity: 0, y: 40 }}
 							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-							className="flex flex-col items-center text-center group cursor-default"
+							viewport={{ once: true, margin: "-100px" }}
+							transition={{ duration: 0.8, ease: "easeOut" }}
+							className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} gap-12 items-center`}
 						>
-							<motion.div
-								whileHover={{ y: -4, scale: 1.05 }}
-								transition={{ type: "spring", stiffness: 300, damping: 20 }}
-								className={`mb-8 flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-300 ${feature.accent} ${feature.glow}`}
-							>
-								<feature.icon className="h-6 w-6 stroke-[1.5]" />
-							</motion.div>
-
-							<h3 className="mb-4 font-serif text-2xl font-light text-foreground">{feature.title}</h3>
-							<p className="text-base leading-relaxed text-muted-foreground/80 font-light">
-								{feature.description}
-							</p>
+							<div className="flex-1 w-full">
+								<div className={`p-12 rounded-3xl border ${feature.border} ${feature.bg} bg-opacity-30 backdrop-blur-sm`}>
+									<div className={`h-16 w-16 rounded-2xl ${feature.bg} border ${feature.border} flex items-center justify-center mb-8`}>
+										<Icon className={`h-8 w-8 ${feature.color}`} />
+									</div>
+									<h3 className="text-3xl font-serif font-medium mb-4">{feature.title}</h3>
+									<p className="text-lg text-muted-foreground leading-relaxed font-light">
+										{feature.description}
+									</p>
+								</div>
+							</div>
+							
+							{/* Empty space to allow the scroll path to snake through */}
+							<div className="flex-1 w-full hidden md:block" />
 						</motion.div>
-					))}
-				</div>
+					);
+				})}
 			</div>
 		</section>
 	);
