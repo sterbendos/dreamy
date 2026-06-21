@@ -33,8 +33,8 @@ export function Footer() {
 					{/* Brand Section */}
 					<div className="max-w-sm">
 						<Link href="/" className="inline-block mb-5">
-							<span className="font-serif text-xl font-light italic text-foreground">Dreamy</span>
-						</Link>
+						<span className="font-sans text-base font-semibold tracking-tight text-foreground">Dreamy</span>
+					</Link>
 						<p className="text-muted-foreground/70 text-sm font-light leading-relaxed">
 							The privacy-first video editor that feels simple to use.
 						</p>

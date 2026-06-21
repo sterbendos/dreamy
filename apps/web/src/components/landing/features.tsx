@@ -1,84 +1,99 @@
 "use client";
 
-import { motion } from "motion/react";
-import { Scissors, Sparkles, Zap, Lock } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 
 const features = [
 	{
-		title: "Silence Cutter",
-		description: "Automatically detects and removes dead air, ums, and ahs from your footage.",
-		icon: Scissors,
-		color: "text-primary",
-		bg: "bg-primary/10",
-		border: "border-primary/20",
-	},
-	{
-		title: "AI Subtitles",
-		description: "Generate pixel-perfect captions instantly with Whisper-level accuracy.",
-		icon: Sparkles,
-		color: "text-chart-2",
-		bg: "bg-chart-2/10",
-		border: "border-chart-2/20",
-	},
-	{
-		title: "WebAssembly Engine",
-		description: "Desktop-grade performance running entirely in your browser window.",
-		icon: Zap,
-		color: "text-chart-3",
-		bg: "bg-chart-3/10",
-		border: "border-chart-3/20",
-	},
-	{
+		id: "privacy",
 		title: "100% Private",
-		description: "Your files never leave your device. All processing happens locally.",
-		icon: Lock,
-		color: "text-foreground",
-		bg: "bg-muted",
-		border: "border-border",
+		body: "Your footage never leaves your device. All processing runs locally via WebAssembly. No uploads, no cloud, no exceptions.",
+		stat: "0",
+		statLabel: "bytes sent",
+		accent: false,
+		className: "md:col-span-1 md:row-span-2",
+	},
+	{
+		id: "ai",
+		title: "AI that edits",
+		body: "Tell Dreamy what to do in plain text. Cut silence, add captions, trim takes. The AI applies it frame-accurately.",
+		stat: null,
+		statLabel: null,
+		accent: true,
+		className: "md:col-span-1",
+	},
+	{
+		id: "speed",
+		title: "Desktop-grade speed",
+		body: "FFmpeg compiled to Wasm runs at native performance. Export a 10-minute video in seconds, not minutes.",
+		stat: null,
+		statLabel: null,
+		accent: false,
+		className: "md:col-span-1",
 	},
 ];
 
 export function Features() {
-	return (
-		<section id="features" className="relative py-32 z-10">
-			<div className="mb-24 max-w-2xl">
-				<h2 className="text-4xl md:text-5xl font-serif font-medium tracking-tight mb-6">
-					Designed to stay out of your way.
-				</h2>
-				<p className="text-xl text-muted-foreground font-light leading-relaxed">
-					We stripped away the complexity of traditional NLEs and rebuilt video editing around what actually matters: speed, intelligence, and privacy.
-				</p>
-			</div>
+	const reduce = useReducedMotion();
 
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-				{features.map((feature, idx) => {
-					const Icon = feature.icon;
-					return (
+	return (
+		<section id="features" className="py-32 lg:py-40">
+			<div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16">
+
+				{/* Section lead — no eyebrow */}
+				<div className="mb-16 max-w-xl">
+					<h2 className="text-4xl md:text-5xl font-sans font-semibold tracking-tighter text-foreground leading-[1.05] mb-4">
+						Built different.
+					</h2>
+					<p className="text-base text-muted-foreground leading-relaxed">
+						We stripped every assumption about what a video editor needs to be and rebuilt from the browser up.
+					</p>
+				</div>
+
+				{/* Asymmetric bento: 2-col, first cell spans 2 rows */}
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					{features.map((f, i) => (
 						<motion.div
-							key={feature.title}
-							initial={{ opacity: 0, y: 30 }}
+							key={f.id}
+							className={f.className}
+							initial={reduce ? false : { opacity: 0, y: 20 }}
 							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true, margin: "-50px" }}
-							transition={{ 
-								type: "spring",
-								stiffness: 100,
-								damping: 20,
-								delay: idx * 0.1 
+							viewport={{ once: true, amount: 0.2 }}
+							transition={{
+								duration: 0.6,
+								delay: i * 0.08,
+								ease: [0.16, 1, 0.3, 1],
 							}}
-							className="group"
 						>
-							<div className={`h-full p-10 rounded-2xl border ${feature.border} bg-card/60 backdrop-blur-md transition-all duration-300 hover:bg-card hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/5`}>
-								<div className={`h-14 w-14 rounded-xl ${feature.bg} border ${feature.border} flex items-center justify-center mb-6`}>
-									<Icon className={`h-6 w-6 ${feature.color}`} />
-								</div>
-								<h3 className="text-2xl font-serif font-medium mb-3">{feature.title}</h3>
-								<p className="text-base text-muted-foreground leading-relaxed font-light">
-									{feature.description}
+							<div
+								className={`h-full rounded-xl border p-8 flex flex-col gap-4 ${
+									f.accent
+										? "border-primary/30 bg-primary/5"
+										: "border-border bg-card"
+								}`}
+							>
+								{/* Stat or accent bar */}
+								{f.id === "privacy" && (
+									<div className="mb-4">
+										<p className="text-[4.5rem] font-semibold tracking-tighter text-foreground leading-none tabular-nums">
+											{f.stat}
+											<span className="text-2xl text-muted-foreground/50 ml-1 font-light">{f.statLabel}</span>
+										</p>
+									</div>
+								)}
+								{f.accent && (
+									<div className="w-8 h-0.5 bg-primary mb-2" />
+								)}
+
+								<h3 className="text-xl font-semibold tracking-tight text-foreground">
+									{f.title}
+								</h3>
+								<p className="text-sm text-muted-foreground leading-relaxed font-light">
+									{f.body}
 								</p>
 							</div>
 						</motion.div>
-					);
-				})}
+					))}
+				</div>
 			</div>
 		</section>
 	);

@@ -1,87 +1,51 @@
 "use client";
 
-import { motion } from "motion/react";
-import { Button } from "../ui/button";
-import { ArrowRight } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 
 export function CtaBanner() {
-	return (
-		<section className="relative px-4 py-32 md:py-48 overflow-hidden">
-			{/* Background gradient orbs */}
-			<div className="pointer-events-none absolute inset-0 -z-10">
-				<motion.div
-					animate={{ scale: [1, 1.15, 1], opacity: [0.12, 0.18, 0.12] }}
-					transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-					className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full"
-					style={{ background: "radial-gradient(circle, hsl(258, 85%, 65%), transparent 70%)" }}
-				/>
-				<motion.div
-					animate={{ scale: [1, 1.1, 1], opacity: [0.08, 0.14, 0.08] }}
-					transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-					className="absolute left-1/4 top-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full"
-					style={{ background: "radial-gradient(circle, hsl(295, 70%, 65%), transparent 70%)" }}
-				/>
-				<motion.div
-					animate={{ scale: [1, 1.12, 1], opacity: [0.06, 0.12, 0.06] }}
-					transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-					className="absolute right-1/4 top-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full"
-					style={{ background: "radial-gradient(circle, hsl(220, 85%, 65%), transparent 70%)" }}
-				/>
-			</div>
+	const reduce = useReducedMotion();
 
-			<div className="mx-auto max-w-4xl text-center">
+	return (
+		<section className="relative py-32 lg:py-48 border-t border-border/40 overflow-hidden">
+			{/* Single, subtle cobalt glow — not a pulsing orb, just ambiance */}
+			<div
+				className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[240px] rounded-full opacity-[0.06]"
+				style={{ background: "radial-gradient(ellipse, hsl(221,100%,55%), transparent 70%)" }}
+			/>
+
+			<div className="relative max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16">
 				<motion.div
-					initial={{ opacity: 0, y: 24 }}
+					className="max-w-2xl"
+					initial={reduce ? false : { opacity: 0, y: 20 }}
 					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true }}
-					transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-					className="flex flex-col items-center gap-10"
+					viewport={{ once: true, amount: 0.4 }}
+					transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
 				>
-					<h2 className="font-serif text-5xl font-light leading-[1.1] tracking-tight md:text-7xl text-foreground">
-						Ready to edit
-						<br />
-						<motion.span
-							className="italic bg-clip-text text-transparent"
-							style={{
-								backgroundImage: "linear-gradient(135deg, hsl(258, 85%, 65%), hsl(295, 75%, 65%), hsl(258, 85%, 65%))",
-								backgroundSize: "200% 100%",
-							}}
-							animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-							transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-						>
-							differently?
-						</motion.span>
+					<h2 className="text-4xl md:text-5xl lg:text-6xl font-sans font-semibold tracking-tighter leading-[1.04] text-foreground mb-6">
+						Your footage.<br />
+						Your machine.<br />
+						<span className="text-muted-foreground font-light">Your edit.</span>
 					</h2>
 
-					<p className="max-w-md text-lg font-light leading-relaxed text-muted-foreground/80">
-						No sign-up. No credit card. Just open Dreamy and start creating — right now, in your browser.
+					<p className="text-base text-muted-foreground leading-relaxed mb-10 max-w-[40ch] font-light">
+						No sign-up required. Open Dreamy and start editing in under ten seconds.
 					</p>
 
-					<Link href="/projects">
-						<motion.div
-							whileHover={{ scale: 1.04 }}
-							whileTap={{ scale: 0.96 }}
-							transition={{ type: "spring", stiffness: 400, damping: 20 }}
+					<div className="flex flex-row gap-3 items-center flex-wrap">
+						<Link
+							href="/editor"
+							className="inline-flex items-center justify-center gap-2.5 h-12 px-7 rounded-md bg-foreground text-background text-sm font-medium transition-all hover:bg-foreground/85 active:scale-[0.98]"
 						>
-							<Button
-								size="lg"
-								className="relative h-14 gap-2.5 overflow-hidden rounded-full px-10 text-lg font-medium"
-							>
-								<motion.div
-									className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent"
-									animate={{ translateX: ["-100%", "200%"] }}
-									transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1.5, ease: "easeInOut" }}
-								/>
-								Start editing free
-								<ArrowRight className="h-5 w-5" />
-							</Button>
-						</motion.div>
-					</Link>
-
-					<p className="text-sm text-muted-foreground/50 font-light">
-						100% browser-based · No uploads required · Privacy-first
-					</p>
+							Open editor free
+							<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+								<path d="M2.5 7h9M7 2.5l4.5 4.5-4.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+							</svg>
+						</Link>
+						<span className="text-xs text-muted-foreground/50 font-light">
+							100% browser-based · Zero uploads
+						</span>
+					</div>
 				</motion.div>
 			</div>
 		</section>

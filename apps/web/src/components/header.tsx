@@ -38,9 +38,8 @@ export function Header() {
 		>
 			{/* Gradient progress line on scroll */}
 			<motion.div
-				className="absolute bottom-0 left-0 h-px origin-left"
+				className="absolute bottom-0 left-0 h-px origin-left bg-primary"
 				style={{
-					background: "linear-gradient(90deg, hsl(258,85%,65%), hsl(295,70%,65%))",
 					scaleX: scrolled ? 1 : 0,
 					transition: "transform 0.4s ease",
 				}}
@@ -49,17 +48,9 @@ export function Header() {
 			<div className="relative flex w-full items-center justify-between px-8 py-4">
 				<div className="relative z-10 flex items-center gap-8">
 					<Link href="/" className="group flex items-center relative">
-						<span className="font-serif text-lg font-light italic text-foreground transition-colors group-hover:text-primary">
+						<span className="font-sans text-base font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
 							Dreamy
 						</span>
-						{/* Animated underline */}
-						<motion.span
-							className="absolute -bottom-0.5 left-0 h-px origin-left"
-							initial={{ scaleX: 0 }}
-							whileHover={{ scaleX: 1 }}
-							transition={{ duration: 0.3 }}
-							style={{ background: "linear-gradient(90deg, hsl(258,85%,65%), hsl(295,70%,65%))", width: "100%" }}
-						/>
 					</Link>
 					<nav className="hidden items-center gap-6 md:flex">
 						{links.map((link) => (
@@ -141,7 +132,7 @@ export function Header() {
 								>
 									<Link
 										href={link.href}
-										className="font-serif text-2xl font-light italic text-foreground"
+										className="font-sans text-2xl font-medium tracking-tight text-foreground hover:text-primary transition-colors"
 										onClick={() => setIsMenuOpen(false)}
 									>
 										{link.label}

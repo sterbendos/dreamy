@@ -1,82 +1,96 @@
 "use client";
 
-import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
-import { ArrowRight, Sparkles, Play } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { motion } from "motion/react";
+import Image from "next/image";
 
 export function Hero() {
+	const reduce = useReducedMotion();
+
 	return (
-		<section className="relative overflow-hidden pt-32 pb-20 md:pt-48 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-			<div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-				{/* Left Column: Massive Editorial Typography */}
-				<div className="lg:col-span-7 flex flex-col items-start text-left">
-					<motion.h1
-						className="text-5xl sm:text-6xl md:text-8xl font-sans font-medium tracking-tighter text-foreground leading-[1.05] mb-8"
-						initial={{ opacity: 0, y: 30 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.8, ease: "easeOut" }}
-					>
-						Edit at the <br />
-						<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-chart-2 pr-4">
-							speed of thought.
-						</span>
-					</motion.h1>
+		<section className="relative min-h-[100dvh] flex items-center overflow-hidden">
+			{/* Subtle noise grain over background - inherits from layout's Noise component */}
 
-					<motion.p
-						className="text-lg sm:text-xl text-muted-foreground max-w-xl font-light leading-relaxed mb-10"
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-					>
-						No timelines to battle. No clunky exports. Just talk to your footage,
-						and watch the magic happen entirely in your browser.
-					</motion.p>
+			<div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16 py-24 grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-20 items-center">
 
-					<motion.div
-						className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-					>
-						<Button
-							size="lg"
-							className="h-14 px-8 text-base bg-foreground text-background hover:bg-foreground/90 transition-all hover:scale-[1.02] active:scale-95"
-							asChild
-						>
-							<Link href="/editor">
-								Start Editing Free
-								<ArrowRight className="ml-2 h-5 w-5" />
-							</Link>
-						</Button>
-						<Button
-							size="lg"
-							variant="outline"
-							className="h-14 px-8 text-base border-border/50 bg-background/50 backdrop-blur-md hover:bg-muted/50 transition-all"
-						>
-							<Play className="mr-2 h-4 w-4" /> Watch Reel
-						</Button>
-					</motion.div>
-				</div>
-
-				{/* Right Column: Real Image Mockup */}
-				<motion.div 
-					className="lg:col-span-5 relative w-full hidden lg:block"
-					initial={{ opacity: 0, scale: 0.95 }}
-					animate={{ opacity: 1, scale: 1 }}
-					transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+				{/* Left: Editorial copy block */}
+				<motion.div
+					className="flex flex-col items-start"
+					initial={reduce ? false : { opacity: 0, y: 28 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
 				>
-					<div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/5 bg-black/50">
-						{/* Use regular img for demo, next/image normally */}
-						<img 
-							src="/editor-mockup.png" 
-							alt="Cutflow Video Editor Interface" 
+					{/* Status tag */}
+					<div className="mb-8 flex items-center gap-2.5">
+						<span className="flex h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+						<span className="text-xs font-medium text-muted-foreground tracking-widest uppercase">
+							Browser-native · Open source
+						</span>
+					</div>
+
+					<h1 className="text-5xl sm:text-6xl lg:text-7xl font-sans font-semibold tracking-tighter leading-[1.02] text-foreground mb-6">
+						Edit at the<br />
+						speed of{" "}
+						<span className="text-primary">thought.</span>
+					</h1>
+
+					<p className="text-lg text-muted-foreground leading-relaxed max-w-[40ch] mb-10 font-light">
+						Talk to your footage. Dreamy cuts, captions, and exports — entirely in your browser. No uploads. No servers.
+					</p>
+
+					<div className="flex flex-row gap-3 w-full sm:w-auto">
+						<Link
+							href="/editor"
+							className="inline-flex items-center justify-center gap-2.5 h-12 px-7 rounded-md bg-foreground text-background text-sm font-medium transition-all hover:bg-foreground/85 active:scale-[0.98]"
+						>
+							Open editor free
+							<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+								<path d="M2.5 7h9M7 2.5l4.5 4.5-4.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+							</svg>
+						</Link>
+						<Link
+							href="/roadmap"
+							className="inline-flex items-center justify-center h-12 px-7 rounded-md border border-border bg-transparent text-sm font-medium text-foreground/70 transition-colors hover:text-foreground hover:border-border/80"
+						>
+							See roadmap
+						</Link>
+					</div>
+
+					{/* Trust line */}
+					<p className="mt-8 text-xs text-muted-foreground/50 font-light">
+						WebAssembly-powered · Zero data leaves your device
+					</p>
+				</motion.div>
+
+				{/* Right: Editor screenshot */}
+				<motion.div
+					className="relative hidden lg:block"
+					initial={reduce ? false : { opacity: 0, scale: 0.97 }}
+					animate={{ opacity: 1, scale: 1 }}
+					transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
+				>
+					{/* Cobalt glow behind image - the ONE allowed accent touch */}
+					<div
+						className="absolute -inset-[1px] rounded-xl pointer-events-none"
+						style={{
+							background: "linear-gradient(135deg, hsl(221,100%,55%,0.15) 0%, transparent 60%)",
+						}}
+					/>
+					<div className="relative rounded-xl overflow-hidden border border-border/60 shadow-[0_32px_80px_rgba(0,0,0,0.4)]">
+						<Image
+							src="/editor-mockup.png"
+							alt="Dreamy video editor — transcript-based editing with AI subtitles and multi-track timeline"
+							width={1200}
+							height={750}
 							className="w-full h-auto object-cover"
+							priority
 						/>
 					</div>
 				</motion.div>
 			</div>
+
+			{/* Bottom border */}
+			<div className="absolute bottom-0 left-0 right-0 h-px bg-border/30" />
 		</section>
 	);
 }
