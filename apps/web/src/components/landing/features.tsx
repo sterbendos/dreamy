@@ -40,7 +40,7 @@ const features = [
 
 export function Features() {
 	return (
-		<section id="features" className="relative py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10">
+		<section id="features" className="relative py-32 z-10">
 			<div className="mb-24 max-w-2xl">
 				<h2 className="text-4xl md:text-5xl font-serif font-medium tracking-tight mb-6">
 					Designed to stay out of your way.

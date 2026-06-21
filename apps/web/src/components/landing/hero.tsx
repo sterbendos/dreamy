@@ -5,6 +5,7 @@ import { Badge } from "../ui/badge";
 import { ArrowRight, Sparkles, Play } from "lucide-react";
 import Link from "next/link";
 import { motion } from "motion/react";
+import { HeroScene } from "./scene";
 
 export function Hero() {
 	return (
@@ -74,8 +75,10 @@ export function Hero() {
 					</motion.div>
 				</div>
 
-				{/* Right Column: Empty space for 3D Canvas elements to shine through */}
-				<div className="lg:col-span-5 relative h-[500px] w-full hidden lg:block pointer-events-none" />
+				{/* Right Column: 3D Interactive Editor */}
+				<div className="lg:col-span-5 relative h-[500px] w-full hidden lg:block">
+					<HeroScene />
+				</div>
 			</div>
 		</section>
 	);

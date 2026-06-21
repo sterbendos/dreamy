@@ -4,6 +4,7 @@ import { HowItWorks } from "@/components/landing/how-it-works";
 import { Showcase } from "@/components/landing/showcase";
 import { CtaBanner } from "@/components/landing/cta-banner";
 import { MarqueeStrip } from "@/components/landing/marquee-strip";
+import { JourneyLine } from "@/components/landing/journey-line";
 import { Scene } from "@/components/landing/scene";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -20,12 +21,13 @@ export default async function Home() {
 	return (
 		<div>
 			<Header />
-			<main>
-				<Scene />
+			<main className="relative">
 				<Hero />
 				<MarqueeStrip />
-				<Features />
-				<HowItWorks />
+				<JourneyLine>
+					<Features />
+					<HowItWorks />
+				</JourneyLine>
 				<Showcase />
 				<CtaBanner />
 			</main>
