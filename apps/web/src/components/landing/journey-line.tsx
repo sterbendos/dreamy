@@ -1,34 +1,22 @@
-"use client";
-
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
-
 export function JourneyLine({ children }: { children: React.ReactNode }) {
-	const containerRef = useRef<HTMLDivElement>(null);
-	
-	const { scrollYProgress } = useScroll({
-		target: containerRef,
-		offset: ["start center", "end center"],
-	});
-
-	const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
 	return (
-		<div ref={containerRef} className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			{/* The Track */}
-			<div className="absolute left-8 md:left-12 top-0 bottom-0 w-px bg-border/30 hidden md:block" />
-			
-			{/* The Glowing Trace */}
-			<motion.div 
-				className="absolute left-8 md:left-12 top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary via-chart-2 to-primary hidden md:block origin-top"
-				style={{ scaleY: pathLength }}
-			>
-				{/* The Playhead / Lead Dot */}
-				<motion.div className="absolute -bottom-1 -left-1.5 h-3 w-3 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)]" />
-			</motion.div>
+		<div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex">
+			{/* The Zero-JS CSS Track */}
+			<div className="hidden md:flex w-16 shrink-0 relative flex-col">
+				{/* The faint background track */}
+				<div className="absolute left-1/2 top-0 bottom-0 w-px bg-border/30 -translate-x-1/2" />
+				
+				{/* The Sticky Playhead & Trail */}
+				<div className="sticky top-1/2 h-0 w-full flex justify-center z-10">
+					{/* Upward glowing trail attached to the dot */}
+					<div className="absolute bottom-[6px] w-[2px] h-[50vh] bg-gradient-to-t from-primary via-chart-2 to-transparent" />
+					{/* The Lead Dot */}
+					<div className="w-3 h-3 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)] -translate-y-1/2" />
+				</div>
+			</div>
 
 			{/* The Content */}
-			<div className="md:pl-16 relative">
+			<div className="flex-1 min-w-0">
 				{children}
 			</div>
 		</div>

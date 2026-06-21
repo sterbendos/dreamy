@@ -5,7 +5,6 @@ import { Badge } from "../ui/badge";
 import { ArrowRight, Sparkles, Play } from "lucide-react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { HeroScene } from "./scene";
 
 export function Hero() {
 	return (
@@ -34,7 +33,7 @@ export function Hero() {
 						transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
 					>
 						Edit at the <br />
-						<span className="text-transparent bg-clip-text bg-gradient-dreamy italic pr-4">
+						<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-chart-2 italic pr-4">
 							speed of thought.
 						</span>
 					</motion.h1>
@@ -75,10 +74,41 @@ export function Hero() {
 					</motion.div>
 				</div>
 
-				{/* Right Column: 3D Interactive Editor */}
-				<div className="lg:col-span-5 relative h-[500px] w-full hidden lg:block">
-					<HeroScene />
-				</div>
+				{/* Right Column: 2D Glass Editor Mockup */}
+				<motion.div 
+					className="lg:col-span-5 relative h-[450px] w-full hidden lg:block"
+					initial={{ opacity: 0, scale: 0.95 }}
+					animate={{ opacity: 1, scale: 1 }}
+					transition={{ duration: 1, ease: "easeOut", delay: 0.4 }}
+				>
+					<div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/20 to-chart-2/20 blur-2xl opacity-50" />
+					<div className="absolute inset-0 rounded-3xl border border-white/10 bg-[#0a0a0c]/80 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col">
+						{/* Editor Header */}
+						<div className="h-12 border-b border-white/10 flex items-center px-4 gap-2 bg-white/5">
+							<div className="w-3 h-3 rounded-full bg-white/20" />
+							<div className="w-3 h-3 rounded-full bg-white/20" />
+							<div className="w-3 h-3 rounded-full bg-white/20" />
+						</div>
+						{/* Editor Preview */}
+						<div className="flex-1 p-4 flex items-center justify-center">
+							<div className="w-full h-full rounded-xl bg-black/50 border border-white/5 relative overflow-hidden flex items-center justify-center group cursor-pointer">
+								<div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+								<div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center backdrop-blur-md border border-primary/30 group-hover:scale-110 transition-transform">
+									<Play className="w-6 h-6 text-primary fill-primary translate-x-0.5" />
+								</div>
+							</div>
+						</div>
+						{/* Editor Timeline */}
+						<div className="h-32 border-t border-white/10 bg-black/40 p-4 space-y-2 relative">
+							<div className="absolute top-0 bottom-0 left-1/3 w-[2px] bg-primary shadow-[0_0_10px_rgba(138,43,226,0.8)] z-10" />
+							<div className="w-3/4 h-6 rounded bg-primary/40 border border-primary/50 relative overflow-hidden">
+								<div className="absolute inset-0 bg-white/10 w-1/3" />
+							</div>
+							<div className="w-1/2 h-6 rounded bg-chart-2/40 border border-chart-2/50 ml-12" />
+							<div className="w-2/3 h-6 rounded bg-chart-3/40 border border-chart-3/50" />
+						</div>
+					</div>
+				</motion.div>
 			</div>
 		</section>
 	);
