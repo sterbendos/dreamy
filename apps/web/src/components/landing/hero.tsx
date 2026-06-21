@@ -9,10 +9,6 @@ import { motion } from "motion/react";
 export function Hero() {
 	return (
 		<section className="relative overflow-hidden pt-32 pb-20 md:pt-48 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-			{/* Dramatic floating orbs for atmosphere */}
-			<div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-primary/20 blur-[120px] mix-blend-screen opacity-50 -translate-y-1/2 translate-x-1/3 animate-pulse" />
-			<div className="absolute bottom-0 left-10 w-[400px] h-[400px] rounded-full bg-chart-2/20 blur-[100px] mix-blend-screen opacity-40 translate-y-1/2" />
-
 			<div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 				{/* Left Column: Massive Editorial Typography */}
 				<div className="lg:col-span-7 flex flex-col items-start text-left">
@@ -78,37 +74,8 @@ export function Hero() {
 					</motion.div>
 				</div>
 
-				{/* Right Column: Abstract/Asymmetrical Visual */}
-				<motion.div 
-					className="lg:col-span-5 relative h-[500px] w-full hidden lg:block"
-					initial={{ opacity: 0, scale: 0.95 }}
-					animate={{ opacity: 1, scale: 1 }}
-					transition={{ duration: 1, ease: "easeOut", delay: 0.4 }}
-				>
-					<div className="absolute inset-0 rounded-3xl bg-gradient-dreamy opacity-20 blur-2xl" />
-					<div className="absolute inset-0 rounded-3xl border border-white/10 bg-black/40 backdrop-blur-xl shadow-2xl overflow-hidden flex items-center justify-center">
-						{/* Abstract Editor representation */}
-						<div className="w-full h-full relative">
-							<div className="absolute top-4 left-4 right-4 h-8 flex gap-2">
-								<div className="w-3 h-3 rounded-full bg-white/20" />
-								<div className="w-3 h-3 rounded-full bg-white/20" />
-								<div className="w-3 h-3 rounded-full bg-white/20" />
-							</div>
-							<div className="absolute top-20 left-10 right-10 bottom-32 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-								<motion.div 
-									className="w-16 h-16 rounded-full bg-primary/30 blur-xl"
-									animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.8, 0.5] }}
-									transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-								/>
-							</div>
-							<div className="absolute bottom-10 left-10 right-10 h-16 rounded-lg bg-white/5 border border-white/10 flex items-center px-4 gap-2">
-								<div className="h-full w-1 bg-primary/50 rounded-full" />
-								<div className="h-full w-24 bg-chart-2/40 rounded-sm" />
-								<div className="h-full w-12 bg-chart-3/40 rounded-sm" />
-							</div>
-						</div>
-					</div>
-				</motion.div>
+				{/* Right Column: Empty space for 3D Canvas elements to shine through */}
+				<div className="lg:col-span-5 relative h-[500px] w-full hidden lg:block pointer-events-none" />
 			</div>
 		</section>
 	);

@@ -41,8 +41,8 @@ const features = [
 export function Features() {
 	return (
 		<section id="features" className="relative py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10">
-			<div className="mb-32 max-w-3xl">
-				<h2 className="text-4xl md:text-6xl font-serif font-medium tracking-tight mb-6">
+			<div className="mb-24 max-w-2xl">
+				<h2 className="text-4xl md:text-5xl font-serif font-medium tracking-tight mb-6">
 					Designed to stay out of your way.
 				</h2>
 				<p className="text-xl text-muted-foreground font-light leading-relaxed">
@@ -50,33 +50,32 @@ export function Features() {
 				</p>
 			</div>
 
-			<div className="space-y-32">
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 				{features.map((feature, idx) => {
-					const isEven = idx % 2 === 0;
 					const Icon = feature.icon;
 					return (
 						<motion.div
 							key={feature.title}
-							initial={{ opacity: 0, y: 40 }}
+							initial={{ opacity: 0, y: 30 }}
 							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true, margin: "-100px" }}
-							transition={{ duration: 0.8, ease: "easeOut" }}
-							className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} gap-12 items-center`}
+							viewport={{ once: true, margin: "-50px" }}
+							transition={{ 
+								type: "spring",
+								stiffness: 100,
+								damping: 20,
+								delay: idx * 0.1 
+							}}
+							className="group"
 						>
-							<div className="flex-1 w-full">
-								<div className={`p-12 rounded-3xl border ${feature.border} ${feature.bg} bg-opacity-30 backdrop-blur-sm`}>
-									<div className={`h-16 w-16 rounded-2xl ${feature.bg} border ${feature.border} flex items-center justify-center mb-8`}>
-										<Icon className={`h-8 w-8 ${feature.color}`} />
-									</div>
-									<h3 className="text-3xl font-serif font-medium mb-4">{feature.title}</h3>
-									<p className="text-lg text-muted-foreground leading-relaxed font-light">
-										{feature.description}
-									</p>
+							<div className={`h-full p-10 rounded-2xl border ${feature.border} bg-card/60 backdrop-blur-md transition-all duration-300 hover:bg-card hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/5`}>
+								<div className={`h-14 w-14 rounded-xl ${feature.bg} border ${feature.border} flex items-center justify-center mb-6`}>
+									<Icon className={`h-6 w-6 ${feature.color}`} />
 								</div>
+								<h3 className="text-2xl font-serif font-medium mb-3">{feature.title}</h3>
+								<p className="text-base text-muted-foreground leading-relaxed font-light">
+									{feature.description}
+								</p>
 							</div>
-							
-							{/* Empty space to allow the scroll path to snake through */}
-							<div className="flex-1 w-full hidden md:block" />
 						</motion.div>
 					);
 				})}

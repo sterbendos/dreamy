@@ -4,7 +4,7 @@ import { HowItWorks } from "@/components/landing/how-it-works";
 import { Showcase } from "@/components/landing/showcase";
 import { CtaBanner } from "@/components/landing/cta-banner";
 import { MarqueeStrip } from "@/components/landing/marquee-strip";
-import { ScrollPath } from "@/components/landing/scroll-path";
+import { Scene } from "@/components/landing/scene";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import type { Metadata } from "next";
@@ -21,7 +21,7 @@ export default async function Home() {
 		<div>
 			<Header />
 			<main>
-				<ScrollPath />
+				<Scene />
 				<Hero />
 				<MarqueeStrip />
 				<Features />
