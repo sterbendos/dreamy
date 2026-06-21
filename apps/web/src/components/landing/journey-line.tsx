@@ -9,9 +9,9 @@ export function JourneyLine({ children }: { children: React.ReactNode }) {
 				{/* The Sticky Playhead & Trail */}
 				<div className="sticky top-1/2 h-0 w-full flex justify-center z-10">
 					{/* Upward glowing trail attached to the dot */}
-					<div className="absolute bottom-[6px] w-[2px] h-[50vh] bg-gradient-to-t from-primary via-chart-2 to-transparent" />
+					<div className="absolute bottom-[6px] w-[2px] h-[50vh] bg-gradient-to-t from-primary/50 via-primary/20 to-transparent" />
 					{/* The Lead Dot */}
-					<div className="w-3 h-3 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)] -translate-y-1/2" />
+					<div className="w-3 h-3 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,1)] border border-primary/50 -translate-y-1/2" />
 				</div>
 			</div>
 
