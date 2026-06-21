@@ -35,7 +35,7 @@ export function Hero() {
 					</h1>
 
 					<p className="text-lg text-muted-foreground leading-relaxed max-w-[40ch] mb-10 font-light">
-						Talk to your footage. Dreamy cuts, captions, and exports — entirely in your browser. No uploads. No servers.
+						Stop fighting the timeline. Just tell Dreamy what to cut, caption, or trim, and watch it happen instantly. Zero video uploads required.
 					</p>
 
 					<div className="flex flex-row gap-3 w-full sm:w-auto">
@@ -43,7 +43,7 @@ export function Hero() {
 							href="/editor"
 							className="inline-flex items-center justify-center gap-2.5 h-12 px-7 rounded-md bg-foreground text-background text-sm font-medium transition-all hover:bg-foreground/85 active:scale-[0.98]"
 						>
-							Open editor free
+							Start creating
 							<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
 								<path d="M2.5 7h9M7 2.5l4.5 4.5-4.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
 							</svg>
@@ -58,7 +58,7 @@ export function Hero() {
 
 					{/* Trust line */}
 					<p className="mt-8 text-xs text-muted-foreground/50 font-light">
-						WebAssembly-powered · Zero data leaves your device
+						Rendered locally on your machine · No waiting in cloud queues
 					</p>
 				</motion.div>
 

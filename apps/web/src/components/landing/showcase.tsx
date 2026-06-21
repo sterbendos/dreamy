@@ -37,15 +37,15 @@ export function Showcase() {
 					</h2>
 
 					<p className="text-base text-muted-foreground leading-relaxed max-w-[52ch] mb-12 font-light">
-						Dreamy runs FFmpeg, Whisper-level transcription, and a full multi-track timeline entirely inside your browser window — no installation, no backend, no compromise on performance.
+						You don't need a heavy desktop app to create professional content. Dreamy brings intelligent, multi-track editing to any machine with a web browser.
 					</p>
 
 					{/* Three inline stats — different visual treatment from card bento above */}
 					<div className="flex flex-col sm:flex-row gap-8 sm:gap-16 pt-8 border-t border-border/40">
 						{[
-							{ value: "< 100ms", label: "AI response latency" },
-							{ value: "WASM", label: "Native-speed codec" },
-							{ value: "Local", label: "All rendering" },
+							{ value: "Playback", label: "Instant latency" },
+							{ value: "Local", label: "Video rendering" },
+							{ value: "AI", label: "Driven edits" },
 						].map((stat) => (
 							<div key={stat.label} className="flex flex-col gap-1">
 								<span className="text-2xl font-semibold tracking-tight text-foreground">

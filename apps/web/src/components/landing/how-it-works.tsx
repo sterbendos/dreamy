@@ -5,18 +5,18 @@ import { motion, useReducedMotion } from "motion/react";
 const steps = [
 	{
 		number: "01",
-		title: "Drop your files",
-		desc: "Drag media directly into the browser. No upload dialog. No cloud intermediary. Your files stay on your machine.",
+		title: "Drop and start",
+		desc: "Skip the import bars and cloud syncing. Drag your media into the browser and see your timeline instantly.",
 	},
 	{
 		number: "02",
-		title: "Tell Dreamy what to cut",
-		desc: 'Type a command or speak it. "Remove all silence", "Add bold yellow subtitles", "Trim the last take." The editor responds.',
+		title: "Command the cut",
+		desc: 'Speak or type your edits. Tell Dreamy to cut the fluff, sync the audio, or generate subtitles. The AI handles the mechanics.',
 	},
 	{
 		number: "03",
-		title: "Export locally",
-		desc: "Render to MP4 using FFmpeg.wasm at native speed. No queue. No waiting. File saves directly to your downloads.",
+		title: "Export in a flash",
+		desc: "Your final video renders locally. You get your MP4 directly to your downloads folder without waiting for a server.",
 	},
 ];
 
@@ -32,11 +32,11 @@ export function HowItWorks() {
 					{/* Left: sticky label block */}
 					<div className="lg:sticky lg:top-28 self-start">
 						<h2 className="text-4xl md:text-5xl font-sans font-semibold tracking-tighter leading-[1.05] text-foreground mb-5">
-							Three steps.<br />
-							<span className="text-muted-foreground font-light">That's it.</span>
+							The fastest path<br />
+							<span className="text-muted-foreground font-light">from raw to ready.</span>
 						</h2>
 						<p className="text-sm text-muted-foreground leading-relaxed max-w-[30ch] font-light">
-							A workflow designed to disappear. You focus on the story; Dreamy handles the edit.
+							A workflow designed to keep you in the creative zone. No friction, no manuals.
 						</p>
 					</div>
 

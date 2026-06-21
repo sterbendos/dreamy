@@ -4,27 +4,27 @@ import { motion, useReducedMotion } from "motion/react";
 
 const features = [
 	{
-		id: "privacy",
-		title: "100% Private",
-		body: "Your footage never leaves your device. All processing runs locally via WebAssembly. No uploads, no cloud, no exceptions.",
-		stat: "0",
-		statLabel: "bytes sent",
+		id: "local",
+		title: "Zero video uploads",
+		body: "Your massive video files stay exactly where they are—on your hard drive. Because everything runs locally, you can start editing the second you drop a file.",
+		stat: "Instant",
+		statLabel: "import time",
 		accent: false,
 		className: "md:col-span-1 md:row-span-2",
 	},
 	{
 		id: "ai",
-		title: "AI that edits",
-		body: "Tell Dreamy what to do in plain text. Cut silence, add captions, trim takes. The AI applies it frame-accurately.",
+		title: "Direct your edit",
+		body: "Don't hunt for the razor tool. Just type 'Remove the dead air' or 'Add cinematic captions' and let our AI agents execute the cuts perfectly.",
 		stat: null,
 		statLabel: null,
 		accent: true,
 		className: "md:col-span-1",
 	},
 	{
-		id: "speed",
-		title: "Desktop-grade speed",
-		body: "FFmpeg compiled to Wasm runs at native performance. Export a 10-minute video in seconds, not minutes.",
+		id: "render",
+		title: "Render without the wait",
+		body: "By utilizing your browser's local power, exports happen directly on your machine. No cloud servers, no queues, no forced compression.",
 		stat: null,
 		statLabel: null,
 		accent: false,
@@ -42,10 +42,10 @@ export function Features() {
 				{/* Section lead — no eyebrow */}
 				<div className="mb-16 max-w-xl">
 					<h2 className="text-4xl md:text-5xl font-sans font-semibold tracking-tighter text-foreground leading-[1.05] mb-4">
-						Built different.
+						Built for momentum.
 					</h2>
 					<p className="text-base text-muted-foreground leading-relaxed">
-						We stripped every assumption about what a video editor needs to be and rebuilt from the browser up.
+						We stripped away the clutter of traditional timeline editors so you can focus entirely on the story.
 					</p>
 				</div>
 
