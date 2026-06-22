@@ -1,7 +1,7 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
@@ -19,8 +19,33 @@ const FREE_MODELS = [
 export function CopilotPanel() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [model, setModel] = useState(FREE_MODELS[0].id);
+	const [rateLimitError, setRateLimitError] = useState<string | null>(null);
+	const [retryCountdown, setRetryCountdown] = useState(0);
+	const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const copilot = useEditor((e) => e.copilot);
-	
+
+	// Countdown timer for rate limit
+	useEffect(() => {
+		if (retryCountdown <= 0) {
+			if (countdownRef.current) clearInterval(countdownRef.current);
+			setRateLimitError(null);
+			return;
+		}
+		countdownRef.current = setInterval(() => {
+			setRetryCountdown((prev) => {
+				if (prev <= 1) {
+					if (countdownRef.current) clearInterval(countdownRef.current);
+					setRateLimitError(null);
+					return 0;
+				}
+				return prev - 1;
+			});
+		}, 1000);
+		return () => {
+			if (countdownRef.current) clearInterval(countdownRef.current);
+		};
+	}, [retryCountdown]);
+
 	const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
 		api: "/api/chat",
 		maxSteps: 5, // Allow multi-step tool calls
@@ -35,8 +60,25 @@ export function CopilotPanel() {
 				}
 			}
 			return { error: "Copilot not ready" };
-		}
+		},
+		onError(error) {
+			try {
+				const data = JSON.parse(error.message);
+				if (data.retryAfterSeconds) {
+					const secs = Number(data.retryAfterSeconds);
+					setRetryCountdown(secs);
+					setRateLimitError(`Too many messages. Try again in ${secs}s.`);
+					return;
+				}
+			} catch {}
+			if (error.message.includes("429") || error.message.toLowerCase().includes("too many")) {
+				setRetryCountdown(60);
+				setRateLimitError("Too many messages. Try again in 60s.");
+			}
+		},
 	});
+
+	const isRateLimited = retryCountdown > 0;
 
 	if (!isOpen) {
 		return (
@@ -108,6 +150,11 @@ export function CopilotPanel() {
 					{isLoading && messages[messages.length - 1]?.role === 'user' && (
 						<div className="text-xs text-muted-foreground animate-pulse">Thinking...</div>
 					)}
+					{isRateLimited && (
+						<div className="text-xs text-destructive-foreground bg-destructive/80 px-3 py-2 rounded-lg text-center">
+							⏳ Rate limited — try again in {retryCountdown}s
+						</div>
+					)}
 				</div>
 			</ScrollArea>
 
@@ -117,10 +164,11 @@ export function CopilotPanel() {
 					<Input
 						value={input}
 						onChange={handleInputChange}
-						placeholder="E.g., Split the video at 5 seconds..."
-						className="flex-1 bg-card text-sm"
+						placeholder={isRateLimited ? `Rate limited — ${retryCountdown}s remaining` : "E.g., Split the video at 5 seconds..."}
+						disabled={isRateLimited}
+						className="flex-1 bg-card text-sm disabled:opacity-60"
 					/>
-					<Button type="submit" size="icon" disabled={!input || isLoading}>
+					<Button type="submit" size="icon" disabled={!input || isLoading || isRateLimited}>
 						<HugeiconsIcon icon={Send01Icon} className="w-4 h-4" />
 					</Button>
 				</form>
