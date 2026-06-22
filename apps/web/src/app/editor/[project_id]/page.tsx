@@ -16,6 +16,7 @@ import { Onboarding } from "@/components/editor/onboarding";
 import { MigrationDialog } from "@/project/components/migration-dialog";
 import { usePanelStore } from "@/editor/panel-store";
 import { usePasteMedia } from "@/media/use-paste-media";
+import { CopilotPanel } from "@/components/editor/panels/copilot-panel";
 import { MobileGate } from "@/components/editor/mobile-gate";
 import { useMemo, useState } from "react";
 import { useEditor } from "@/editor/use-editor";
@@ -204,6 +205,7 @@ function EditorLayout() {
 			>
 				<Timeline />
 			</ResizablePanel>
+			<CopilotPanel />
 		</ResizablePanelGroup>
 	);
 }

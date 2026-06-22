@@ -1,176 +1,109 @@
 import express from "express";
 import cors from "cors";
 import { WebSocketServer, WebSocket } from "ws";
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
-import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { randomUUID } from "crypto";
 
 const app = express();
 app.use(cors());
 
-// MCP Server initialization
-const mcpServer = new Server(
-    { name: "DreamyCopilot", version: "1.0.0" },
-    { capabilities: { tools: {} } }
-);
+// A map to store the active browser connections
+// Right now we assume one active editor session at a time for simplicity.
+let activeBrowserWs: WebSocket | null = null;
 
-// Map to store active browser connections
-const browserClients = new Map<string, WebSocket>();
-// Map to store pending commands waiting for browser response
-const pendingCommands = new Map<string, { resolve: (res: any) => void; reject: (err: any) => void }>();
+// Map of external client (SSE or Stdio) response streams to forward messages back to them
+// Key is client ID, value is a callback that takes a JSON string
+const externalClients = new Map<string, (data: string) => void>();
 
-mcpServer.setRequestHandler(ListToolsRequestSchema, async () => {
-    return {
-        tools: [
-            {
-                name: "split_element",
-                description: "Split a video or audio element at a specific time in seconds.",
-                inputSchema: {
-                    type: "object",
-                    properties: {
-                        elementId: { type: "string" },
-                        timeSeconds: { type: "number" }
-                    },
-                    required: ["elementId", "timeSeconds"]
-                }
-            },
-            {
-                name: "add_text",
-                description: "Add a text subtitle or graphic to the timeline.",
-                inputSchema: {
-                    type: "object",
-                    properties: {
-                        text: { type: "string" },
-                        startTimeSeconds: { type: "number" },
-                        durationSeconds: { type: "number" },
-                        fontSize: { type: "number" }
-                    },
-                    required: ["text", "startTimeSeconds", "durationSeconds"]
-                }
-            },
-            {
-                name: "delete_element",
-                description: "Delete an element from the timeline.",
-                inputSchema: {
-                    type: "object",
-                    properties: {
-                        elementId: { type: "string" }
-                    },
-                    required: ["elementId"]
-                }
-            },
-            {
-                name: "get_timeline_state",
-                description: "Get the current state of the timeline, including all tracks and elements.",
-                inputSchema: {
-                    type: "object",
-                    properties: {}
-                }
-            }
-        ]
-    };
+app.get("/sse", async (req, res) => {
+    console.log("[Relay] External MCP Client connected via SSE!");
+    
+    const clientId = randomUUID();
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    res.write(`endpoint: /message?id=${clientId}\n\n`);
+
+    externalClients.set(clientId, (data: string) => {
+        res.write(`event: message\ndata: ${data}\n\n`);
+    });
+
+    req.on("close", () => {
+        console.log(`[Relay] SSE Client disconnected: ${clientId}`);
+        externalClients.delete(clientId);
+    });
 });
 
-// Helper to send command to browser and wait for response
-async function executeInBrowser(command: string, args: any): Promise<any> {
-    if (browserClients.size === 0) {
-        throw new Error("No active Dreamy browser tab is connected to the Copilot.");
+app.post("/message", express.json(), async (req, res) => {
+    const clientId = req.query.id as string;
+    if (!clientId || !externalClients.has(clientId)) {
+        return res.status(400).send("Invalid or missing client ID.");
     }
 
-    const commandId = randomUUID();
-    const client = Array.from(browserClients.values())[0]; // Just grab the first connected browser
+    if (!activeBrowserWs || activeBrowserWs.readyState !== WebSocket.OPEN) {
+        return res.status(503).send("No active Dreamy browser session connected.");
+    }
 
-    return new Promise((resolve, reject) => {
-        // Timeout after 10 seconds
-        const timeout = setTimeout(() => {
-            pendingCommands.delete(commandId);
-            reject(new Error("Browser execution timed out."));
-        }, 10000);
+    // Forward the JSON-RPC message directly to the browser
+    activeBrowserWs.send(JSON.stringify(req.body));
+    res.status(202).send("Accepted");
+});
 
-        pendingCommands.set(commandId, {
-            resolve: (res) => {
-                clearTimeout(timeout);
-                resolve(res);
-            },
-            reject: (err) => {
-                clearTimeout(timeout);
-                reject(err);
+const port = 4242;
+const server = app.listen(port, () => {
+    console.log(`[Relay] Dreamy MCP Hub running on http://localhost:${port}`);
+});
+
+// --- WebSocket Server ---
+const wss = new WebSocketServer({ server });
+
+wss.on("connection", (ws, req) => {
+    const url = new URL(req.url || "", `http://localhost:${port}`);
+    
+    if (url.pathname === "/browser") {
+        console.log("[Relay] Browser session connected.");
+        activeBrowserWs = ws;
+
+        ws.on("message", (message) => {
+            // Forward message from browser back to ALL external clients
+            // In a more complex setup, we'd route this by JSON-RPC ID, but broadcasting is fine
+            // since JSON-RPC clients ignore unknown response IDs.
+            const dataStr = message.toString();
+            for (const send of externalClients.values()) {
+                send(dataStr);
             }
         });
 
-        client.send(JSON.stringify({
-            id: commandId,
-            command,
-            args
-        }));
-    });
-}
-
-mcpServer.setRequestHandler(CallToolRequestSchema, async (request) => {
-    try {
-        const result = await executeInBrowser(request.params.name, request.params.arguments);
-        return {
-            content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
-        };
-    } catch (err: any) {
-        return {
-            content: [{ type: "text", text: `Error: ${err.message}` }],
-            isError: true
-        };
-    }
-});
-
-// --- HTTP Endpoints for MCP SSE ---
-let transport: SSEServerTransport | null = null;
-
-app.get("/sse", async (req, res) => {
-    console.log("Claude connected via SSE!");
-    transport = new SSEServerTransport("/message", res);
-    await mcpServer.connect(transport);
-});
-
-app.post("/message", async (req, res) => {
-    if (transport) {
-        await transport.handlePostMessage(req, res);
-    } else {
-        res.status(400).send("No active SSE transport.");
-    }
-});
-
-// --- Start the server ---
-const port = 4242;
-const server = app.listen(port, () => {
-    console.log(`Dreamy MCP Server running on http://localhost:${port}`);
-});
-
-// --- WebSocket Server for Browser ---
-const wss = new WebSocketServer({ server, path: "/browser" });
-
-wss.on("connection", (ws) => {
-    const id = randomUUID();
-    browserClients.set(id, ws);
-    console.log(`Browser tab connected to Copilot (ID: ${id})`);
-
-    ws.on("message", (message) => {
-        try {
-            const data = JSON.parse(message.toString());
-            const pending = pendingCommands.get(data.id);
-            if (pending) {
-                if (data.error) {
-                    pending.reject(new Error(data.error));
-                } else {
-                    pending.resolve(data.result);
-                }
-                pendingCommands.delete(data.id);
+        ws.on("close", () => {
+            console.log("[Relay] Browser session disconnected.");
+            if (activeBrowserWs === ws) {
+                activeBrowserWs = null;
             }
-        } catch (e) {
-            console.error("Failed to parse browser message", e);
-        }
-    });
+        });
+    } else if (url.pathname === "/stdio") {
+        console.log("[Relay] Stdio proxy connected.");
+        const clientId = randomUUID();
+        
+        externalClients.set(clientId, (data: string) => {
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send(data);
+            }
+        });
 
-    ws.on("close", () => {
-        browserClients.delete(id);
-        console.log(`Browser tab disconnected (ID: ${id})`);
-    });
+        ws.on("message", (message) => {
+            if (!activeBrowserWs || activeBrowserWs.readyState !== WebSocket.OPEN) {
+                console.error("[Relay] Received stdio message but no browser is connected.");
+                return;
+            }
+            // Parse message in case it's a batch, or just forward string
+            activeBrowserWs.send(message.toString());
+        });
+
+        ws.on("close", () => {
+            console.log("[Relay] Stdio proxy disconnected.");
+            externalClients.delete(clientId);
+        });
+    } else {
+        ws.close();
+    }
 });
