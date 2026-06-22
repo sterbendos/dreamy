@@ -1,6 +1,7 @@
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { streamText } from "ai";
 import { z } from "zod";
+import { checkChatRateLimit } from "@/auth/rate-limit";
 
 // Initialize OpenRouter provider
 // The API key is read automatically from process.env.OPENROUTER_API_KEY
@@ -13,6 +14,26 @@ const openrouter = createOpenRouter({
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
+	// --- Rate limiting ---
+	// Check before doing anything else so blocked users never hit OpenRouter.
+	const { success, remaining, retryAfterSeconds } = await checkChatRateLimit({ request: req });
+	if (!success) {
+		return new Response(
+			JSON.stringify({
+				error: "Too many requests. You've used up your AI messages for this window.",
+				retryAfterSeconds,
+			}),
+			{
+				status: 429,
+				headers: {
+					"Content-Type": "application/json",
+					"Retry-After": String(retryAfterSeconds),
+					"X-RateLimit-Remaining": "0",
+				},
+			},
+		);
+	}
+
 	try {
 		const { messages, model = "meta-llama/llama-3-8b-instruct:free" } = await req.json();
 
@@ -61,7 +82,11 @@ export async function POST(req: Request) {
 					"then use the appropriate tools to make the edits. Be concise and helpful.",
 		});
 
-		return result.toDataStreamResponse();
+		return result.toDataStreamResponse({
+			headers: {
+				"X-RateLimit-Remaining": String(remaining),
+			},
+		});
 	} catch (error) {
 		console.error("[Chat API] Error:", error);
 		return new Response(JSON.stringify({ error: "Failed to process chat request" }), { status: 500 });
