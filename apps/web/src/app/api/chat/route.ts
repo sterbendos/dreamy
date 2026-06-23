@@ -2,6 +2,10 @@ import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { streamText } from "ai";
 import { z } from "zod";
 import { checkChatRateLimit } from "@/auth/rate-limit";
+import { auth } from "@/auth/server";
+import { headers } from "next/headers";
+import { getUserSubscription, getUserUsageToday, incrementUserUsage } from "@/billing/service";
+import { LIMITS, getAvailableModels, Tier } from "@/billing/tiers";
 
 // Initialize OpenRouter provider
 // The API key is read automatically from process.env.OPENROUTER_API_KEY
@@ -35,7 +39,39 @@ export async function POST(req: Request) {
 	}
 
 	try {
+		// --- Auth and Tier limits ---
+		const session = await auth.api.getSession({
+			headers: await headers(),
+		});
+
+		let tier: Tier = "free";
+		let isUserAuthenticated = false;
+
+		if (session?.user) {
+			isUserAuthenticated = true;
+			const subscriptionInfo = await getUserSubscription(session.user.id);
+			tier = subscriptionInfo.tier;
+			const usage = await getUserUsageToday(session.user.id);
+			
+			if (usage.count >= LIMITS[tier].dailyCommands) {
+				return new Response(JSON.stringify({ error: `Daily limit reached. You've used all ${LIMITS[tier].dailyCommands} commands for today.` }), { status: 403 });
+			}
+			
+			// Increment usage for this user
+			await incrementUserUsage(session.user.id);
+		} else {
+			// Unauthenticated users fallback to IP-based rate limiting (10 per IP via Upstash)
+			// Checked above via checkChatRateLimit
+		}
+
 		const { messages, model = "meta-llama/llama-3-8b-instruct:free" } = await req.json();
+
+		const availableModels = getAvailableModels(tier);
+		const isModelAllowed = availableModels.some(m => m.id === model);
+		
+		if (!isModelAllowed) {
+			return new Response(JSON.stringify({ error: "Model not available for your current plan." }), { status: 403 });
+		}
 
 		const result = streamText({
 			model: openrouter(model),

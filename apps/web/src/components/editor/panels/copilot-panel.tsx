@@ -9,20 +9,39 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { AiChat02Icon, Cancel01Icon, MailSend01Icon as Send01Icon } from "@hugeicons/core-free-icons";
 
 import { useEditor } from "@/editor/use-editor";
-
-const FREE_MODELS = [
-	{ id: "meta-llama/llama-3-8b-instruct:free", name: "Llama 3 8B" },
-	{ id: "google/gemma-7b-it:free", name: "Gemma 7B" },
-	{ id: "mistralai/mistral-7b-instruct:free", name: "Mistral 7B" }
-];
+import { MODELS, Tier, LIMITS } from "@/billing/tiers";
+import { useRouter } from "next/navigation";
 
 export function CopilotPanel() {
 	const [isOpen, setIsOpen] = useState(false);
-	const [model, setModel] = useState(FREE_MODELS[0].id);
+	const [tier, setTier] = useState<Tier>("free");
+	const [usageToday, setUsageToday] = useState(0);
+	const availableModels = MODELS[tier];
+	
+	const [model, setModel] = useState(availableModels[0].id);
 	const [rateLimitError, setRateLimitError] = useState<string | null>(null);
 	const [retryCountdown, setRetryCountdown] = useState(0);
 	const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const copilot = useEditor((e) => e.copilot);
+	const router = useRouter();
+
+	useEffect(() => {
+		if (isOpen) {
+			fetch("/api/payment/status")
+				.then(r => r.json())
+				.then(d => {
+					if (d.tier) {
+						setTier(d.tier);
+						setUsageToday(d.usageToday || 0);
+						// Reset model if current model is not allowed in new tier
+						if (!MODELS[d.tier as Tier].find(m => m.id === model)) {
+							setModel(MODELS[d.tier as Tier][0].id);
+						}
+					}
+				})
+				.catch(console.error);
+		}
+	}, [isOpen, model]);
 
 	// Countdown timer for rate limit
 	useEffect(() => {
@@ -70,6 +89,16 @@ export function CopilotPanel() {
 					setRateLimitError(`Too many messages. Try again in ${secs}s.`);
 					return;
 				}
+				if (data.error && data.error.includes("Daily limit")) {
+					setRateLimitError(data.error);
+					// Fetch usage to update the UI
+					fetch("/api/payment/status")
+						.then(r => r.json())
+						.then(d => {
+							if (d.usageToday) setUsageToday(d.usageToday);
+						});
+					return;
+				}
 			} catch {}
 			if (error.message.includes("429") || error.message.toLowerCase().includes("too many")) {
 				setRetryCountdown(60);
@@ -78,7 +107,7 @@ export function CopilotPanel() {
 		},
 	});
 
-	const isRateLimited = retryCountdown > 0;
+	const isRateLimited = retryCountdown > 0 || (usageToday >= LIMITS[tier].dailyCommands);
 
 	if (!isOpen) {
 		return (
@@ -104,7 +133,7 @@ export function CopilotPanel() {
 						onChange={(e) => setModel(e.target.value)}
 						className="bg-transparent text-sm font-medium focus:outline-none cursor-pointer"
 					>
-						{FREE_MODELS.map(m => (
+						{availableModels.map(m => (
 							<option key={m.id} value={m.id} className="bg-background text-foreground">{m.name}</option>
 						))}
 					</select>
@@ -151,12 +180,27 @@ export function CopilotPanel() {
 						<div className="text-xs text-muted-foreground animate-pulse">Thinking...</div>
 					)}
 					{isRateLimited && (
-						<div className="text-xs text-destructive-foreground bg-destructive/80 px-3 py-2 rounded-lg text-center">
-							⏳ Rate limited — try again in {retryCountdown}s
+						<div className="text-xs text-destructive-foreground bg-destructive/80 px-3 py-2 rounded-lg text-center flex flex-col gap-2">
+							{retryCountdown > 0 ? (
+								<span>⏳ Rate limited — try again in {retryCountdown}s</span>
+							) : (
+								<span>⚠️ {rateLimitError || "Daily limit reached."}</span>
+							)}
+							{tier === "free" && (
+								<Button size="sm" variant="secondary" onClick={() => router.push("/pricing")} className="w-full mt-1">Upgrade to Pro</Button>
+							)}
 						</div>
 					)}
 				</div>
 			</ScrollArea>
+			
+			{/* Usage Bar */}
+			<div className="px-4 py-2 bg-muted/20 border-t border-border/50 text-xs flex items-center justify-between">
+				<span className="text-muted-foreground">Usage: {usageToday}/{LIMITS[tier].dailyCommands}</span>
+				{tier === "free" && (
+					<span onClick={() => router.push("/pricing")} className="text-primary hover:underline cursor-pointer font-medium">Upgrade</span>
+				)}
+			</div>
 
 			{/* Input */}
 			<div className="p-3 border-t border-border/50 bg-background/50">

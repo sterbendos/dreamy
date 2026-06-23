@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, integer } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
 	id: text("id").primaryKey(),
@@ -68,3 +68,23 @@ export const verifications = pgTable("verifications", {
 		() => /* @__PURE__ */ new Date(),
 	),
 }).enableRLS();
+
+export const subscriptions = pgTable("subscriptions", {
+	id: text("id").primaryKey(),
+	userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+	tier: text("tier").notNull().default("free"), // 'free' or 'pro'
+	status: text("status").notNull().default("active"),
+	kashierOrderId: text("kashier_order_id"),
+	currentPeriodEnd: timestamp("current_period_end"),
+	createdAt: timestamp("created_at").$defaultFn(() => new Date()).notNull(),
+	updatedAt: timestamp("updated_at").$defaultFn(() => new Date()).notNull(),
+});
+
+export const ai_usage = pgTable("ai_usage", {
+	id: text("id").primaryKey(),
+	userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+	date: text("date").notNull(), // format YYYY-MM-DD to easily query by day
+	count: integer("count").notNull().default(0),
+	createdAt: timestamp("created_at").$defaultFn(() => new Date()).notNull(),
+	updatedAt: timestamp("updated_at").$defaultFn(() => new Date()).notNull(),
+});
