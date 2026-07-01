@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-	// Only protect the editor and account pages
 	const isProtectedRoute = 
 		request.nextUrl.pathname.startsWith("/editor") || 
-		request.nextUrl.pathname.startsWith("/account");
+		request.nextUrl.pathname.startsWith("/account") ||
+		request.nextUrl.pathname.startsWith("/projects");
 
 	if (isProtectedRoute) {
 		// Better Auth uses different cookie names in dev vs prod
@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
 			request.cookies.get("__Secure-better-auth.session_token")?.value;
 		
 		if (!sessionToken) {
-			const loginUrl = new URL("/", request.url);
+			const loginUrl = new URL("/login", request.url);
 			return NextResponse.redirect(loginUrl);
 		}
 	}
@@ -23,5 +23,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/editor/:path*", "/account/:path*"],
+	matcher: ["/editor/:path*", "/account/:path*", "/projects/:path*"],
 };

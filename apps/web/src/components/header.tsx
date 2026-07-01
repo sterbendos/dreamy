@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "motion/react";
 import { Button } from "./ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { useSession, signOut } from "@/auth/client";
+import { useRouter } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
 import { Menu02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -15,6 +17,8 @@ export function Header() {
 	const [scrolled, setScrolled] = useState(false);
 	const closeMenu = () => setIsMenuOpen(false);
 	const { scrollY } = useScroll();
+	const { data: session, isPending } = useSession();
+	const router = useRouter();
 
 	useMotionValueEvent(scrollY, "change", (latest) => {
 		setScrolled(latest > 24);
@@ -78,18 +82,57 @@ export function Header() {
 						</Button>
 					</div>
 					<div className="hidden items-center gap-3 md:flex">
-						<Link href="/projects">
-							<motion.div
-								whileHover={{ scale: 1.03 }}
-								whileTap={{ scale: 0.97 }}
-								transition={{ type: "spring", stiffness: 400, damping: 20 }}
-							>
-								<Button className="text-sm rounded-full px-5">
-									Open Editor
-									<ArrowRight className="size-4" />
+						{isPending ? (
+							<Button variant="outline" className="text-sm rounded-full px-5 h-9" disabled>
+								<Loader2 className="w-4 h-4 animate-spin" />
+							</Button>
+						) : session ? (
+							<div className="flex items-center gap-2">
+								<Link href="/projects">
+									<motion.div
+										whileHover={{ scale: 1.03 }}
+										whileTap={{ scale: 0.97 }}
+										transition={{ type: "spring", stiffness: 400, damping: 20 }}
+									>
+										<Button className="text-sm rounded-full px-5">
+											Dashboard
+											<ArrowRight className="size-4" />
+										</Button>
+									</motion.div>
+								</Link>
+								<Button
+									variant="ghost"
+									className="text-sm rounded-full px-4 text-muted-foreground hover:text-foreground"
+									onClick={async () => {
+										await signOut();
+										router.push("/");
+										router.refresh();
+									}}
+								>
+									Sign Out
 								</Button>
-							</motion.div>
-						</Link>
+							</div>
+						) : (
+							<div className="flex items-center gap-2">
+								<Link href="/login">
+									<Button variant="ghost" className="text-sm rounded-full px-5">
+										Log In
+									</Button>
+								</Link>
+								<Link href="/signup">
+									<motion.div
+										whileHover={{ scale: 1.03 }}
+										whileTap={{ scale: 0.97 }}
+										transition={{ type: "spring", stiffness: 400, damping: 20 }}
+									>
+										<Button className="text-sm rounded-full px-5">
+											Sign Up
+											<ArrowRight className="size-4" />
+										</Button>
+									</motion.div>
+								</Link>
+							</div>
+						)}
 						<ThemeToggle />
 					</div>
 				</div>
