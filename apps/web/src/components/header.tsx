@@ -15,10 +15,15 @@ import { cn } from "@/utils/ui";
 export function Header() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [scrolled, setScrolled] = useState(false);
+	const [mounted, setMounted] = useState(false);
 	const closeMenu = () => setIsMenuOpen(false);
 	const { scrollY } = useScroll();
 	const { data: session, isPending } = useSession();
 	const router = useRouter();
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
 
 	useMotionValueEvent(scrollY, "change", (latest) => {
 		setScrolled(latest > 24);
@@ -82,7 +87,7 @@ export function Header() {
 						</Button>
 					</div>
 					<div className="hidden items-center gap-3 md:flex">
-						{isPending ? (
+						{!mounted || isPending ? (
 							<Button variant="outline" className="text-sm rounded-full px-5 h-9" disabled>
 								<Loader2 className="w-4 h-4 animate-spin" />
 							</Button>
@@ -180,6 +185,60 @@ export function Header() {
 									</Link>
 								</motion.div>
 							))}
+							<motion.div
+								initial={{ scale: 0.98, opacity: 0 }}
+								animate={{
+									scale: isMenuOpen ? 1 : 0.98,
+									opacity: isMenuOpen ? 1 : 0,
+								}}
+								transition={{
+									duration: 0.4,
+									delay: isMenuOpen ? links.length * 0.1 : 0,
+									ease: [0.25, 0.46, 0.45, 0.94],
+								}}
+								className="mt-4 pt-4 border-t border-border/50"
+							>
+								{isPending || !mounted ? null : session ? (
+									<div className="flex flex-col gap-3">
+										<Link
+											href="/projects"
+											className="font-sans text-2xl font-medium tracking-tight text-foreground hover:text-primary transition-colors"
+											onClick={() => setIsMenuOpen(false)}
+										>
+											Dashboard
+										</Link>
+										<button
+											type="button"
+											className="text-left font-sans text-2xl font-medium tracking-tight text-muted-foreground hover:text-foreground transition-colors"
+											onClick={async () => {
+												await signOut();
+												setIsMenuOpen(false);
+												router.push("/");
+												router.refresh();
+											}}
+										>
+											Sign Out
+										</button>
+									</div>
+								) : (
+									<div className="flex flex-col gap-3">
+										<Link
+											href="/login"
+											className="font-sans text-2xl font-medium tracking-tight text-foreground hover:text-primary transition-colors"
+											onClick={() => setIsMenuOpen(false)}
+										>
+											Log In
+										</Link>
+										<Link
+											href="/signup"
+											className="font-sans text-2xl font-medium tracking-tight text-foreground hover:text-primary transition-colors"
+											onClick={() => setIsMenuOpen(false)}
+										>
+											Sign Up
+										</Link>
+									</div>
+								)}
+							</motion.div>
 						</nav>
 						<ThemeToggle
 							className="absolute right-8 bottom-8 size-10"
