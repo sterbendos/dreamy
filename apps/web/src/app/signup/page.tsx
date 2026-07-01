@@ -26,24 +26,23 @@ export default function SignupPage() {
 
 		setIsLoading(true);
 		try {
-			await signUp.email({
+			const { data, error } = await signUp.email({
 				email,
 				password,
 				name,
-				fetchOptions: {
-					onSuccess: () => {
-						toast.success("Account created successfully!");
-						router.push("/projects");
-						router.refresh();
-					},
-					onError: (ctx) => {
-						toast.error(ctx.error.message || "Failed to create account");
-						setIsLoading(false);
-					},
-				},
 			});
-		} catch (error) {
-			toast.error("An unexpected error occurred");
+
+			setIsLoading(false);
+			if (error) {
+				toast.error(error.message || "Failed to create account");
+				return;
+			}
+
+			toast.success("Account created successfully!");
+			router.push("/projects");
+			router.refresh();
+		} catch (error: any) {
+			toast.error(error?.message || "An unexpected error occurred");
 			setIsLoading(false);
 		}
 	};

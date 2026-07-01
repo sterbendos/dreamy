@@ -25,23 +25,22 @@ export default function LoginPage() {
 
 		setIsLoading(true);
 		try {
-			await signIn.email({
+			const { data, error } = await signIn.email({
 				email,
 				password,
-				fetchOptions: {
-					onSuccess: () => {
-						toast.success("Welcome back!");
-						router.push("/projects");
-						router.refresh();
-					},
-					onError: (ctx) => {
-						toast.error(ctx.error.message || "Failed to log in");
-						setIsLoading(false);
-					},
-				},
 			});
-		} catch (error) {
-			toast.error("An unexpected error occurred");
+
+			setIsLoading(false);
+			if (error) {
+				toast.error(error.message || "Failed to log in");
+				return;
+			}
+
+			toast.success("Welcome back!");
+			router.push("/projects");
+			router.refresh();
+		} catch (error: any) {
+			toast.error(error?.message || "An unexpected error occurred");
 			setIsLoading(false);
 		}
 	};
