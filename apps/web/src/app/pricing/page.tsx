@@ -45,9 +45,9 @@ export default function PricingPage() {
 	const router = useRouter();
 
 	const instapay = {
-		phone: "01552859609",
-		accountName: "Dreamy",
-		amount: "250",
+		phone: process.env.NEXT_PUBLIC_INSTAPAY_PHONE ?? "01552859609",
+		accountName: process.env.NEXT_PUBLIC_INSTAPAY_ACCOUNT_NAME ?? "Dreamy",
+		amount: process.env.NEXT_PUBLIC_INSTAPAY_AMOUNT ?? "250",
 		currency: "EGP",
 	};
 
@@ -135,7 +135,7 @@ export default function PricingPage() {
 							<p className="text-muted-foreground text-sm mt-1">For serious editors.</p>
 						</div>
 						<div className="text-4xl font-bold">
-							250 EGP<span className="text-lg text-muted-foreground font-normal">/mo</span>
+							{instapay.amount} {instapay.currency}<span className="text-lg text-muted-foreground font-normal">/mo</span>
 						</div>
 						<ul className="flex flex-col gap-3 flex-1 text-sm">
 							<li className="flex items-center gap-2 text-primary font-medium">
@@ -188,7 +188,7 @@ export default function PricingPage() {
 
 					<p className="text-sm text-muted-foreground mb-6 leading-relaxed">
 						Open your bank app or InstaPay wallet, and send exactly{" "}
-						<span className="text-foreground font-semibold">250 EGP</span> to the following account.
+						<span className="text-foreground font-semibold">{instapay.amount} {instapay.currency}</span> to the following account.
 						Keep your transfer reference number — you'll need it in the next step.
 					</p>
 
@@ -200,7 +200,7 @@ export default function PricingPage() {
 
 					<div className="bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3 mb-6">
 						<p className="text-xs text-amber-600 dark:text-amber-400 leading-relaxed">
-							<span className="font-semibold">Important:</span> Make sure the amount is exactly 250 EGP and
+							<span className="font-semibold">Important:</span> Make sure the amount is exactly {instapay.amount} {instapay.currency} and
 							save your transfer reference number (رقم العملية) before proceeding.
 						</p>
 					</div>

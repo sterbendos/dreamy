@@ -21,9 +21,9 @@ const webEnvSchema = z.object({
 	FREESOUND_API_KEY: z.string().default("dummy_key"),
 
 	// InstaPay manual payment flow
-	INSTAPAY_PHONE: z.string().default("01552859609"),
-	INSTAPAY_ACCOUNT_NAME: z.string().default("Dreamy"),
-	INSTAPAY_AMOUNT: z.coerce.number().default(250),
+	NEXT_PUBLIC_INSTAPAY_PHONE: z.string().default("01552859609"),
+	NEXT_PUBLIC_INSTAPAY_ACCOUNT_NAME: z.string().default("Dreamy"),
+	NEXT_PUBLIC_INSTAPAY_AMOUNT: z.coerce.number().default(250),
 
 	// Admin secret for approving pending payments (keep this private)
 	ADMIN_SECRET: z.string().default("dummy_admin_secret"),

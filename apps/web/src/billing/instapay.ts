@@ -15,9 +15,9 @@ export interface InstaPayInstructions {
  */
 export function getInstaPayInstructions(): InstaPayInstructions {
 	return {
-		phone: webEnv.INSTAPAY_PHONE,
-		accountName: webEnv.INSTAPAY_ACCOUNT_NAME,
-		amount: webEnv.INSTAPAY_AMOUNT,
+		phone: webEnv.NEXT_PUBLIC_INSTAPAY_PHONE,
+		accountName: webEnv.NEXT_PUBLIC_INSTAPAY_ACCOUNT_NAME,
+		amount: webEnv.NEXT_PUBLIC_INSTAPAY_AMOUNT,
 		currency: "EGP",
 		note: "Dreamy Pro - Monthly",
 	};
