@@ -9,10 +9,37 @@ const confirmSchema = z.object({
 	senderPhone: z.string().min(10, "Phone number is required"),
 });
 
+// Simple in-memory rate limiter: max 3 submissions per user per 10 minutes
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX = 3;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+
+function checkRateLimit(userId: string): { allowed: boolean; retryAfterSeconds: number } {
+	const now = Date.now();
+	const entry = rateLimitMap.get(userId);
+
+	if (!entry || now > entry.resetAt) {
+		rateLimitMap.set(userId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+		return { allowed: true, retryAfterSeconds: 0 };
+	}
+
+	if (entry.count >= RATE_LIMIT_MAX) {
+		return {
+			allowed: false,
+			retryAfterSeconds: Math.ceil((entry.resetAt - now) / 1000),
+		};
+	}
+
+	entry.count++;
+	return { allowed: true, retryAfterSeconds: 0 };
+}
+
 /**
  * POST /api/payment/confirm
  * Called when a user submits their InstaPay transfer reference.
  * Creates a pending payment record that an admin will verify and approve.
+ *
+ * Rate limited: max 3 submissions per user per 10 minutes.
  */
 export async function POST(req: Request) {
 	try {
@@ -22,6 +49,20 @@ export async function POST(req: Request) {
 
 		if (!session?.user) {
 			return new NextResponse("Unauthorized", { status: 401 });
+		}
+
+		// Rate limiting per authenticated user
+		const { allowed, retryAfterSeconds } = checkRateLimit(session.user.id);
+		if (!allowed) {
+			return NextResponse.json(
+				{
+					error: `Too many payment submissions. Please wait ${Math.ceil(retryAfterSeconds / 60)} minute(s) before trying again.`,
+				},
+				{
+					status: 429,
+					headers: { "Retry-After": String(retryAfterSeconds) },
+				},
+			);
 		}
 
 		const body = await req.json();

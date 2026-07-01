@@ -24,7 +24,7 @@ export function Hero() {
 					<div className="mb-8 flex items-center gap-2.5">
 						<span className="flex h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
 						<span className="text-xs font-medium text-muted-foreground tracking-widest uppercase">
-							Browser-native · Open source
+							Browser-native · Privacy-first
 						</span>
 					</div>
 

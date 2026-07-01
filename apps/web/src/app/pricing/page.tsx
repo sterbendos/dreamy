@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "@/auth/client";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -37,6 +38,7 @@ function CopyButton({ value, label }: { value: string; label: string }) {
 // ── Main page ──────────────────────────────────────────────────────────────────
 
 export default function PricingPage() {
+	const { data: session } = useSession();
 	const [step, setStep] = useState<Step>("plans");
 	const [transferRef, setTransferRef] = useState("");
 	const [senderPhone, setSenderPhone] = useState("");
@@ -69,7 +71,7 @@ export default function PricingPage() {
 			});
 
 			if (res.status === 401) {
-				router.push("/");
+				router.push("/login?returnTo=/pricing");
 				return;
 			}
 
@@ -97,6 +99,7 @@ export default function PricingPage() {
 					<p className="text-muted-foreground text-lg max-w-md mx-auto">
 						Upgrade to Pro and unlock 200 AI commands per day with access to the best models.
 					</p>
+					<p className="text-sm text-muted-foreground mt-3">All prices in Egyptian Pounds (EGP)</p>
 				</div>
 
 				<div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
@@ -107,7 +110,7 @@ export default function PricingPage() {
 							<p className="text-muted-foreground text-sm mt-1">For casual creators.</p>
 						</div>
 						<div className="text-4xl font-bold">
-							$0<span className="text-lg text-muted-foreground font-normal">/mo</span>
+							0 EGP<span className="text-lg text-muted-foreground font-normal">/mo</span>
 						</div>
 						<ul className="flex flex-col gap-3 flex-1 text-sm text-muted-foreground">
 							<li className="flex items-center gap-2">
@@ -153,7 +156,13 @@ export default function PricingPage() {
 						</ul>
 						<Button
 							id="upgrade-btn"
-							onClick={() => setStep("instructions")}
+							onClick={() => {
+								if (!session) {
+									router.push("/login?returnTo=/pricing");
+									return;
+								}
+								setStep("instructions");
+							}}
 							className="w-full"
 						>
 							Upgrade via InstaPay

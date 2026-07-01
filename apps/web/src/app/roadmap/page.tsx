@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { ReactMarkdownWrapper } from "@/components/ui/react-markdown-wrapper";
 import { cn } from "@/utils/ui";
 
-const LAST_UPDATED = "February 25, 2026";
+const LAST_UPDATED = "July 1, 2026";
 
 type StatusType = "complete" | "pending" | "default" | "info";
 
@@ -42,7 +42,7 @@ const roadmapItems: RoadmapItem[] = [
 	{
 		title: "Essential functionality",
 		description:
-			"Everything that makes a video editor **useful**. Timeline interactivity, storage, effects, transitions, etc.",
+			"Active development phase. Currently building: timeline clip trimming & splitting, multi-track audio mixing, transitions library, auto-subtitles via on-device Whisper (WASM), auto-cut silence detection, text overlays and captions editor, export quality settings, and the full Pro subscription billing flow.",
 		status: {
 			text: "In progress",
 			type: "pending",

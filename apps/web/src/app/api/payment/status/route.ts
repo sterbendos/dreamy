@@ -24,6 +24,7 @@ export async function GET(req: Request) {
 			usageToday: usage.count,
 			dailyLimit: LIMITS[tier].dailyCommands,
 			pendingPayment: pending ?? null,
+			emailVerified: session.user.emailVerified ?? false,
 		});
 	} catch (error) {
 		console.error("[Payment Status API Error]", error);

@@ -6,7 +6,7 @@ interface BasePageProps {
 	children: React.ReactNode;
 	className?: string;
 	mainClassName?: string;
-	maxWidth?: "3xl" | "6xl" | "full";
+	maxWidth?: "2xl" | "3xl" | "6xl" | "full";
 	title?: string;
 	description?: React.ReactNode;
 	action?: React.ReactNode;
@@ -22,6 +22,7 @@ export function BasePage({
 	action,
 }: BasePageProps) {
 	const maxWidthClass = {
+		"2xl": "max-w-2xl",
 		"3xl": "max-w-3xl",
 		"6xl": "max-w-6xl",
 		full: "max-w-full",

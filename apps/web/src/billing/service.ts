@@ -147,3 +147,48 @@ export const activateSubscription = async ({
 
 	return { userId: payment.userId, endsAt: newEndDate };
 };
+
+export const cancelSubscription = async (userId: string) => {
+	const sub = await db.query.subscriptions.findFirst({
+		where: eq(subscriptions.userId, userId),
+	});
+
+	if (!sub) throw new Error("No subscription found");
+
+	await db.update(subscriptions)
+		.set({
+			status: "cancelled",
+			updatedAt: new Date(),
+		})
+		.where(eq(subscriptions.id, sub.id));
+
+	return { cancelled: true };
+};
+
+/**
+ * Admin-only: get all pending payment submissions.
+ */
+export const getAllPendingPayments = async () => {
+	return db.query.pendingPayments.findMany({
+		where: eq(pendingPayments.status, "pending"),
+		orderBy: (table, { desc }) => [desc(table.createdAt)],
+	});
+};
+
+/**
+ * Admin-only: reject a pending payment.
+ */
+export const rejectPayment = async (pendingPaymentId: string) => {
+	const payment = await db.query.pendingPayments.findFirst({
+		where: eq(pendingPayments.id, pendingPaymentId),
+	});
+
+	if (!payment) throw new Error("Pending payment not found");
+	if (payment.status !== "pending") throw new Error(`Payment is already ${payment.status}`);
+
+	await db.update(pendingPayments)
+		.set({ status: "rejected", updatedAt: new Date() })
+		.where(eq(pendingPayments.id, pendingPaymentId));
+
+	return { rejected: true, userId: payment.userId };
+};

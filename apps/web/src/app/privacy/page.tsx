@@ -7,7 +7,7 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
-import { SOCIAL_LINKS } from "@/site/social";
+
 
 export const metadata: Metadata = {
 	title: "Privacy Policy - Dreamy",
@@ -37,29 +37,35 @@ export default function PrivacyPage() {
 					</AccordionTrigger>
 					<AccordionContent>
 						<h3 className="mb-3 text-lg font-medium">
-							Your content never leaves your device.
+							Your videos never leave your device.
 						</h3>
 						<ol className="list-decimal space-y-2 pl-6">
 							<li>
-								Basic editing happens locally in your browser - we never see
-								your files
+								All editing and AI processing (Whisper, captions, etc.) runs locally
+								in your browser via WASM — no data leaves your device
 							</li>
 							<li>
-								AI features like auto captions run locally in your browser
-								too - nothing is uploaded
+								Videos and projects are stored locally in your browser (IndexedDB)
+								— never uploaded to our servers
 							</li>
 							<li>
-								Dreamy does not currently require an account or login
+								We store only your account info (email, name) in our PostgreSQL
+								database via Drizzle ORM
 							</li>
-							<li>Project data stays on your device, not our servers</li>
 							<li>
-								We use anonymized analytics to improve the app, but no personal video
+								InstaPay is used for Pro subscriptions — we store only your
+								phone number and transfer reference for payment verification
+							</li>
+							<li>
+								We use anonymized analytics (Databuddy) — no personal video
 								content is tracked
 							</li>
-							<li>You can clear local data from your browser at any time</li>
 							<li>
-								We don&apos;t sell or share your data with anyone (we don&apos;t
-								even have it)
+								You can delete your account or contact us to exercise your
+								privacy rights at any time
+							</li>
+							<li>
+								We don&apos;t sell or share your personal data with third parties
 							</li>
 						</ol>
 						<p className="mt-4">
@@ -91,17 +97,18 @@ export default function PrivacyPage() {
 			<section className="flex flex-col gap-3">
 				<h2 className="text-2xl font-semibold">Accounts & Authentication</h2>
 				<p>
-					Dreamy does not currently offer user accounts, login, or Google
-					sign-in.
+					Dreamy uses email/password accounts via better-auth. When you sign up,
+					we store your email address and name in our PostgreSQL database using
+					Drizzle ORM.
 				</p>
 				<p>
-					Because there is no account system today, we do not collect account
-					emails, profile information, or OAuth identity data.
+					Your account is required for Pro subscription features. We do not
+					collect OAuth identity data or social login information.
 				</p>
 				<p>
-					Your projects are never stored on our servers. All project data,
-					including names, thumbnails, and creation dates, is stored locally
-					in your browser using IndexedDB.
+					Your videos and projects are never stored on our servers. All project
+					data, including names, thumbnails, and creation dates, is stored
+					locally in your browser using IndexedDB.
 				</p>
 			</section>
 
@@ -148,6 +155,11 @@ export default function PrivacyPage() {
 						<strong>Vercel:</strong> For hosting and content delivery
 					</li>
 					<li>
+						<strong>InstaPay:</strong> For processing Pro subscription payments.
+						We store your phone number and transfer reference for payment
+						verification only.
+					</li>
+					<li>
 						<strong>Databuddy:</strong> For anonymized analytics
 					</li>
 				</ul>
@@ -157,9 +169,10 @@ export default function PrivacyPage() {
 				<h2 className="text-2xl font-semibold">Your Rights</h2>
 				<p>You have complete control over your data:</p>
 				<ul className="list-disc space-y-2 pl-6">
-					<li>No account is required to use Dreamy today</li>
-					<li>Clear local storage to remove all saved projects</li>
-					<li>Contact us with any privacy concerns</li>
+					<li>Delete your account at any time — contact us via email</li>
+					<li>Request an export of your account data (email, name)</li>
+					<li>Clear local storage in your browser to remove all saved projects</li>
+					<li>Contact us with any privacy concerns or data requests</li>
 				</ul>
 			</section>
 
@@ -193,14 +206,14 @@ export default function PrivacyPage() {
 					>
 						ahmmmd1113@gmail.com
 					</a>
-					, or reach out on{" "}
+					, or join our{" "}
 					<a
-						href={SOCIAL_LINKS.x}
+						href="https://discord.com/invite/Mu3acKZvCp"
 						target="_blank"
 						rel="noopener noreferrer"
 						className="text-primary hover:underline"
 					>
-						X (Twitter)
+						Discord
 					</a>
 					.
 				</p>
@@ -209,7 +222,7 @@ export default function PrivacyPage() {
 			<Separator />
 
 			<p className="text-muted-foreground text-sm">
-				Last updated: March 15, 2026
+				Last updated: July 1, 2026
 			</p>
 		</BasePage>
 	);

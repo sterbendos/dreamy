@@ -83,21 +83,6 @@ export default function BrandPage() {
 					</Link>
 				</>
 			}
-			action={
-				<Button
-					variant="outline"
-					size="lg"
-					className="mx-auto gap-2"
-					onClick={() => {
-						ALL_ASSETS().forEach((asset, i) => {
-							setTimeout(() => downloadAsset(asset.src), i * 200);
-						});
-					}}
-				>
-					<Download />
-					Download all
-				</Button>
-			}
 		>
 			<div className="flex flex-col gap-10">
 				{ASSET_SECTIONS.map((section) => (

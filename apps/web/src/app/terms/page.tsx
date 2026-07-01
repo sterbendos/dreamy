@@ -7,7 +7,7 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
-import { SOCIAL_LINKS } from "@/site/social";
+
 
 export const metadata: Metadata = {
 	title: "Terms of Service - Dreamy",
@@ -41,15 +41,19 @@ export default function TermsPage() {
 						</h3>
 						<ol className="list-decimal space-y-2 pl-6">
 							<li>
-								Everything runs locally in your browser - nothing is ever
-								uploaded to our servers
+								All video editing and AI processing runs locally in your browser
+								— nothing is ever uploaded to our servers
 							</li>
 							<li>
 								We never claim ownership of your content
 							</li>
 							<li>
-								Free for personal and commercial use with no watermarks or
-								restrictions
+								Free tier available for basic use; Pro subscription (250 EGP/month
+								via InstaPay) unlocks advanced AI features
+							</li>
+							<li>
+								Accounts are required for Pro features — stored securely in our
+								PostgreSQL database
 							</li>
 							<li>
 								You&apos;re responsible for how you use it - don&apos;t break
@@ -60,10 +64,8 @@ export default function TermsPage() {
 								perfect uptime
 							</li>
 							<li>
-								Your files stay on your device — we never see or store them
-							</li>
-							<li>
-								No account required - your exported videos are always yours
+								Your videos stay on your device — stored locally in IndexedDB,
+								never on our servers
 							</li>
 						</ol>
 						<p className="mt-4">
@@ -116,18 +118,36 @@ export default function TermsPage() {
 			<section className="flex flex-col gap-3">
 				<h2 className="text-2xl font-semibold">AI Features</h2>
 				<p>
-					AI features like auto captions run entirely in your browser using
-					on-device models. No content is uploaded to any server. These features
-					are optional - you can use Dreamy without them.
+					AI features like auto captions and transcription run entirely in your
+					browser using on-device models (Whisper via WASM). No content is
+					uploaded to any server. These features are optional and available with
+					a Pro subscription — you can use Dreamy without them.
+				</p>
+				<p>
+					Because all AI processing happens locally, your video content never
+					leaves your device and we have no access to it.
 				</p>
 			</section>
 
 			<section className="flex flex-col gap-3">
-				<h2 className="text-2xl font-semibold">Service</h2>
+				<h2 className="text-2xl font-semibold">Accounts & Subscription</h2>
 				<p>
-					Dreamy does not currently require an account. The service is provided
-					&quot;as is&quot; without warranties. While we strive for
-					reliability, we can&apos;t guarantee uninterrupted service.
+					Accounts are available and required for Pro subscription features. You
+					can use Dreamy for free without an account.
+				</p>
+				<p>
+					Pro subscriptions cost 250 EGP per month via InstaPay. Subscriptions
+					run in 30-day periods and renew automatically. You can cancel anytime
+					by contacting us via email.
+				</p>
+				<p>
+					We store only your email and name for account purposes. InstaPay
+					payment processing is handled entirely by InstaPay — we store only your
+					phone number and transfer reference for payment verification.
+				</p>
+				<p>
+					The service is provided &quot;as is&quot; without warranties. While we
+					strive for reliability, we can&apos;t guarantee uninterrupted service.
 				</p>
 			</section>
 
@@ -183,10 +203,43 @@ export default function TermsPage() {
 			</section>
 
 			<section className="flex flex-col gap-3">
+				<h2 className="text-2xl font-semibold">Limitation of Liability</h2>
+				<p>
+					Dreamy is provided free of charge for basic use. Pro subscriptions are
+					paid. To the extent permitted by law:
+				</p>
+				<ul className="list-disc space-y-2 pl-6">
+					<li>We&apos;re not liable for any loss of data, content, or revenue</li>
+					<li>
+						Projects are stored in your browser and may be lost if you clear
+						browser data
+					</li>
+					<li>We&apos;re not responsible for how you use the service</li>
+					<li>Our liability is limited to the maximum extent allowed by law</li>
+				</ul>
+				<p>
+					Since your content stays on your device, we have no way to recover
+					lost projects. Consider exporting important videos when finished
+					editing.
+				</p>
+			</section>
+
+			<section className="flex flex-col gap-3">
+				<h2 className="text-2xl font-semibold">Service Changes</h2>
+				<p>We may update Dreamy and these terms:</p>
+				<ul className="list-disc space-y-2 pl-6">
+					<li>We&apos;ll notify you of significant changes to these terms</li>
+					<li>Continued use means you accept any updates</li>
+					<li>Major changes will be discussed with the community on GitHub</li>
+				</ul>
+			</section>
+
+			<section className="flex flex-col gap-3">
 				<h2 className="text-2xl font-semibold">Stopping Use</h2>
 				<p>You can stop using Dreamy at any time:</p>
 				<ul className="list-disc space-y-2 pl-6">
 					<li>Clear your browser data to remove local projects</li>
+					<li>Contact us to delete your account and associated data</li>
 				</ul>
 			</section>
 
@@ -201,14 +254,14 @@ export default function TermsPage() {
 					>
 						ahmmmd1113@gmail.com
 					</a>
-					, or reach out on{" "}
+					, or join our{" "}
 					<a
-						href={SOCIAL_LINKS.x}
+						href="https://discord.com/invite/Mu3acKZvCp"
 						target="_blank"
 						rel="noopener noreferrer"
 						className="text-primary hover:underline"
 					>
-						X (Twitter)
+						Discord
 					</a>
 					.
 				</p>
@@ -219,7 +272,7 @@ export default function TermsPage() {
 			</section>
 			<Separator />
 			<p className="text-muted-foreground text-sm">
-				Last updated: March 15, 2026
+				Last updated: July 1, 2026
 			</p>
 		</BasePage>
 	);

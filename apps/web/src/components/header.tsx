@@ -34,6 +34,7 @@ export function Header() {
 		{ label: "Contributors", href: "/contributors" },
 		{ label: "Sponsors", href: "/sponsors" },
 		{ label: "Blog", href: "/blog" },
+		{ label: "Pricing", href: "/pricing" },
 	];
 
 	return (

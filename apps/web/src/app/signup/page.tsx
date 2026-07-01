@@ -14,6 +14,7 @@ export default function SignupPage() {
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [acceptTerms, setAcceptTerms] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 
@@ -21,6 +22,10 @@ export default function SignupPage() {
 		e.preventDefault();
 		if (!name || !email || !password) {
 			toast.error("Please fill in all fields");
+			return;
+		}
+		if (!acceptTerms) {
+			toast.error("Please accept the Terms of Service and Privacy Policy");
 			return;
 		}
 
@@ -135,12 +140,34 @@ export default function SignupPage() {
 									minLength={8}
 								/>
 							</div>
+							<p className="text-xs text-muted-foreground px-1">Minimum 8 characters. Mix of letters and numbers recommended.</p>
 						</div>
+
+						<label className="flex items-start gap-2.5 cursor-pointer group">
+							<div className="mt-0.5">
+								<input
+									type="checkbox"
+									checked={acceptTerms}
+									onChange={(e) => setAcceptTerms(e.target.checked)}
+									className="w-4 h-4 rounded border-border/50 bg-background/50 text-primary focus:ring-primary/20 cursor-pointer"
+								/>
+							</div>
+							<p className="text-xs text-muted-foreground leading-relaxed group-hover:text-foreground/70 transition-colors">
+								I agree to the{" "}
+								<Link href="/terms" className="text-foreground underline underline-offset-2 hover:text-primary">
+									Terms of Service
+								</Link>{" "}
+								and{" "}
+								<Link href="/privacy" className="text-foreground underline underline-offset-2 hover:text-primary">
+									Privacy Policy
+								</Link>
+							</p>
+						</label>
 
 						<Button
 							type="submit"
 							className="w-full h-11 mt-2 text-[15px] font-medium transition-all"
-							disabled={isLoading}
+							disabled={isLoading || !acceptTerms}
 						>
 							{isLoading ? (
 								<Loader2 className="w-5 h-5 animate-spin" />
