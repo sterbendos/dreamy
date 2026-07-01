@@ -88,18 +88,18 @@ export function Header() {
 							</Button>
 						) : session ? (
 							<div className="flex items-center gap-2">
-								<Link href="/projects">
-									<motion.div
-										whileHover={{ scale: 1.03 }}
-										whileTap={{ scale: 0.97 }}
-										transition={{ type: "spring", stiffness: 400, damping: 20 }}
-									>
-										<Button className="text-sm rounded-full px-5">
+								<motion.div
+									whileHover={{ scale: 1.03 }}
+									whileTap={{ scale: 0.97 }}
+									transition={{ type: "spring", stiffness: 400, damping: 20 }}
+								>
+									<Button className="text-sm rounded-full px-5" asChild>
+										<Link href="/projects">
 											Dashboard
 											<ArrowRight className="size-4" />
-										</Button>
-									</motion.div>
-								</Link>
+										</Link>
+									</Button>
+								</motion.div>
 								<Button
 									variant="ghost"
 									className="text-sm rounded-full px-4 text-muted-foreground hover:text-foreground"
@@ -114,23 +114,21 @@ export function Header() {
 							</div>
 						) : (
 							<div className="flex items-center gap-2">
-								<Link href="/login">
-									<Button variant="ghost" className="text-sm rounded-full px-5">
-										Log In
-									</Button>
-								</Link>
-								<Link href="/signup">
-									<motion.div
-										whileHover={{ scale: 1.03 }}
-										whileTap={{ scale: 0.97 }}
-										transition={{ type: "spring", stiffness: 400, damping: 20 }}
-									>
-										<Button className="text-sm rounded-full px-5">
+								<Button variant="ghost" className="text-sm rounded-full px-5" asChild>
+									<Link href="/login">Log In</Link>
+								</Button>
+								<motion.div
+									whileHover={{ scale: 1.03 }}
+									whileTap={{ scale: 0.97 }}
+									transition={{ type: "spring", stiffness: 400, damping: 20 }}
+								>
+									<Button className="text-sm rounded-full px-5" asChild>
+										<Link href="/signup">
 											Sign Up
 											<ArrowRight className="size-4" />
-										</Button>
-									</motion.div>
-								</Link>
+										</Link>
+									</Button>
+								</motion.div>
 							</div>
 						)}
 						<ThemeToggle />
