@@ -45,42 +45,40 @@ export async function POST(req: Request) {
 		});
 
 		let tier: Tier = "free";
-		let isUserAuthenticated = false;
+		let userId: string | null = null;
 
 		if (session?.user) {
-			isUserAuthenticated = true;
-			const subscriptionInfo = await getUserSubscription(session.user.id);
+			userId = session.user.id;
+			const subscriptionInfo = await getUserSubscription(userId);
 			tier = subscriptionInfo.tier;
-			const usage = await getUserUsageToday(session.user.id);
-			
+			const usage = await getUserUsageToday(userId);
+
 			if (usage.count >= LIMITS[tier].dailyCommands) {
-				return new Response(JSON.stringify({ error: `Daily limit reached. You've used all ${LIMITS[tier].dailyCommands} commands for today.` }), { status: 403 });
+				return new Response(
+					JSON.stringify({ error: `Daily limit reached. You've used all ${LIMITS[tier].dailyCommands} commands for today.` }),
+					{ status: 403 },
+				);
 			}
-			
-			// Increment usage for this user
-			await incrementUserUsage(session.user.id);
-		} else {
-			// Unauthenticated users fallback to IP-based rate limiting (10 per IP via Upstash)
-			// Checked above via checkChatRateLimit
 		}
 
-		const { messages, model = "meta-llama/llama-3-8b-instruct:free" } = await req.json();
+		const { messages, model = "meta-llama/llama-3.1-8b-instruct:free" } = await req.json();
 
 		const availableModels = getAvailableModels(tier);
-		const isModelAllowed = availableModels.some(m => m.id === model);
-		
+		const isModelAllowed = availableModels.some((m) => m.id === model);
+
 		if (!isModelAllowed) {
-			return new Response(JSON.stringify({ error: "Model not available for your current plan." }), { status: 403 });
+			return new Response(
+				JSON.stringify({ error: "Model not available for your current plan." }),
+				{ status: 403 },
+			);
 		}
 
 		const result = streamText({
 			model: openrouter(model),
 			messages,
-			// Define tools that the AI can call.
-			// When the AI decides to call a tool, the Vercel AI SDK will pause the stream
-			// and return the tool call to the client. The client (useChat) will then execute
-			// the actual tool logic in the browser (where it has access to EditorCore), and 
-			// send the tool result back to the server in a new request to continue the generation.
+			// Tools are executed client-side via onToolCall in useChat —
+			// the server only declares the schema so the AI can call them.
+			// The client (CopilotPanel) has direct access to EditorCore and performs the actual mutation.
 			tools: {
 				split_element: {
 					description: "Split a video or audio element at a specific time in seconds.",
@@ -88,8 +86,6 @@ export async function POST(req: Request) {
 						elementId: z.string().describe("The ID of the element to split"),
 						timeSeconds: z.number().describe("The time in seconds where the split should occur"),
 					}),
-					// We do not implement the execute function here on the server because the server
-					// has no access to the browser's video timeline memory. The execution happens client-side.
 				},
 				add_text: {
 					description: "Add a text subtitle or graphic to the timeline.",
@@ -111,11 +107,20 @@ export async function POST(req: Request) {
 					parameters: z.object({}),
 				},
 			},
-			system: "You are Dreamy Copilot, an AI assistant integrated directly into a video editor. " +
-					"You can help the user edit their video by using the provided tools. " +
-					"When the user asks you to perform an action (e.g. 'split the first clip at 5 seconds'), " +
-					"first use the get_timeline_state tool to understand what elements exist and their IDs, " +
-					"then use the appropriate tools to make the edits. Be concise and helpful.",
+			system:
+				"You are Dreamy Copilot, an AI assistant integrated directly into a video editor. " +
+				"You can help the user edit their video by using the provided tools. " +
+				"When the user asks you to perform an action (e.g. 'split the first clip at 5 seconds'), " +
+				"first use the get_timeline_state tool to understand what elements exist and their IDs, " +
+				"then use the appropriate tools to make the edits. Be concise and helpful.",
+			// Increment usage only after the stream is successfully established.
+			onFinish: async () => {
+				if (userId) {
+					await incrementUserUsage(userId).catch((err) => {
+						console.error("[Chat API] Failed to increment usage:", err);
+					});
+				}
+			},
 		});
 
 		return result.toDataStreamResponse({

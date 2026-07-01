@@ -74,7 +74,7 @@ export const subscriptions = pgTable("subscriptions", {
 	userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
 	tier: text("tier").notNull().default("free"), // 'free' or 'pro'
 	status: text("status").notNull().default("active"),
-	kashierOrderId: text("kashier_order_id"),
+	paymentReference: text("payment_reference"),
 	currentPeriodEnd: timestamp("current_period_end"),
 	createdAt: timestamp("created_at").$defaultFn(() => new Date()).notNull(),
 	updatedAt: timestamp("updated_at").$defaultFn(() => new Date()).notNull(),
@@ -85,6 +85,25 @@ export const ai_usage = pgTable("ai_usage", {
 	userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
 	date: text("date").notNull(), // format YYYY-MM-DD to easily query by day
 	count: integer("count").notNull().default(0),
+	createdAt: timestamp("created_at").$defaultFn(() => new Date()).notNull(),
+	updatedAt: timestamp("updated_at").$defaultFn(() => new Date()).notNull(),
+});
+
+/**
+ * Pending InstaPay payment submissions — user claims they sent money.
+ * Admin verifies and approves via /api/payment/approve.
+ */
+export const pendingPayments = pgTable("pending_payments", {
+	id: text("id").primaryKey(),
+	userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+	/** The transfer reference number (رقم العملية) the user copied from their bank app */
+	transferReference: text("transfer_reference").notNull(),
+	/** The user's InstaPay-registered phone number for cross-verification */
+	senderPhone: text("sender_phone").notNull(),
+	/** Amount they claimed to send */
+	amount: integer("amount").notNull().default(250),
+	/** pending | approved | rejected */
+	status: text("status").notNull().default("pending"),
 	createdAt: timestamp("created_at").$defaultFn(() => new Date()).notNull(),
 	updatedAt: timestamp("updated_at").$defaultFn(() => new Date()).notNull(),
 });

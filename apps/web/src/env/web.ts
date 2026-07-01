@@ -19,11 +19,14 @@ const webEnvSchema = z.object({
 	MARBLE_WORKSPACE_KEY: z.string().default("dummy_key"),
 	FREESOUND_CLIENT_ID: z.string().default("dummy_id"),
 	FREESOUND_API_KEY: z.string().default("dummy_key"),
-	
-	// Kashier
-	KASHIER_API_KEY: z.string().default("dummy_kashier_api_key"),
-	KASHIER_MERCHANT_ID: z.string().default("dummy_kashier_merchant_id"),
-	KASHIER_WEBHOOK_SECRET: z.string().default("dummy_kashier_webhook_secret"),
+
+	// InstaPay manual payment flow
+	INSTAPAY_PHONE: z.string().default("01552859609"),
+	INSTAPAY_ACCOUNT_NAME: z.string().default("Dreamy"),
+	INSTAPAY_AMOUNT: z.coerce.number().default(250),
+
+	// Admin secret for approving pending payments (keep this private)
+	ADMIN_SECRET: z.string().default("dummy_admin_secret"),
 });
 
 export type WebEnv = z.infer<typeof webEnvSchema>;

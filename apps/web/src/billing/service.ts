@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { subscriptions, ai_usage } from "@/db/schema";
+import { subscriptions, ai_usage, pendingPayments } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { Tier, LIMITS } from "./tiers";
 
@@ -37,9 +37,113 @@ export const getUserUsageToday = async (userId: string) => {
 
 export const incrementUserUsage = async (userId: string) => {
 	const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-	// We use raw update or just fetch and update
 	const usage = await getUserUsageToday(userId);
 	await db.update(ai_usage)
 		.set({ count: usage.count + 1 })
 		.where(eq(ai_usage.id, usage.id));
+};
+
+/**
+ * Creates a pending payment record after a user claims to have sent money via InstaPay.
+ * An admin must verify and call activateSubscription() to confirm.
+ */
+export const createPendingPayment = async ({
+	userId,
+	transferReference,
+	senderPhone,
+	amount = 250,
+}: {
+	userId: string;
+	transferReference: string;
+	senderPhone: string;
+	amount?: number;
+}) => {
+	// Check if user already has a pending payment to avoid duplicates
+	const existing = await db.query.pendingPayments.findFirst({
+		where: and(
+			eq(pendingPayments.userId, userId),
+			eq(pendingPayments.status, "pending"),
+		),
+	});
+
+	if (existing) {
+		// Update the existing pending payment instead of creating a new one
+		const [updated] = await db.update(pendingPayments)
+			.set({ transferReference, senderPhone, amount, updatedAt: new Date() })
+			.where(eq(pendingPayments.id, existing.id))
+			.returning();
+		return updated;
+	}
+
+	const [payment] = await db.insert(pendingPayments).values({
+		id: crypto.randomUUID(),
+		userId,
+		transferReference,
+		senderPhone,
+		amount,
+		status: "pending",
+	}).returning();
+
+	return payment;
+};
+
+export const getPendingPayment = async (userId: string) => {
+	return db.query.pendingPayments.findFirst({
+		where: and(
+			eq(pendingPayments.userId, userId),
+			eq(pendingPayments.status, "pending"),
+		),
+	});
+};
+
+/**
+ * Admin-only: activates a user's subscription after verifying their InstaPay transfer.
+ */
+export const activateSubscription = async ({
+	pendingPaymentId,
+}: {
+	pendingPaymentId: string;
+}) => {
+	const payment = await db.query.pendingPayments.findFirst({
+		where: eq(pendingPayments.id, pendingPaymentId),
+	});
+
+	if (!payment) throw new Error("Pending payment not found");
+	if (payment.status !== "pending") throw new Error(`Payment is already ${payment.status}`);
+
+	// Mark payment as approved
+	await db.update(pendingPayments)
+		.set({ status: "approved", updatedAt: new Date() })
+		.where(eq(pendingPayments.id, pendingPaymentId));
+
+	// Activate or create subscription for 30 days
+	const newEndDate = new Date();
+	newEndDate.setDate(newEndDate.getDate() + 30);
+
+	const currentSub = await db.query.subscriptions.findFirst({
+		where: eq(subscriptions.userId, payment.userId),
+	});
+
+	if (currentSub) {
+		await db.update(subscriptions)
+			.set({
+				tier: "pro",
+				status: "active",
+				currentPeriodEnd: newEndDate,
+				paymentReference: payment.transferReference,
+				updatedAt: new Date(),
+			})
+			.where(eq(subscriptions.id, currentSub.id));
+	} else {
+		await db.insert(subscriptions).values({
+			id: crypto.randomUUID(),
+			userId: payment.userId,
+			tier: "pro",
+			status: "active",
+			currentPeriodEnd: newEndDate,
+			paymentReference: payment.transferReference,
+		});
+	}
+
+	return { userId: payment.userId, endsAt: newEndDate };
 };

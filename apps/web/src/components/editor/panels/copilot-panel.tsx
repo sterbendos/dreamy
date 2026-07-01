@@ -1,49 +1,114 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { AiChat02Icon, Cancel01Icon, MailSend01Icon as Send01Icon } from "@hugeicons/core-free-icons";
+import {
+	AiChat02Icon,
+	Cancel01Icon,
+	MailSend01Icon as Send01Icon,
+	ArrowUp01Icon,
+	Loading03Icon,
+	Tick02Icon,
+	SparklesIcon,
+} from "@hugeicons/core-free-icons";
 
 import { useEditor } from "@/editor/use-editor";
-import { MODELS, Tier, LIMITS } from "@/billing/tiers";
+import { MODELS, LIMITS } from "@/billing/tiers";
+import type { Tier } from "@/billing/tiers";
 import { useRouter } from "next/navigation";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface StatusData {
+	tier: Tier;
+	usageToday: number;
+	dailyLimit: number;
+}
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function ToolBadge({ toolName, done }: { toolName: string; done: boolean }) {
+	const label = toolName.replace(/_/g, " ");
+	return (
+		<div
+			className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium transition-all ${
+				done
+					? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20"
+					: "bg-primary/10 text-primary border border-primary/20 animate-pulse"
+			}`}
+		>
+			{done ? (
+				<HugeiconsIcon icon={Tick02Icon} className="w-3 h-3" />
+			) : (
+				<HugeiconsIcon icon={Loading03Icon} className="w-3 h-3 animate-spin" />
+			)}
+			{done ? `Done: ${label}` : `Running: ${label}…`}
+		</div>
+	);
+}
+
+function ThinkingIndicator() {
+	return (
+		<div className="flex items-start gap-2.5">
+			<div className="w-6 h-6 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+				<HugeiconsIcon icon={SparklesIcon} className="w-3 h-3 text-primary" />
+			</div>
+			<div className="bg-muted/60 border border-border/40 rounded-2xl rounded-tl-sm px-3 py-2.5">
+				<div className="flex gap-1 items-center h-4">
+					<div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce [animation-delay:0ms]" />
+					<div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce [animation-delay:150ms]" />
+					<div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce [animation-delay:300ms]" />
+				</div>
+			</div>
+		</div>
+	);
+}
+
+// ─── Main Component ────────────────────────────────────────────────────────────
 
 export function CopilotPanel() {
 	const [isOpen, setIsOpen] = useState(false);
-	const [tier, setTier] = useState<Tier>("free");
-	const [usageToday, setUsageToday] = useState(0);
-	const availableModels = MODELS[tier];
-	
-	const [model, setModel] = useState(availableModels[0].id);
+	const [status, setStatus] = useState<StatusData | null>(null);
+	const [isFetchingStatus, setIsFetchingStatus] = useState(false);
+	const [selectedModel, setSelectedModel] = useState<string | null>(null);
 	const [rateLimitError, setRateLimitError] = useState<string | null>(null);
 	const [retryCountdown, setRetryCountdown] = useState(0);
 	const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const bottomRef = useRef<HTMLDivElement>(null);
 	const copilot = useEditor((e) => e.copilot);
 	const router = useRouter();
 
-	useEffect(() => {
-		if (isOpen) {
-			fetch("/api/payment/status")
-				.then(r => r.json())
-				.then(d => {
-					if (d.tier) {
-						setTier(d.tier);
-						setUsageToday(d.usageToday || 0);
-						// Reset model if current model is not allowed in new tier
-						if (!MODELS[d.tier as Tier].find(m => m.id === model)) {
-							setModel(MODELS[d.tier as Tier][0].id);
-						}
-					}
-				})
-				.catch(console.error);
+	// ── Fetch subscription status when panel opens ──────────────────────────
+	const fetchStatus = useCallback(async () => {
+		setIsFetchingStatus(true);
+		try {
+			const res = await fetch("/api/payment/status");
+			if (!res.ok) return; // unauthenticated — stay as null, use free defaults
+			const data: StatusData = await res.json();
+			setStatus(data);
+			// Reset model to first allowed if the current one isn't available
+			setSelectedModel((prev) => {
+				const models = MODELS[data.tier];
+				if (!prev || !models.find((m) => m.id === prev)) {
+					return models[0].id;
+				}
+				return prev;
+			});
+		} catch {
+			// silently ignore — user will just get free tier defaults
+		} finally {
+			setIsFetchingStatus(false);
 		}
-	}, [isOpen, model]);
+	}, []);
 
-	// Countdown timer for rate limit
+	useEffect(() => {
+		if (isOpen) fetchStatus();
+	}, [isOpen, fetchStatus]);
+
+	// ── Countdown timer for rate limit ──────────────────────────────────────
 	useEffect(() => {
 		if (retryCountdown <= 0) {
 			if (countdownRef.current) clearInterval(countdownRef.current);
@@ -65,20 +130,33 @@ export function CopilotPanel() {
 		};
 	}, [retryCountdown]);
 
+	// ── Derived values ──────────────────────────────────────────────────────
+	const tier: Tier = status?.tier ?? "free";
+	const availableModels = MODELS[tier];
+	const activeModel = selectedModel ?? availableModels[0].id;
+	const dailyLimit = status?.dailyLimit ?? LIMITS[tier].dailyCommands;
+	const usageToday = status?.usageToday ?? 0;
+	const isDailyLimitReached = status !== null && usageToday >= dailyLimit;
+	const isRateLimited = retryCountdown > 0 || isDailyLimitReached;
+
+	// ── Chat hook ───────────────────────────────────────────────────────────
 	const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
 		api: "/api/chat",
-		maxSteps: 5, // Allow multi-step tool calls
-		body: { model },
+		maxSteps: 5,
+		body: { model: activeModel },
 		async onToolCall({ toolCall }) {
-			if (copilot) {
-				try {
-					const result = await copilot.executeTool(toolCall.toolName, toolCall.args);
-					return result;
-				} catch (err: any) {
-					return { error: err.message };
-				}
+			if (!copilot) return { error: "Editor not ready" };
+			try {
+				return await copilot.executeTool(toolCall.toolName, toolCall.args);
+			} catch (err: any) {
+				return { error: err.message };
 			}
-			return { error: "Copilot not ready" };
+		},
+		onResponse() {
+			// Refresh usage count after a successful response
+			if (status) {
+				setStatus((prev) => prev ? { ...prev, usageToday: prev.usageToday + 1 } : prev);
+			}
 		},
 		onError(error) {
 			try {
@@ -86,134 +164,249 @@ export function CopilotPanel() {
 				if (data.retryAfterSeconds) {
 					const secs = Number(data.retryAfterSeconds);
 					setRetryCountdown(secs);
-					setRateLimitError(`Too many messages. Try again in ${secs}s.`);
+					setRateLimitError(`Rate limited — try again in ${secs}s`);
 					return;
 				}
-				if (data.error && data.error.includes("Daily limit")) {
+				if (data.error?.includes("Daily limit")) {
 					setRateLimitError(data.error);
-					// Fetch usage to update the UI
-					fetch("/api/payment/status")
-						.then(r => r.json())
-						.then(d => {
-							if (d.usageToday) setUsageToday(d.usageToday);
-						});
+					fetchStatus(); // re-fetch to sync usage count
 					return;
 				}
-			} catch {}
+			} catch {
+				// not JSON — fall through
+			}
 			if (error.message.includes("429") || error.message.toLowerCase().includes("too many")) {
 				setRetryCountdown(60);
-				setRateLimitError("Too many messages. Try again in 60s.");
+				setRateLimitError("Rate limited — try again in 60s");
 			}
 		},
 	});
 
-	const isRateLimited = retryCountdown > 0 || (usageToday >= LIMITS[tier].dailyCommands);
+	// ── Auto-scroll to latest message ───────────────────────────────────────
+	useEffect(() => {
+		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, [messages, isLoading]);
 
+	// ─────────────────────────────────────────────────────────────────────────
+	// Closed state — floating button
+	// ─────────────────────────────────────────────────────────────────────────
 	if (!isOpen) {
 		return (
 			<Button
 				variant="outline"
 				size="icon"
-				className="fixed bottom-4 right-4 z-50 rounded-full shadow-lg h-12 w-12 bg-background border-border/50 text-foreground"
+				id="copilot-toggle-btn"
+				className="fixed bottom-5 right-5 z-50 rounded-full shadow-xl h-13 w-13 bg-background/90 backdrop-blur-sm border-border/60 text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200 hover:scale-110 group"
 				onClick={() => setIsOpen(true)}
+				title="Open Dreamy Copilot"
 			>
-				<HugeiconsIcon icon={AiChat02Icon} className="w-6 h-6" />
+				<HugeiconsIcon icon={SparklesIcon} className="w-5 h-5 group-hover:scale-110 transition-transform" />
 			</Button>
 		);
 	}
 
+	// ─────────────────────────────────────────────────────────────────────────
+	// Open state — chat panel
+	// ─────────────────────────────────────────────────────────────────────────
 	return (
-		<div className="fixed bottom-4 right-4 z-50 w-[350px] h-[500px] bg-card border border-border/50 rounded-xl shadow-2xl flex flex-col overflow-hidden">
-			{/* Header */}
-			<div className="h-12 border-b border-border/50 flex items-center justify-between px-4 bg-muted/30">
+		<div
+			id="copilot-panel"
+			className="fixed bottom-5 right-5 z-50 w-[380px] flex flex-col bg-background/95 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl overflow-hidden"
+			style={{ height: "540px" }}
+		>
+			{/* ── Header ── */}
+			<div className="flex items-center justify-between px-4 py-3 border-b border-border/40 bg-muted/20 flex-shrink-0">
+				<div className="flex items-center gap-2.5">
+					<div className="w-7 h-7 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
+						<HugeiconsIcon icon={SparklesIcon} className="w-3.5 h-3.5 text-primary" />
+					</div>
+					<div>
+						<p className="text-sm font-semibold leading-none">Dreamy Copilot</p>
+						<p className="text-[10px] text-muted-foreground mt-0.5 capitalize">{tier} plan</p>
+					</div>
+				</div>
+
 				<div className="flex items-center gap-2">
-					<HugeiconsIcon icon={AiChat02Icon} className="w-4 h-4 text-primary" />
-					<select 
-						value={model} 
-						onChange={(e) => setModel(e.target.value)}
-						className="bg-transparent text-sm font-medium focus:outline-none cursor-pointer"
+					{/* Model selector */}
+					<select
+						id="copilot-model-select"
+						value={activeModel}
+						onChange={(e) => setSelectedModel(e.target.value)}
+						className="text-xs bg-muted/50 border border-border/40 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary/50 cursor-pointer text-foreground max-w-[130px]"
 					>
-						{availableModels.map(m => (
-							<option key={m.id} value={m.id} className="bg-background text-foreground">{m.name}</option>
+						{availableModels.map((m) => (
+							<option key={m.id} value={m.id} className="bg-background">
+								{m.name}
+							</option>
 						))}
 					</select>
+
+					<Button
+						variant="ghost"
+						size="icon"
+						className="h-7 w-7 hover:bg-muted rounded-lg"
+						onClick={() => setIsOpen(false)}
+					>
+						<HugeiconsIcon icon={Cancel01Icon} className="w-4 h-4" />
+					</Button>
 				</div>
-				<Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted" onClick={() => setIsOpen(false)}>
-					<HugeiconsIcon icon={Cancel01Icon} className="w-4 h-4" />
-				</Button>
 			</div>
 
-			{/* Messages */}
-			<ScrollArea className="flex-1 p-4">
-				<div className="flex flex-col gap-4">
-					{messages.length === 0 && (
-						<div className="text-center text-muted-foreground text-sm mt-10">
-							How can I help you edit this video?
-						</div>
-					)}
-					{messages.map((m) => (
-						<div key={m.id} className={`flex flex-col gap-1 ${m.role === "user" ? "items-end" : "items-start"}`}>
-							{m.content && (
-								<div className={`px-3 py-2 rounded-lg text-sm max-w-[85%] ${m.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}>
-									{m.content}
-								</div>
-							)}
-							{m.toolInvocations?.map((toolInvocation) => {
-								const { toolName, toolCallId, state } = toolInvocation;
-								if (state === 'result') {
-									return (
-										<div key={toolCallId} className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded">
-											✓ Executed {toolName}
-										</div>
-									);
-								} else {
-									return (
-										<div key={toolCallId} className="text-xs text-primary bg-primary/10 px-2 py-1 rounded animate-pulse">
-											Executing {toolName}...
-										</div>
-									);
-								}
-							})}
-						</div>
-					))}
-					{isLoading && messages[messages.length - 1]?.role === 'user' && (
-						<div className="text-xs text-muted-foreground animate-pulse">Thinking...</div>
-					)}
-					{isRateLimited && (
-						<div className="text-xs text-destructive-foreground bg-destructive/80 px-3 py-2 rounded-lg text-center flex flex-col gap-2">
-							{retryCountdown > 0 ? (
-								<span>⏳ Rate limited — try again in {retryCountdown}s</span>
-							) : (
-								<span>⚠️ {rateLimitError || "Daily limit reached."}</span>
-							)}
-							{tier === "free" && (
-								<Button size="sm" variant="secondary" onClick={() => router.push("/pricing")} className="w-full mt-1">Upgrade to Pro</Button>
-							)}
-						</div>
-					)}
+			{/* ── Usage bar ── */}
+			<div className="px-4 py-2 flex items-center gap-3 border-b border-border/30 bg-muted/10 flex-shrink-0">
+				<div className="flex-1 bg-muted/40 rounded-full h-1.5 overflow-hidden">
+					<div
+						className={`h-full rounded-full transition-all duration-500 ${
+							isDailyLimitReached ? "bg-destructive" : "bg-primary"
+						}`}
+						style={{ width: `${Math.min((usageToday / dailyLimit) * 100, 100)}%` }}
+					/>
 				</div>
-			</ScrollArea>
-			
-			{/* Usage Bar */}
-			<div className="px-4 py-2 bg-muted/20 border-t border-border/50 text-xs flex items-center justify-between">
-				<span className="text-muted-foreground">Usage: {usageToday}/{LIMITS[tier].dailyCommands}</span>
+				<span className="text-[10px] text-muted-foreground tabular-nums whitespace-nowrap">
+					{usageToday}/{dailyLimit} today
+				</span>
 				{tier === "free" && (
-					<span onClick={() => router.push("/pricing")} className="text-primary hover:underline cursor-pointer font-medium">Upgrade</span>
+					<button
+						onClick={() => router.push("/pricing")}
+						className="text-[10px] text-primary hover:underline font-medium whitespace-nowrap"
+					>
+						Upgrade ↗
+					</button>
 				)}
 			</div>
 
-			{/* Input */}
-			<div className="p-3 border-t border-border/50 bg-background/50">
-				<form onSubmit={handleSubmit} className="flex gap-2">
+			{/* ── Messages ── */}
+			<div className="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
+				{messages.length === 0 && (
+					<div className="flex flex-col items-center justify-center h-full gap-3 text-center pb-4">
+						<div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+							<HugeiconsIcon icon={SparklesIcon} className="w-6 h-6 text-primary" />
+						</div>
+						<div>
+							<p className="text-sm font-medium">How can I help?</p>
+							<p className="text-xs text-muted-foreground mt-1 max-w-[220px]">
+								Ask me to edit your video — split clips, add text, delete elements.
+							</p>
+						</div>
+						<div className="flex flex-col gap-1.5 w-full max-w-[280px] mt-2">
+							{["Split first clip at 5 seconds", "Add 'Intro' text at 0s for 3s", "Show timeline state"].map((s) => (
+								<button
+									key={s}
+									className="text-xs text-left px-3 py-2 rounded-xl bg-muted/50 hover:bg-muted border border-border/40 hover:border-primary/30 text-muted-foreground hover:text-foreground transition-all"
+									onClick={() => {
+										handleInputChange({ target: { value: s } } as any);
+									}}
+								>
+									{s}
+								</button>
+							))}
+						</div>
+					</div>
+				)}
+
+				{messages.map((m) => (
+					<div key={m.id} className={`flex flex-col gap-2 ${m.role === "user" ? "items-end" : "items-start"}`}>
+						{m.role === "assistant" && (
+							<div className="flex items-center gap-1.5 ml-1">
+								<div className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center">
+									<HugeiconsIcon icon={SparklesIcon} className="w-2.5 h-2.5 text-primary" />
+								</div>
+								<span className="text-[10px] text-muted-foreground font-medium">Copilot</span>
+							</div>
+						)}
+
+						{m.content && (
+							<div
+								className={`px-3.5 py-2.5 rounded-2xl text-sm max-w-[88%] leading-relaxed ${
+									m.role === "user"
+										? "bg-primary text-primary-foreground rounded-tr-sm"
+										: "bg-muted/60 border border-border/40 text-foreground rounded-tl-sm"
+								}`}
+							>
+								{m.content}
+							</div>
+						)}
+
+						{/* Tool invocation badges */}
+						{m.toolInvocations && m.toolInvocations.length > 0 && (
+							<div className="flex flex-col gap-1.5 items-start max-w-[88%]">
+								{m.toolInvocations.map((inv) => (
+									<ToolBadge
+										key={inv.toolCallId}
+										toolName={inv.toolName}
+										done={inv.state === "result"}
+									/>
+								))}
+							</div>
+						)}
+					</div>
+				))}
+
+				{/* Thinking indicator */}
+				{isLoading && messages[messages.length - 1]?.role === "user" && <ThinkingIndicator />}
+
+				{/* Rate limit banner */}
+				{isRateLimited && (
+					<div className="bg-destructive/10 border border-destructive/20 rounded-xl px-3.5 py-3 flex flex-col gap-2.5">
+						<p className="text-xs text-destructive font-medium">
+							{retryCountdown > 0
+								? `⏳ Rate limited — retry in ${retryCountdown}s`
+								: (rateLimitError ?? "Daily limit reached.")}
+						</p>
+						{tier === "free" && (
+							<Button
+								size="sm"
+								variant="outline"
+								className="h-7 text-xs border-destructive/30 hover:bg-destructive/10 text-destructive"
+								onClick={() => router.push("/pricing")}
+							>
+								Upgrade to Pro for 200 commands/day
+							</Button>
+						)}
+					</div>
+				)}
+
+				{/* Scroll anchor */}
+				<div ref={bottomRef} />
+			</div>
+
+			{/* ── Input ── */}
+			<div className="p-3 border-t border-border/40 bg-muted/10 flex-shrink-0">
+				<form onSubmit={handleSubmit} className="flex gap-2 items-end">
 					<Input
+						id="copilot-input"
 						value={input}
 						onChange={handleInputChange}
-						placeholder={isRateLimited ? `Rate limited — ${retryCountdown}s remaining` : "E.g., Split the video at 5 seconds..."}
-						disabled={isRateLimited}
-						className="flex-1 bg-card text-sm disabled:opacity-60"
+						placeholder={
+							isRateLimited
+								? retryCountdown > 0
+									? `Rate limited — ${retryCountdown}s`
+									: "Daily limit reached"
+								: "Ask Copilot to edit your video…"
+						}
+						disabled={isRateLimited || isLoading}
+						className="flex-1 bg-background/60 text-sm border-border/50 rounded-xl disabled:opacity-50 resize-none"
+						onKeyDown={(e) => {
+							if (e.key === "Enter" && !e.shiftKey) {
+								e.preventDefault();
+								if (input.trim() && !isLoading && !isRateLimited) {
+									handleSubmit(e as any);
+								}
+							}
+						}}
 					/>
-					<Button type="submit" size="icon" disabled={!input || isLoading || isRateLimited}>
-						<HugeiconsIcon icon={Send01Icon} className="w-4 h-4" />
+					<Button
+						type="submit"
+						size="icon"
+						id="copilot-send-btn"
+						disabled={!input.trim() || isLoading || isRateLimited}
+						className="h-9 w-9 rounded-xl flex-shrink-0"
+					>
+						{isLoading ? (
+							<HugeiconsIcon icon={Loading03Icon} className="w-4 h-4 animate-spin" />
+						) : (
+							<HugeiconsIcon icon={Send01Icon} className="w-4 h-4" />
+						)}
 					</Button>
 				</form>
 			</div>

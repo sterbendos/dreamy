@@ -1,7 +1,7 @@
 import { auth } from "@/auth/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { getUserSubscription, getUserUsageToday } from "@/billing/service";
+import { getUserSubscription, getUserUsageToday, getPendingPayment } from "@/billing/service";
 import { LIMITS } from "@/billing/tiers";
 
 export async function GET(req: Request) {
@@ -16,12 +16,14 @@ export async function GET(req: Request) {
 
 		const { tier, subscription } = await getUserSubscription(session.user.id);
 		const usage = await getUserUsageToday(session.user.id);
+		const pending = await getPendingPayment(session.user.id);
 
 		return NextResponse.json({
 			tier,
 			subscription,
 			usageToday: usage.count,
 			dailyLimit: LIMITS[tier].dailyCommands,
+			pendingPayment: pending ?? null,
 		});
 	} catch (error) {
 		console.error("[Payment Status API Error]", error);
