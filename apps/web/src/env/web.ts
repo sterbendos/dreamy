@@ -28,12 +28,9 @@ const webEnvSchema = z.object({
 	// Admin secret for approving pending payments (keep this private)
 	ADMIN_SECRET: z.string().default("dummy_admin_secret"),
 
-	// SMTP for email verification and transactional emails
-	SMTP_HOST: z.string().default("smtp.gmail.com"),
-	SMTP_PORT: z.coerce.number().default(465),
-	SMTP_USER: z.string().default("noreply@example.com"),
-	SMTP_PASS: z.string().default("dummy_smtp_pass"),
-	SMTP_FROM: z.string().default("Dreamy <noreply@example.com>"),
+	// Resend — for transactional emails (verification, etc.)
+	RESEND_API_KEY: z.string().default("re_dummy_key"),
+	RESEND_FROM: z.string().default("Dreamy <onboarding@resend.dev>"),
 });
 
 export type WebEnv = z.infer<typeof webEnvSchema>;
