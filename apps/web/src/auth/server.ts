@@ -66,7 +66,11 @@ export const auth = betterAuth({
 	},
 	baseURL: webEnv.NEXT_PUBLIC_SITE_URL,
 	appName: "Dreamy",
-	trustedOrigins: [webEnv.NEXT_PUBLIC_SITE_URL],
+	trustedOrigins: [
+		webEnv.NEXT_PUBLIC_SITE_URL,
+		process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}` : undefined,
+		process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : undefined
+	].filter(Boolean) as string[],
 });
 
 export type Auth = typeof auth;
