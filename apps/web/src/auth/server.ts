@@ -31,25 +31,32 @@ export const auth = betterAuth({
 		sendOnSignUp: true,
 		autoSignInAfterVerification: true,
 		sendVerificationEmail: async ({ user, url }) => {
-			await resend.emails.send({
-				from: webEnv.RESEND_FROM,
-				to: user.email,
-				subject: "Verify your Dreamy account",
-				html: `
-					<div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 32px; background: #0a0a0a; color: #ededed; border-radius: 16px;">
-						<h2 style="font-size: 24px; font-weight: 700; margin-bottom: 8px; color: #fff;">Verify your email</h2>
-						<p style="color: #9ca3af; margin-bottom: 24px; line-height: 1.6;">
-							Thanks for signing up for Dreamy! Click the button below to verify your email address and activate your account.
-						</p>
-						<a href="${url}" style="display: inline-block; background: #fff; color: #000; padding: 12px 28px; border-radius: 9999px; text-decoration: none; font-weight: 600; font-size: 15px;">
-							Verify Email →
-						</a>
-						<p style="color: #6b7280; font-size: 12px; margin-top: 32px;">
-							If you didn't create a Dreamy account, you can safely ignore this email.
-						</p>
-					</div>
-				`,
-			});
+			try {
+				const { error } = await resend.emails.send({
+					from: webEnv.RESEND_FROM,
+					to: user.email,
+					subject: "Verify your Dreamy account",
+					html: `
+						<div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 32px; background: #0a0a0a; color: #ededed; border-radius: 16px;">
+							<h2 style="font-size: 24px; font-weight: 700; margin-bottom: 8px; color: #fff;">Verify your email</h2>
+							<p style="color: #9ca3af; margin-bottom: 24px; line-height: 1.6;">
+								Thanks for signing up for Dreamy! Click the button below to verify your email address and activate your account.
+							</p>
+							<a href="${url}" style="display: inline-block; background: #fff; color: #000; padding: 12px 28px; border-radius: 9999px; text-decoration: none; font-weight: 600; font-size: 15px;">
+								Verify Email →
+							</a>
+							<p style="color: #6b7280; font-size: 12px; margin-top: 32px;">
+								If you didn't create a Dreamy account, you can safely ignore this email.
+							</p>
+						</div>
+					`,
+				});
+				if (error) {
+					console.error("[Resend Error]:", error);
+				}
+			} catch (e) {
+				console.error("[Resend Exception]:", e);
+			}
 		},
 	},
 	rateLimit: {
