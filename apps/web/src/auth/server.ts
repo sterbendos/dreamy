@@ -63,11 +63,20 @@ export const auth = betterAuth({
 		storage: "secondary-storage",
 		customStorage: {
 			get: async (key) => {
-				const value = await redis.get(key);
-				return value as RateLimit | undefined;
+				try {
+					const value = await redis.get(key);
+					return value as RateLimit | undefined;
+				} catch (e) {
+					console.error("[Redis Get Error]:", e);
+					return undefined;
+				}
 			},
 			set: async (key, value) => {
-				await redis.set(key, value);
+				try {
+					await redis.set(key, value);
+				} catch (e) {
+					console.error("[Redis Set Error]:", e);
+				}
 			},
 		},
 	},
