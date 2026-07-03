@@ -10,7 +10,7 @@ const capabilities = [
 	"Local Processing",
 	"GPU Accelerated",
 	"Privacy-First",
-	"Open Source",
+	"No Uploads Required",
 	"Real-time Preview",
 	"Multi-track Audio",
 ];

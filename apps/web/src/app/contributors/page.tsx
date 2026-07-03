@@ -21,18 +21,7 @@ export default function ContributorsPage() {
 				<p className="text-muted-foreground text-lg">
 					We currently have no contributors listed.
 				</p>
-				<p className="text-muted-foreground text-sm max-w-md">
-					Want to contribute to Dreamy? Check out our{" "}
-					<a
-						href="https://github.com/sterbendos/dreamy/blob/main/.github/CONTRIBUTING.md"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="text-foreground underline underline-offset-4 hover:opacity-70"
-					>
-						contributing guide
-					</a>{" "}
-					to get started.
-				</p>
+
 			</div>
 		</BasePage>
 	);

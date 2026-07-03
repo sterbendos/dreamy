@@ -251,11 +251,11 @@ export default function PricingPage() {
 
 					<form onSubmit={handleConfirm} className="flex flex-col gap-4">
 						<div className="flex flex-col gap-1.5">
-							<label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+							<label htmlFor="transfer-ref" className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
 								Transfer Reference (رقم العملية) *
 							</label>
 							<Input
-								id="transfer-ref-input"
+								id="transfer-ref"
 								value={transferRef}
 								onChange={(e) => setTransferRef(e.target.value)}
 								placeholder="e.g. TXN123456789"
@@ -265,11 +265,11 @@ export default function PricingPage() {
 						</div>
 
 						<div className="flex flex-col gap-1.5">
-							<label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+							<label htmlFor="sender-phone" className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
 								Your InstaPay Phone Number *
 							</label>
 							<Input
-								id="sender-phone-input"
+								id="sender-phone"
 								value={senderPhone}
 								onChange={(e) => setSenderPhone(e.target.value)}
 								placeholder="e.g. 01001234567"

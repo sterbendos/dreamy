@@ -25,7 +25,7 @@ export default function LoginPage() {
 
 		setIsLoading(true);
 		try {
-			const { data, error } = await signIn.email({
+			const { error } = await signIn.email({
 				email,
 				password,
 			});
@@ -87,10 +87,11 @@ export default function LoginPage() {
 
 					<form onSubmit={handleLogin} className="space-y-4">
 						<div className="space-y-1.5">
-							<label className="text-sm font-medium px-1 text-foreground/80">Email</label>
+							<label htmlFor="email" className="text-sm font-medium px-1 text-foreground/80">Email</label>
 							<div className="relative">
 								<Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
 								<Input
+									id="email"
 									type="email"
 									placeholder="you@example.com"
 									className="pl-9 bg-background/50 border-border/50 focus-visible:ring-primary/20 focus-visible:border-primary/50 h-11"
@@ -104,11 +105,12 @@ export default function LoginPage() {
 
 						<div className="space-y-1.5">
 							<div className="flex items-center justify-between px-1">
-								<label className="text-sm font-medium text-foreground/80">Password</label>
+								<label htmlFor="password" className="text-sm font-medium text-foreground/80">Password</label>
 							</div>
 							<div className="relative">
 								<Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
 								<Input
+									id="password"
 									type="password"
 									placeholder="••••••••"
 									className="pl-9 bg-background/50 border-border/50 focus-visible:ring-primary/20 focus-visible:border-primary/50 h-11"
@@ -134,7 +136,7 @@ export default function LoginPage() {
 					</form>
 
 					<div className="mt-8 text-center text-sm text-muted-foreground">
-						Don't have an account?{" "}
+						Don&apos;t have an account?{" "}
 						<Link
 							href="/signup"
 							className="font-medium text-foreground hover:text-primary transition-colors underline underline-offset-4"

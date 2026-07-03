@@ -198,41 +198,11 @@ export default function TermsPage() {
 					<li>We&apos;ll notify you of significant changes to these terms</li>
 					<li>Continued use means you accept any updates</li>
 					<li>You can always self-host an older version if you prefer</li>
-					<li>Major changes will be discussed with the community on GitHub</li>
+					<li>Major changes will be communicated via our blog</li>
 				</ul>
 			</section>
 
-			<section className="flex flex-col gap-3">
-				<h2 className="text-2xl font-semibold">Limitation of Liability</h2>
-				<p>
-					Dreamy is provided free of charge for basic use. Pro subscriptions are
-					paid. To the extent permitted by law:
-				</p>
-				<ul className="list-disc space-y-2 pl-6">
-					<li>We&apos;re not liable for any loss of data, content, or revenue</li>
-					<li>
-						Projects are stored in your browser and may be lost if you clear
-						browser data
-					</li>
-					<li>We&apos;re not responsible for how you use the service</li>
-					<li>Our liability is limited to the maximum extent allowed by law</li>
-				</ul>
-				<p>
-					Since your content stays on your device, we have no way to recover
-					lost projects. Consider exporting important videos when finished
-					editing.
-				</p>
-			</section>
 
-			<section className="flex flex-col gap-3">
-				<h2 className="text-2xl font-semibold">Service Changes</h2>
-				<p>We may update Dreamy and these terms:</p>
-				<ul className="list-disc space-y-2 pl-6">
-					<li>We&apos;ll notify you of significant changes to these terms</li>
-					<li>Continued use means you accept any updates</li>
-					<li>Major changes will be discussed with the community on GitHub</li>
-				</ul>
-			</section>
 
 			<section className="flex flex-col gap-3">
 				<h2 className="text-2xl font-semibold">Stopping Use</h2>

@@ -39,10 +39,7 @@ export default function SignupPage() {
 
 			setIsLoading(false);
 			if (error) {
-				const errorMsg = error.message && error.message !== "Internal Server Error" 
-					? error.message 
-					: JSON.stringify(error);
-				toast.error(`Error: ${errorMsg}`);
+				toast.error(error.message || "Failed to create account");
 				return;
 			}
 

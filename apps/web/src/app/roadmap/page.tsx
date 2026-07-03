@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { BasePage } from "@/app/base-page";
-import { GitHubContributeSection } from "@/components/gitHub-contribute-section";
 import { Badge } from "@/components/ui/badge";
 import { ReactMarkdownWrapper } from "@/components/ui/react-markdown-wrapper";
 import { cn } from "@/utils/ui";
@@ -98,10 +97,15 @@ export default function RoadmapPage() {
 						<RoadmapItem key={item.title} item={item} index={index} />
 					))}
 				</div>
-				<GitHubContributeSection
-					title="Want to help?"
-					description="Dreamy is actively developed by a dedicated team. If you find bugs or have ideas, we'd love to hear from you — open an issue or reach out on X."
-				/>
+				<div className="flex flex-col gap-4 rounded-xl border border-border/50 bg-card p-6 md:p-8 mt-8">
+					<h2 className="text-xl font-semibold">Want to help?</h2>
+					<p className="text-muted-foreground leading-relaxed">
+						Have feedback or found a bug?{" "}
+						<a href="mailto:ahmmmd1113@gmail.com" className="text-foreground underline underline-offset-4 hover:opacity-70">
+							Email us directly.
+						</a>
+					</p>
+				</div>
 			</div>
 		</BasePage>
 	);

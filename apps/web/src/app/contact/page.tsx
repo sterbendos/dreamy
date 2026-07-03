@@ -45,17 +45,7 @@ export default function ContactPage() {
 					</Button>
 				</div>
 
-				<div className="flex flex-col gap-4 bg-card border border-border/50 rounded-2xl p-8">
-					<h2 className="text-xl font-semibold">GitHub</h2>
-					<p className="text-muted-foreground leading-relaxed">
-						Found a bug or have a feature request? Open an issue on GitHub.
-					</p>
-					<Button asChild variant="outline" className="w-fit mt-2">
-						<Link href="https://github.com/Dreamy-app/Dreamy" target="_blank" rel="noopener noreferrer">
-							Open an issue on GitHub
-						</Link>
-					</Button>
-				</div>
+
 			</div>
 		</BasePage>
 	);
