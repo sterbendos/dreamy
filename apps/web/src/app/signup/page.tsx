@@ -31,7 +31,7 @@ export default function SignupPage() {
 
 		setIsLoading(true);
 		try {
-			const { data, error } = await signUp.email({
+			const { error } = await signUp.email({
 				email,
 				password,
 				name,
@@ -39,7 +39,7 @@ export default function SignupPage() {
 
 			setIsLoading(false);
 			if (error) {
-				toast.error(error.message || "Failed to create account");
+				toast.error(error.message || "Failed to create account. Please try again.");
 				return;
 			}
 

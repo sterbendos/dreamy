@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Mail02Icon, Bug02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
-export function GitHubContributeSection({
+export function ContactSection({
 	title,
 	description,
 }: {
