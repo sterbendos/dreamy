@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { user } from "@/db/schema";
+import { users } from "@/db/schema";
 import { sql } from "drizzle-orm";
 import { Redis } from "@upstash/redis";
 import { webEnv } from "@/env/web";
@@ -33,7 +33,7 @@ export async function GET() {
 	// 2. Test Tables Exist
 	if (results.db === "Connected successfully") {
 		try {
-			await db.select().from(user).limit(1);
+			await db.select().from(users).limit(1);
 			results.tables = "User table exists";
 		} catch (e: any) {
 			results.tables = { error: e.message, stack: e.stack, name: e.name };

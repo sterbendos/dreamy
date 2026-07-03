@@ -5,7 +5,8 @@
   "packageManager": "bun@1.2.18",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "drizzle-kit push && next build",
+    "build": "next build",
+    "build:migrate": "drizzle-kit push && next build",
     "start": "next start",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
