@@ -127,20 +127,21 @@ function EditorLayout() {
 	);
 
 	return (
-		<ResizablePanelGroup
-			direction="vertical"
-			className="size-full gap-[0.18rem]"
-			onLayout={(sizes) => {
-				setPanel({
-					panel: "mainContent",
-					size: sizes[0] ?? panels.mainContent,
-				});
-				setPanel({
-					panel: "timeline",
-					size: sizes[1] ?? panels.timeline,
-				});
-			}}
-		>
+		<>
+			<ResizablePanelGroup
+				direction="vertical"
+				className="size-full gap-[0.18rem]"
+				onLayout={(sizes) => {
+					setPanel({
+						panel: "mainContent",
+						size: sizes[0] ?? panels.mainContent,
+					});
+					setPanel({
+						panel: "timeline",
+						size: sizes[1] ?? panels.timeline,
+					});
+				}}
+			>
 			<ResizablePanel
 				defaultSize={panels.mainContent}
 				minSize={30}
@@ -205,7 +206,8 @@ function EditorLayout() {
 			>
 				<Timeline />
 			</ResizablePanel>
-			<CopilotPanel />
 		</ResizablePanelGroup>
+		<CopilotPanel />
+		</>
 	);
 }
