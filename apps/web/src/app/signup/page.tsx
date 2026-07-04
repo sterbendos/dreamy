@@ -34,7 +34,6 @@ export default function SignupPage() {
 		return { label: "Weak", color: "bg-destructive" };
 	};
 	const strength = getPasswordStrength(password);
-	const router = useRouter();
 
 	const handleSignup = async (e: React.FormEvent) => {
 		e.preventDefault();
