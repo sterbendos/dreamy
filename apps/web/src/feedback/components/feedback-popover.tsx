@@ -188,7 +188,7 @@ function FeedbackPopoverContent({ onClose }: { onClose: () => void }) {
 							<span />
 						)}
 						<div className="flex gap-2">
-							{!form.watch("message").trim() && (
+							{!(form.watch("message") || "").trim() && (
 								<Button
 									type="button"
 									variant="outline"
@@ -201,7 +201,7 @@ function FeedbackPopoverContent({ onClose }: { onClose: () => void }) {
 							<Button
 								type="submit"
 								size="sm"
-								disabled={isSubmitting || !form.watch("message").trim()}
+								disabled={isSubmitting || !(form.watch("message") || "").trim()}
 							>
 								{isSubmitting ? <Spinner /> : "Send"}
 							</Button>

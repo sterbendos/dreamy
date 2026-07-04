@@ -380,7 +380,7 @@ export function CopilotPanel() {
 						onKeyDown={(e) => {
 							if (e.key === "Enter" && !e.shiftKey) {
 								e.preventDefault();
-								if (input.trim() && !isLoading && !isRateLimited) {
+								if ((input || "").trim() && !isLoading && !isRateLimited) {
 									handleSubmit(e as any);
 								}
 							}
@@ -390,7 +390,7 @@ export function CopilotPanel() {
 						type="submit"
 						size="icon"
 						id="copilot-send-btn"
-						disabled={!input.trim() || isLoading || isRateLimited}
+						disabled={!(input || "").trim() || isLoading || isRateLimited}
 						className="h-9 w-9 rounded-xl flex-shrink-0"
 					>
 						{isLoading ? (
