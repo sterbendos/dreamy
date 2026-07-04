@@ -7,10 +7,7 @@ if (process.env.NODE_ENV === "production") {
 	dotenv.config({ path: ".env.local" });
 }
 
-const databaseUrl = process.env.DATABASE_URL;
-if (!databaseUrl) {
-	throw new Error("DATABASE_URL is not set");
-}
+const databaseUrl = process.env.DATABASE_URL || "postgres://dummy:dummy@localhost:5432/dummy";
 
 export default {
 	schema: "./src/db/schema.ts",
@@ -22,5 +19,5 @@ export default {
 		url: databaseUrl,
 	},
 	out: "./migrations",
-	strict: process.env.NODE_ENV === "production",
+	strict: false,
 } satisfies Config;

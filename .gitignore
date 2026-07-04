@@ -41,3 +41,5 @@ rust-migration-notes.md
 *.zip
 *.tar.gz
 *.rar
+.vercel
+.env*
