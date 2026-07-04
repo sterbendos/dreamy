@@ -231,7 +231,7 @@ function DashboardTop() {
 					<div>
 						<h3 className="font-semibold text-primary">Upgrade to Pro</h3>
 						<p className="text-sm text-primary/80">
-							Get 200 AI commands per day and access to Claude 3.5 Sonnet.
+							Get 200 AI commands per day and access to Claude 3.5 Haiku and DeepSeek V3.
 						</p>
 					</div>
 					<Button onClick={() => router.push("/pricing")}>View Pricing</Button>

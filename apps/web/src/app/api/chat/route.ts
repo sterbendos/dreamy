@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 			}
 		}
 
-		const { messages, model = "meta-llama/llama-3.1-8b-instruct:free" } = await req.json();
+		const { messages, model = "deepseek/deepseek-chat-v3:free" } = await req.json();
 
 		const availableModels = getAvailableModels(tier);
 		const isModelAllowed = availableModels.some((m) => m.id === model);

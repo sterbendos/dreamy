@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Sparkles, X, Send, Loader2, Check } from "lucide-react";
 
 import { useEditor } from "@/editor/use-editor";
-import { MODELS, LIMITS } from "@/billing/tiers";
+import { LIMITS, getAvailableModels } from "@/billing/tiers";
 import type { Tier } from "@/billing/tiers";
 import { useRouter } from "next/navigation";
 
@@ -82,9 +82,9 @@ export function CopilotPanel() {
 			setStatus(data);
 			// Reset model to first allowed if the current one isn't available
 			setSelectedModel((prev) => {
-				const models = MODELS[data.tier];
+				const models = getAvailableModels(data.tier);
 				if (!prev || !models.find((m) => m.id === prev)) {
-					return models[0].id;
+					return models[0]?.id ?? null;
 				}
 				return prev;
 			});
@@ -123,8 +123,8 @@ export function CopilotPanel() {
 
 	// ── Derived values ──────────────────────────────────────────────────────
 	const tier: Tier = status?.tier ?? "free";
-	const availableModels = MODELS[tier];
-	const activeModel = selectedModel ?? availableModels[0].id;
+	const availableModels = getAvailableModels(tier);
+	const activeModel = selectedModel ?? availableModels[0]?.id ?? "deepseek/deepseek-chat-v3:free";
 	const dailyLimit = status?.dailyLimit ?? LIMITS[tier].dailyCommands;
 	const usageToday = status?.usageToday ?? 0;
 	const isDailyLimitReached = status !== null && usageToday >= dailyLimit;

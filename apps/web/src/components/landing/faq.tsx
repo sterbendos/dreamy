@@ -19,7 +19,7 @@ const faqs = [
 	},
 	{
 		question: "What is the difference between Free and Pro?",
-		answer: "The Free plan gives you 10 AI commands per day and standard export quality. The Pro plan gives you 200 AI commands per day, unlocks 4K export, and utilizes the more powerful Claude 3.5 Sonnet model for complex editing tasks."
+		answer: "The Free plan gives you 10 AI commands per day and standard export quality. The Pro plan gives you 200 AI commands per day, unlocks 4K export, and gives you access to Claude 3.5 Haiku and DeepSeek V3 for faster, smarter editing commands."
 	},
 	{
 		question: "What platforms does Dreamy work on?",

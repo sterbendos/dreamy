@@ -70,7 +70,7 @@ export function PricingTeaser() {
 							<div className="text-sm font-normal text-muted-foreground mt-1 tracking-normal">≈ $5 USD / month</div>
 						</div>
 						<ul className="space-y-4 mb-8 flex-1">
-							{["200 AI commands per day", "Powered by Claude 3.5 Sonnet", "4K video export", "Advanced styling and animations"].map((feature) => (
+							{["200 AI commands per day", "Claude 3.5 Haiku & DeepSeek V3", "4K video export", "Advanced styling and animations"].map((feature) => (
 								<li key={feature} className="flex items-center gap-3">
 									<Check className="w-5 h-5 text-primary shrink-0" />
 									<span className="text-sm text-foreground">{feature}</span>

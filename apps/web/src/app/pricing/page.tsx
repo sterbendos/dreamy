@@ -146,7 +146,7 @@ export default function PricingPage() {
 								<span>✓</span> 200 AI commands per day
 							</li>
 							<li className="flex items-center gap-2 text-primary font-medium">
-								<span>✓</span> Claude 3.5 Sonnet & Haiku
+								<span>✓</span> Claude 3.5 Haiku & DeepSeek V3
 							</li>
 							<li className="flex items-center gap-2 text-muted-foreground">
 								<span className="text-foreground">✓</span> All free models included
