@@ -39,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			priority: 0.5,
 		},
 		{
-			url: `${SITE_URL}/terms`,
+			url: `${SITE_URL}/terms-of-use`,
 			lastModified: new Date(),
 			changeFrequency: "monthly",
 			priority: 0.5,
@@ -55,6 +55,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			lastModified: new Date(),
 			changeFrequency: "weekly",
 			priority: 1,
+		},
+		{
+			url: `${SITE_URL}/changelog`,
+			lastModified: new Date(),
+			changeFrequency: "weekly",
+			priority: 0.8,
 		},
 		{
 			url: `${SITE_URL}/pricing`,

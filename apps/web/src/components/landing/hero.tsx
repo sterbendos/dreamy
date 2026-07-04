@@ -40,7 +40,7 @@ export function Hero() {
 
 					<div className="flex flex-row gap-3 w-full sm:w-auto">
 						<Link
-							href="/projects"
+							href="/dashboard"
 							className="inline-flex items-center justify-center gap-2.5 h-12 px-7 rounded-md bg-foreground text-background text-sm font-medium transition-all hover:bg-foreground/85 active:scale-[0.98]"
 						>
 							Start creating

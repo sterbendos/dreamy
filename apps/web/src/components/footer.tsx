@@ -17,7 +17,7 @@ const links: CategoryLinks = {
 		{ label: "Changelog", href: "/changelog" },
 		{ label: "Blog", href: "/blog" },
 		{ label: "Privacy", href: "/privacy" },
-		{ label: "Terms of use", href: "/terms" },
+		{ label: "Terms of use", href: "/terms-of-use" },
 	],
 	company: [
 		{ label: "Contact", href: "/contact" },

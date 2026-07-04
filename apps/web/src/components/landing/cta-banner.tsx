@@ -34,7 +34,7 @@ export function CtaBanner() {
 
 					<div className="flex flex-row gap-3 items-center flex-wrap">
 						<Link
-							href="/projects"
+							href="/dashboard"
 							className="inline-flex items-center justify-center gap-2.5 h-12 px-7 rounded-md bg-foreground text-background text-sm font-medium transition-all hover:bg-foreground/85 active:scale-[0.98]"
 						>
 							Start editing free

@@ -99,7 +99,7 @@ export default function PricingPage() {
 					<p className="text-muted-foreground text-lg max-w-md mx-auto">
 						Upgrade to Pro and unlock 200 AI commands per day with access to the best models.
 					</p>
-					<p className="text-sm text-muted-foreground mt-3">All prices in Egyptian Pounds (EGP)</p>
+					<p className="text-sm text-muted-foreground mt-3">All prices in Egyptian Pounds (EGP). EGP 250 is approximately $5 USD.</p>
 				</div>
 
 				<div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
@@ -139,6 +139,7 @@ export default function PricingPage() {
 						</div>
 						<div className="text-4xl font-bold">
 							{instapay.amount} {instapay.currency}<span className="text-lg text-muted-foreground font-normal">/mo</span>
+							<div className="text-sm text-muted-foreground font-normal mt-1">≈ $5 USD / month</div>
 						</div>
 						<ul className="flex flex-col gap-3 flex-1 text-sm">
 							<li className="flex items-center gap-2 text-primary font-medium">
@@ -154,19 +155,28 @@ export default function PricingPage() {
 								<span className="text-foreground">✓</span> Priority support
 							</li>
 						</ul>
-						<Button
-							id="upgrade-btn"
-							onClick={() => {
-								if (!session) {
-									router.push("/login?returnTo=/pricing");
-									return;
-								}
-								setStep("instructions");
-							}}
-							className="w-full"
-						>
-							Upgrade via InstaPay
-						</Button>
+						<div className="flex flex-col gap-2 mt-2">
+							<Button
+								id="upgrade-btn"
+								onClick={() => {
+									if (!session) {
+										router.push("/login?returnTo=/pricing");
+										return;
+									}
+									setStep("instructions");
+								}}
+								className="w-full"
+							>
+								Upgrade via InstaPay (Egypt)
+							</Button>
+							<Button
+								variant="outline"
+								disabled
+								className="w-full"
+							>
+								Credit Card / Stripe (Coming soon)
+							</Button>
+						</div>
 					</div>
 				</div>
 			</div>

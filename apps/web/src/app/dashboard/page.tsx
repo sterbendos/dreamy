@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "@/auth/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -108,7 +109,9 @@ export default function ProjectsPage() {
 			<MigrationDialog />
 			<StoragePersistenceDialog />
 			<ChangelogNotification />
+			<DashboardTop />
 			<ProjectsHeader />
+
 			<ProjectsToolbar projectIds={projectsToDisplay.map((p) => p.id)} />
 			<main className="mx-auto px-4 pt-2 pb-6 flex flex-col gap-4">
 				{isLoading || !isInitialized ? (
@@ -133,6 +136,107 @@ export default function ProjectsPage() {
 					</div>
 				)}
 			</main>
+		</div>
+	);
+}
+
+function DashboardTop() {
+	const { data: session, isPending } = useSession();
+	const router = useRouter();
+	const [status, setStatus] = useState<any>(null);
+
+	useEffect(() => {
+		if (!isPending && !session) {
+			router.push("/login?returnTo=/dashboard");
+		}
+	}, [isPending, session, router]);
+
+	useEffect(() => {
+		if (session) {
+			fetch("/api/payment/status")
+				.then((res) => res.json())
+				.then((data) => setStatus(data));
+		}
+	}, [session]);
+
+	if (!session) return null;
+
+	return (
+		<div className="px-8 py-6 mb-4 flex flex-col gap-6">
+			<div className="flex items-center justify-between">
+				<div>
+					<h1 className="text-3xl font-bold tracking-tight">
+						Welcome, {session.user.name}
+					</h1>
+				</div>
+				<Button
+					size="lg"
+					onClick={() => router.push("/editor")}
+					className="font-semibold px-6"
+				>
+					Open Editor
+				</Button>
+			</div>
+
+			{status && (
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<Card className="bg-card">
+						<CardContent className="p-6">
+							<h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">
+								Current Plan
+							</h2>
+							<p className="text-2xl font-bold capitalize">{status.tier}</p>
+							{status.tier === "free" && (
+								<Button
+									variant="outline"
+									size="sm"
+									className="mt-4"
+									onClick={() => router.push("/pricing")}
+								>
+									Upgrade to Pro
+								</Button>
+							)}
+						</CardContent>
+					</Card>
+					<Card className="bg-card">
+						<CardContent className="p-6">
+							<h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">
+								AI Commands Usage
+							</h2>
+							<p className="text-2xl font-bold">
+								{status.usageToday} / {status.dailyLimit} used
+							</p>
+							<div className="w-full bg-muted/50 rounded-full h-2 overflow-hidden mt-4">
+								<div
+									className={`h-full rounded-full transition-all duration-500 ${
+										status.usageToday >= status.dailyLimit
+											? "bg-destructive"
+											: "bg-primary"
+									}`}
+									style={{
+										width: `${Math.min(
+											(status.usageToday / status.dailyLimit) * 100,
+											100,
+										)}%`,
+									}}
+								/>
+							</div>
+						</CardContent>
+					</Card>
+				</div>
+			)}
+
+			{status?.tier === "free" && (
+				<div className="bg-primary/10 border border-primary/20 rounded-xl p-4 flex items-center justify-between">
+					<div>
+						<h3 className="font-semibold text-primary">Upgrade to Pro</h3>
+						<p className="text-sm text-primary/80">
+							Get 200 AI commands per day and access to Claude 3.5 Sonnet.
+						</p>
+					</div>
+					<Button onClick={() => router.push("/pricing")}>View Pricing</Button>
+				</div>
+			)}
 		</div>
 	);
 }
