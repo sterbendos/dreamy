@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
 	const isProtectedRoute = 
 		request.nextUrl.pathname.startsWith("/editor") || 
 		request.nextUrl.pathname.startsWith("/account") ||
-		request.nextUrl.pathname.startsWith("/projects");
+		request.nextUrl.pathname.startsWith("/dashboard");
 
 	if (isProtectedRoute) {
 		// Better Auth uses different cookie names in dev vs prod
@@ -23,5 +23,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/editor/:path*", "/account/:path*", "/projects/:path*"],
+	matcher: ["/editor/:path*", "/account/:path*", "/dashboard/:path*"],
 };

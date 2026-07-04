@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { BasePage } from "../base-page";
+import { BasePage } from "@/app/base-page";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Mail } from "lucide-react";
 
 export const metadata: Metadata = {
 	title: "Contributors - Dreamy",
-	description: "Meet the people who contribute to Dreamy.",
+	description: "Meet the people building Dreamy.",
 	openGraph: {
 		title: "Contributors - Dreamy",
-		description: "Meet the people who contribute to Dreamy.",
+		description: "Meet the people building Dreamy.",
 		type: "website",
 	},
 };
@@ -14,26 +17,36 @@ export const metadata: Metadata = {
 export default function ContributorsPage() {
 	return (
 		<BasePage
+			maxWidth="2xl"
 			title="Contributors"
-			description="Meet the people who contribute to Dreamy."
+			description="Dreamy is built by a small founding team."
 		>
-			<div className="flex flex-col items-center justify-center gap-6 py-20 text-center">
-				<p className="text-muted-foreground text-lg">
-					We currently have no contributors listed.
-				</p>
-				<div className="bg-muted/40 border border-border/50 rounded-2xl p-8 max-w-lg mt-8">
-					<h3 className="text-xl font-semibold mb-2">Want to contribute?</h3>
-					<p className="text-muted-foreground text-sm mb-6">
-						Dreamy is built by a community of passionate developers and creators. If you'd like to help build the future of browser-native video editing, we'd love your help.
+			<div className="flex flex-col gap-6">
+				<div className="flex flex-col gap-4 bg-card border border-border/50 rounded-2xl p-8">
+					<h2 className="text-xl font-semibold">Ahmed Elkady</h2>
+					<p className="text-sm text-muted-foreground">Founder & Engineer</p>
+					<p className="text-muted-foreground leading-relaxed">
+						Ahmed is the founder and sole engineer behind Dreamy. He designs and builds the entire product, from the editor and AI integrations to the web platform and payments.
 					</p>
-					<div className="flex gap-4 justify-center">
-						<a href="https://github.com/aahmmmd/cutflow" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-							View GitHub Repo
-						</a>
-						<a href="https://discord.gg/dreamy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-border bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
-							Join our Discord
-						</a>
-					</div>
+					<Button asChild variant="outline" className="w-fit mt-2">
+						<Link href="mailto:ahmmmd1113@gmail.com">
+							<Mail className="w-4 h-4 mr-2" />
+							Contact Ahmed
+						</Link>
+					</Button>
+				</div>
+
+				<div className="flex flex-col gap-4 bg-card border border-border/50 rounded-2xl p-8">
+					<h2 className="text-xl font-semibold">Want to be part of what&apos;s next?</h2>
+					<p className="text-muted-foreground leading-relaxed">
+						Dreamy is at an early stage and growing. If you&apos;re excited about browser-native video editing, AI-assisted creative tools, or building in public — we&apos;d love to hear from you.
+					</p>
+					<Button asChild className="w-fit mt-2">
+						<Link href="mailto:ahmmmd1113@gmail.com">
+							<Mail className="w-4 h-4 mr-2" />
+							Reach out at ahmmmd1113@gmail.com
+						</Link>
+					</Button>
 				</div>
 			</div>
 		</BasePage>

@@ -110,7 +110,7 @@ export default function PricingPage() {
 							<p className="text-muted-foreground text-sm mt-1">For casual creators.</p>
 						</div>
 						<div className="text-4xl font-bold">
-							0 EGP<span className="text-lg text-muted-foreground font-normal">/mo</span>
+							EGP 0<span className="text-lg text-muted-foreground font-normal">/mo</span>
 						</div>
 						<ul className="flex flex-col gap-3 flex-1 text-sm text-muted-foreground">
 							<li className="flex items-center gap-2">
@@ -138,7 +138,7 @@ export default function PricingPage() {
 							<p className="text-muted-foreground text-sm mt-1">For serious editors.</p>
 						</div>
 						<div className="text-4xl font-bold">
-							{instapay.amount} {instapay.currency}<span className="text-lg text-muted-foreground font-normal">/mo</span>
+							{instapay.currency} {instapay.amount}<span className="text-lg text-muted-foreground font-normal">/mo</span>
 							<div className="text-sm text-muted-foreground font-normal mt-1">≈ $5 USD / month</div>
 						</div>
 						<ul className="flex flex-col gap-3 flex-1 text-sm">
