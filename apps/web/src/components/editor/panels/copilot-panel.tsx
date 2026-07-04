@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles, X, Send, Loader2, Check } from "lucide-react";
+import { ModelSelector } from "./model-selector";
 
 import { useEditor } from "@/editor/use-editor";
 import { LIMITS, getAvailableModels } from "@/billing/tiers";
@@ -218,19 +219,11 @@ export function CopilotPanel() {
 				</div>
 
 				<div className="flex items-center gap-2">
-					{/* Model selector */}
-					<select
-						id="copilot-model-select"
-						value={activeModel}
-						onChange={(e) => setSelectedModel(e.target.value)}
-						className="text-xs bg-muted/50 border border-border/40 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary/50 cursor-pointer text-foreground max-w-[130px]"
-					>
-						{availableModels.map((m) => (
-							<option key={m.id} value={m.id} className="bg-background">
-								{m.name}
-							</option>
-						))}
-					</select>
+					<ModelSelector 
+						activeModelId={activeModel}
+						availableModels={availableModels}
+						onSelect={setSelectedModel}
+					/>
 
 					<Button
 						variant="ghost"
