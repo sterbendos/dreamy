@@ -10,7 +10,7 @@ const redis = new Redis({
 	token: webEnv.UPSTASH_REDIS_REST_TOKEN,
 });
 
-const resend = new Resend(webEnv.RESEND_API_KEY);
+const resend = new Resend(webEnv.RESEND_API_KEY || "re_dummy_key");
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
