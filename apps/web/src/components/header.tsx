@@ -100,7 +100,7 @@ export function Header() {
 									transition={{ type: "spring", stiffness: 400, damping: 20 }}
 								>
 									<Button className="text-sm rounded-full px-5" asChild>
-										<Link href="/projects">
+										<Link href="/dashboard">
 											Dashboard
 											<ArrowRight className="size-4" />
 										</Link>
@@ -202,7 +202,7 @@ export function Header() {
 								{isPending || !mounted ? null : session ? (
 									<div className="flex flex-col gap-3">
 										<Link
-											href="/projects"
+											href="/dashboard"
 											className="font-sans text-2xl font-medium tracking-tight text-foreground hover:text-primary transition-colors"
 											onClick={() => setIsMenuOpen(false)}
 										>

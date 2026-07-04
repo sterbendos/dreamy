@@ -61,7 +61,7 @@ function ProjectDropdown() {
 			console.error("Failed to prepare project exit:", error);
 		} finally {
 			editor.project.closeProject();
-			router.push("/projects");
+			router.push("/dashboard");
 		}
 	};
 
@@ -93,7 +93,7 @@ function ProjectDropdown() {
 				await editor.project.deleteProjects({
 					ids: [activeProject.metadata.id],
 				});
-				router.push("/projects");
+				router.push("/dashboard");
 			} catch (error) {
 				toast.error("Failed to delete project", {
 					description:

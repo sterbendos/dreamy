@@ -154,8 +154,12 @@ function DashboardTop() {
 	useEffect(() => {
 		if (session) {
 			fetch("/api/payment/status")
-				.then((res) => res.json())
-				.then((data) => setStatus(data));
+				.then((res) => {
+					if (!res.ok) throw new Error("Failed to fetch status");
+					return res.json();
+				})
+				.then((data) => setStatus(data))
+				.catch((err) => console.error(err));
 		}
 	}, [session]);
 
