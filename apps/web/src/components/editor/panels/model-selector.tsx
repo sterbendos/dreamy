@@ -68,25 +68,45 @@ export function ModelSelector({ activeModelId, availableModels, onSelect, disabl
 								{models.map((model) => (
 									<Command.Item
 										key={model.id}
-										value={`${model.name} ${model.provider}`}
+										value={`${model.name} ${model.provider} ${model.strength}`}
 										onSelect={() => {
 											onSelect(model.id);
 											setOpen(false);
 										}}
 										className={cn(
-											"relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50",
+											"relative flex cursor-pointer select-none items-start rounded-sm px-2 py-2 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50",
 											activeModelId === model.id ? "bg-accent/50 text-accent-foreground" : ""
 										)}
 									>
-										<div className="flex flex-col w-full gap-0.5">
+										<div className="flex flex-col w-full gap-1">
 											<div className="flex items-center justify-between w-full">
-												<span className="font-medium truncate pr-2">{model.name}</span>
-												<span className="text-[10px] text-muted-foreground whitespace-nowrap tabular-nums">
+												<div className="flex items-center gap-1.5 min-w-0">
+													<span className="font-medium truncate">{model.name}</span>
+													{model.tier === "free" && (
+														<span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 shrink-0">
+															FREE
+														</span>
+													)}
+													{model.tier === "pro" && (
+														<span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/20 shrink-0">
+															PRO
+														</span>
+													)}
+												</div>
+												<span className="text-[10px] text-muted-foreground whitespace-nowrap tabular-nums shrink-0 ml-2">
 													{formatContextWindow(model.contextWindow)}
 												</span>
 											</div>
-											<div className="flex items-center justify-between w-full text-[10px] text-muted-foreground/70">
-												<span className="truncate">{model.strength}</span>
+											<p className="text-[10px] text-muted-foreground/80 leading-snug line-clamp-2">
+												{model.strength}
+											</p>
+											<div className="flex items-center justify-between text-[10px] text-muted-foreground/70 tabular-nums">
+												<span>
+													{model.costPer1MTokens ? model.costPer1MTokens : "$0.00 — free tier"}
+												</span>
+												<span className="text-muted-foreground/60">
+													★ {model.qualityScore}/100
+												</span>
 											</div>
 										</div>
 									</Command.Item>

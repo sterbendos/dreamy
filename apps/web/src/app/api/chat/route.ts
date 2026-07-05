@@ -12,6 +12,12 @@ import { LIMITS, getAvailableModels, Tier } from "@/billing/tiers";
 // Because it does not have the NEXT_PUBLIC_ prefix, it will never be leaked to the client bundle.
 const openrouter = createOpenRouter({
 	apiKey: process.env.OPENROUTER_API_KEY,
+	// Required for OpenRouter free model routing — without these the
+	// `:free` suffix models return 402 Payment Required.
+	headers: {
+		"HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL ?? "https://dreamy-blush.vercel.app",
+		"X-Title": "Dreamy",
+	},
 });
 
 // Maximum duration for the serverless function
