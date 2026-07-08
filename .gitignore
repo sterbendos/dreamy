@@ -43,3 +43,10 @@ rust-migration-notes.md
 *.rar
 .vercel
 .env*
+
+# Skills & Plugins
+taste-skill-repo/
+ultimate-frontend-design-openclaw-skill/
+ultimate-frontend-design-openclaw-skill-main.zip
+.claude/
+.sixth/

@@ -44,8 +44,8 @@ export default function RootLayout({
 			<body className={`${siteFont.variable} ${serifFont.variable} font-sans antialiased`}>
 				<ThemeProvider
 					attribute="class"
-					defaultTheme="system"
-					enableSystem={true}
+					defaultTheme="dark"
+					forcedTheme="dark"
 					disableTransitionOnChange={true}
 				>
 					<TooltipProvider>
