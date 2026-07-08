@@ -162,3 +162,67 @@ export function formatContextWindow(tokens: number): string {
 	if (tokens >= 1_000) return `${Math.round(tokens / 1_000)}K`;
 	return String(tokens);
 }
+
+/** USD cost per 1M tokens, parsed from costPer1MTokens string like "$0.80 in / $4 out". */
+export interface PricingRate {
+	inputPer1M: number;
+	outputPer1M: number;
+}
+
+export function getModelPricing(model: ModelInfo): PricingRate {
+	if (!model.costPer1MTokens) return { inputPer1M: 0, outputPer1M: 0 };
+	// Parse "$0.80 in / $4 out" -> { inputPer1M: 0.8, outputPer1M: 4 }
+	const match = model.costPer1MTokens.match(/\$([0-9.]+)\s*in\s*\/\s*\$([0-9.]+)\s*out/i);
+	if (!match) return { inputPer1M: 0, outputPer1M: 0 };
+	return {
+		inputPer1M: parseFloat(match[1]),
+		outputPer1M: parseFloat(match[2]),
+	};
+}
+
+/** Estimate USD cost for a request given token counts. */
+export function estimateCostUSD(
+	model: ModelInfo,
+	promptTokens: number,
+	completionTokens: number,
+): number {
+	const pricing = getModelPricing(model);
+	return (
+		(promptTokens / 1_000_000) * pricing.inputPer1M +
+		(completionTokens / 1_000_000) * pricing.outputPer1M
+	);
+}
+
+/**
+ * Fallback chain for free models.
+ * If the primary model fails (e.g. OpenRouter per-model rate limit, 429, 5xx),
+ * the chat route will try these in order.
+ *
+ * Order: best quality first, since most requests succeed on the first try.
+ * We fall back to more conservative models that usually have higher availability.
+ */
+export const FREE_FALLBACK_CHAIN: string[] = [
+	"qwen/qwen3-coder:free",         // 1M context, best for editing commands
+	"deepseek/deepseek-chat-v3:free", // strong all-rounder
+	"meta-llama/llama-3.3-70b-instruct:free", // well-supported
+	"mistralai/mistral-small-3.1-24b-instruct:free", // EU hosted, often available
+	"google/gemma-3-12b-it:free",    // last resort, smaller but reliable
+];
+
+/**
+ * Fallback chain for Pro models.
+ * DeepSeek V3 (paid) is first because it's the cheapest and very capable.
+ * Claude Haiku is the premium option — if it fails, fall back to DeepSeek.
+ */
+export const PRO_FALLBACK_CHAIN: string[] = [
+	"anthropic/claude-3.5-haiku",      // premium, fastest
+	"deepseek/deepseek-chat-v3",       // cheap alternative
+	"meta-llama/llama-3.3-70b-instruct", // open weights fallback
+];
+
+export function getFallbackChain(tier: Tier, primaryModel: string): string[] {
+	const chain = tier === "pro" ? PRO_FALLBACK_CHAIN : FREE_FALLBACK_CHAIN;
+	// Put primary first (if it's in the chain), then the rest, deduped
+	const rest = chain.filter((id) => id !== primaryModel);
+	return primaryModel ? [primaryModel, ...rest] : chain;
+}

@@ -23,6 +23,9 @@ export async function GET(req: Request) {
 			subscription,
 			usageToday: usage.count,
 			dailyLimit: LIMITS[tier].dailyCommands,
+			promptTokens: usage.promptTokens ?? 0,
+			completionTokens: usage.completionTokens ?? 0,
+			estimatedCostUsd: usage.estimatedCostUsd ?? "0",
 			pendingPayment: pending ?? null,
 			emailVerified: session.user.emailVerified ?? false,
 		});

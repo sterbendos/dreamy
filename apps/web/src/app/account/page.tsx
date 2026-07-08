@@ -12,6 +12,9 @@ interface StatusData {
 	} | null;
 	usageToday: number;
 	dailyLimit: number;
+	promptTokens: number;
+	completionTokens: number;
+	estimatedCostUsd: string;
 	pendingPayment: {
 		id: string;
 		status: string;
@@ -63,7 +66,7 @@ export default function AccountPage() {
 		);
 	}
 
-	const { tier, subscription, usageToday, dailyLimit, pendingPayment, emailVerified } = data;
+	const { tier, subscription, usageToday, dailyLimit, pendingPayment, emailVerified, promptTokens, completionTokens, estimatedCostUsd } = data;
 	const isPro = tier === "pro";
 	const usagePercent = Math.min((usageToday / dailyLimit) * 100, 100);
 
@@ -225,6 +228,42 @@ export default function AccountPage() {
 							? "You&apos;ve reached your daily limit. Resets at midnight."
 							: "Daily limit reached. Upgrade to Pro for 200 commands/day."}
 					</p>
+				)}
+
+				{isPro && (promptTokens > 0 || completionTokens > 0) && (
+					<div className="mt-5 pt-5 border-t border-border/50 space-y-2">
+						<div className="flex items-center justify-between text-sm">
+							<span className="text-muted-foreground">Tokens consumed</span>
+							<span className="font-medium tabular-nums">
+								{(promptTokens + completionTokens).toLocaleString()}
+							</span>
+						</div>
+						<div className="flex items-center justify-between text-sm">
+							<span className="text-muted-foreground pl-3 text-xs">
+								↳ Input
+							</span>
+							<span className="text-xs text-muted-foreground tabular-nums">
+								{promptTokens.toLocaleString()}
+							</span>
+						</div>
+						<div className="flex items-center justify-between text-sm">
+							<span className="text-muted-foreground pl-3 text-xs">
+								↳ Output
+							</span>
+							<span className="text-xs text-muted-foreground tabular-nums">
+								{completionTokens.toLocaleString()}
+							</span>
+						</div>
+						<div className="flex items-center justify-between text-sm pt-2 border-t border-border/30">
+							<span className="text-muted-foreground">Estimated cost (today)</span>
+							<span className="font-bold tabular-nums text-primary">
+								${parseFloat(estimatedCostUsd || "0").toFixed(4)}
+							</span>
+						</div>
+						<p className="text-[10px] text-muted-foreground/70 pt-1">
+							We use cheap-but-strong models so a heavy day stays under $0.50.
+						</p>
+					</div>
 				)}
 			</div>
 		</div>

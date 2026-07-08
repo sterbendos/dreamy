@@ -44,6 +44,37 @@ export const incrementUserUsage = async (userId: string) => {
 };
 
 /**
+ * Records actual token usage and estimated cost for one completed AI request.
+ * This is called after streamText finishes so we have real token counts from
+ * the OpenRouter response — not just message counts.
+ */
+export const recordTokenUsage = async ({
+	userId,
+	promptTokens,
+	completionTokens,
+	estimatedCostUsd,
+}: {
+	userId: string;
+	promptTokens: number;
+	completionTokens: number;
+	estimatedCostUsd: number;
+}) => {
+	const usage = await getUserUsageToday(userId);
+	const existingCost = parseFloat(usage.estimatedCostUsd || "0");
+	const newCost = (existingCost + estimatedCostUsd).toFixed(6);
+
+	await db.update(ai_usage)
+		.set({
+			count: usage.count + 1,
+			promptTokens: (usage.promptTokens ?? 0) + promptTokens,
+			completionTokens: (usage.completionTokens ?? 0) + completionTokens,
+			estimatedCostUsd: newCost,
+			updatedAt: new Date(),
+		})
+		.where(eq(ai_usage.id, usage.id));
+};
+
+/**
  * Creates a pending payment record after a user claims to have sent money via InstaPay.
  * An admin must verify and call activateSubscription() to confirm.
  */

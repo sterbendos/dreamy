@@ -85,6 +85,12 @@ export const ai_usage = pgTable("ai_usage", {
 	userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
 	date: text("date").notNull(), // format YYYY-MM-DD to easily query by day
 	count: integer("count").notNull().default(0),
+	/** Total prompt tokens consumed today across all requests */
+	promptTokens: integer("prompt_tokens").notNull().default(0),
+	/** Total completion tokens consumed today across all requests */
+	completionTokens: integer("completion_tokens").notNull().default(0),
+	/** Estimated USD cost of today's AI usage (for billing/observability) */
+	estimatedCostUsd: text("estimated_cost_usd").notNull().default("0"),
 	createdAt: timestamp("created_at").$defaultFn(() => new Date()).notNull(),
 	updatedAt: timestamp("updated_at").$defaultFn(() => new Date()).notNull(),
 });
