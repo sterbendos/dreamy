@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useState, useRef, useEffect } from "react";
+import { mcpClient } from "../../mcp/client";
 
 export function AiChatPanel() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +11,10 @@ export function AiChatPanel() {
 	]);
 	const [input, setInput] = useState("");
 	const messagesEndRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		mcpClient.connect();
+	}, []);
 
 	const togglePanel = () => setIsOpen(!isOpen);
 

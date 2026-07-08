@@ -3,12 +3,14 @@ import { ellipseGraphicDefinition } from "./ellipse";
 import { polygonGraphicDefinition } from "./polygon";
 import { rectangleGraphicDefinition } from "./rectangle";
 import { starGraphicDefinition } from "./star";
+import { kineticTextDefinition } from "../kinetic";
 
 const defaultGraphicDefinitions = [
 	rectangleGraphicDefinition,
 	ellipseGraphicDefinition,
 	polygonGraphicDefinition,
 	starGraphicDefinition,
+	kineticTextDefinition,
 ];
 
 export function registerDefaultGraphics(): void {

@@ -10,6 +10,7 @@ import {
 	rectangleGraphicDefinition,
 	starGraphicDefinition,
 } from "./definitions";
+import { kineticTextDefinition } from "./kinetic";
 import {
 	DEFAULT_GRAPHIC_SOURCE_SIZE,
 	type GraphicInstance,
@@ -147,6 +148,7 @@ export {
 	rectangleGraphicDefinition,
 	registerDefaultGraphics,
 	starGraphicDefinition,
+	kineticTextDefinition,
 };
 export type {
 	GraphicDefinition,
