@@ -7,9 +7,6 @@ import { Button } from "./ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useSession, signOut } from "@/auth/client";
 import { useRouter } from "next/navigation";
-import { ThemeToggle } from "./theme-toggle";
-import { Menu02Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/utils/ui";
 
 export function Header() {
@@ -84,7 +81,11 @@ export function Header() {
 							className="flex items-center justify-center p-0"
 							onClick={() => setIsMenuOpen(!isMenuOpen)}
 						>
-							<HugeiconsIcon icon={Menu02Icon} size={30} />
+							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
+								<line x1="3" y1="6" x2="21" y2="6" />
+								<line x1="3" y1="12" x2="21" y2="12" />
+								<line x1="3" y1="18" x2="21" y2="18" />
+							</svg>
 						</Button>
 					</div>
 					<div className="hidden items-center gap-3 md:flex">
@@ -137,7 +138,6 @@ export function Header() {
 								</motion.div>
 							</div>
 						)}
-						<ThemeToggle />
 					</div>
 				</div>
 
@@ -241,14 +241,6 @@ export function Header() {
 								)}
 							</motion.div>
 						</nav>
-						<ThemeToggle
-							className="absolute right-8 bottom-8 size-10"
-							iconClassName="!size-[1.2rem]"
-							onToggle={(e) => {
-								e.preventDefault();
-								e.stopPropagation();
-							}}
-						/>
 					</div>
 				</div>
 			</div>

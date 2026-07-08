@@ -53,7 +53,7 @@
 }
 
 .panel {
-  /* Panel overrides — keep violet for the editor app panel surfaces */
+  /* Panel overrides — slightly elevated surface tones for the editor */
   --background: hsl(0, 0%, 96%);
   --foreground: hsl(0, 0%, 10%);
   --card: hsl(0, 0%, 96%);
